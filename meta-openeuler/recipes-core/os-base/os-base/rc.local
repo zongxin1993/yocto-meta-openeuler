@@ -1,4 +1,5 @@
 #!/bin/bash
 
-/sbin/auditd
+#/sbin/auditd
+. /etc/init.d/auditd start
 /sbin/syslogd
