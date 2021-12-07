@@ -69,7 +69,18 @@ RDEPENDS_${PN} = "${@["", "busybox-inittab"][(d.getVar('VIRTUAL-RUNTIME_init_man
 
 do_configure() {
         cp ../yocto-embedded-tools/config/arm64/defconfig-busybox .config
-        set -e
+	set +e
+	grep -E '^CONFIG_FEATURE_MOUNT_NFS=y|^CONFIG_FEATURE_INETD_RPC=y' .config
+	ret=$?
+	if [ $ret -eq 0 ]; then
+		grep -E '^CONFIG_EXTRA_CFLAGS=".*-I/usr/include/tirpc|^CONFIG_EXTRA_LDLIBS=".*tirpc' .config
+		ret=$?
+		if [ $ret -ne 0 ]; then
+			sed -i 's/^CONFIG_EXTRA_CFLAGS="/CONFIG_EXTRA_CFLAGS="-I\/usr\/include\/tirpc /g' .config
+			sed -i 's/^CONFIG_EXTRA_LDLIBS="/CONFIG_EXTRA_LDLIBS="tirpc /g' .config
+		fi
+	fi
+	set -e
         yes '' | oe_runmake oldconfig
 }
 
