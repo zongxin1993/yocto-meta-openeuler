@@ -40,3 +40,4 @@ https://docs.yoctoproject.org/overview-manual/yp-intro.html#reference-embedded-d
 
 Indices and tables
 ==================
+
