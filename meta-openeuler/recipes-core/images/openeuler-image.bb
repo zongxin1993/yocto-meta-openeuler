@@ -138,6 +138,8 @@ dosfstools \
 e2fsprogs \
 ethtool \
 expat \
+gdb \
+gdbserver \
 glib-2.0 \
 grep \
 gzip \
