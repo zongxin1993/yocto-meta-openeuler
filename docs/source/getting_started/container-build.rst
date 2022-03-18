@@ -59,43 +59,56 @@ c) 进入容器
 4. yocto一键式构建流程
 *************************************
 
-a) 下载代码
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+a) clone yocto-meta-openeuler代码仓
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: console
 
-    git clone https://gitee.com/openeuler/yocto-meta-openeuler.git -b openEuler-21.09
+    git clone https://gitee.com/openeuler/yocto-meta-openeuler.git -b openEuler-22.03-LTS -v /usr1/yocto-meta-openeuler
 
-b) bash执行scripts/download_code.sh脚本
+b) 下载源码
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: console
 
-    sh scripts/download_code.sh
+    cd /usr1/yocto-meta-openeuler
+    sh scripts/download_code.sh /usr1/openeuler/src
 
-c) bash执行scripts/compile.sh一键式构建脚本
+c) 开始编译
 ******************************************
 
 .. code-block:: console
 
-    sh scripts/compile.sh
+    chown -R huawei:users /usr1
+    su huawei
+    cd /usr1/openeuler/src/yocto-meta-openeuler/scripts
+    source compile.sh aarch64-std /usr1/build /usr1/openeuler/src /usr1/openeuler/gcc/openeuler_gcc_arm64le
+
+- 编译架构: aarch64-std、aarch64-pro、arm-std、raspberrypi4-64
+
+- 构建目录: /usr1/build
+
+- 源码目录: /usr1/openeuler/src
+
+- 编译器所在路径: /usr1/openeuler/gcc/openeuler_gcc_arm64le
+
+    - aarch64-std、aarch64-pro、raspberrypi4-64使用openeuler_gcc_arm64le编译器
+
+    - arm-std使用openeuler_gcc_arm32le编译器
 
 d) 获取结果件
 **************
 
-- /usr1/output
+结果件默认生成在构建目录下的output
 
-5. 目录说明
-*************
+如aarch64-std编译完成后产物如下：
 
-a) 源码目录
-^^^^^^^^^^^^
-- /usr1/openeuler/src
+- openeuler镜像: Image-5.10.0
 
-b) 构建目录
-^^^^^^^^^^^^
-- /usr1/openeuler/src/build
+- 工具链: openeuler-glibc-x86_64-openeuler-image-aarch64-qemu-aarch64-toolchain-21.09.30.sh
 
-c) 结果件目录
-^^^^^^^^^^^^^^
-- /usr1/output
+- 文件系统: openeuler-image-qemu-aarch64-20220318114250.rootfs.cpio.gz
+
+- 内核文件: vmlinux-5.10.0
+
+- 压缩的镜像: zImage
