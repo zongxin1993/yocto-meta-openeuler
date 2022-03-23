@@ -172,16 +172,16 @@ openEuler Embedded登陆后，执行如下命令：
 
 .. note::
 
-    如需openEuler embedded借助宿主机访问互联网，则需要在宿主机上建立网桥，此处不详述，如有需要，请自行查阅相关资料。
+    如需openEuler Embedded借助宿主机访问互联网，则需要在宿主机上建立网桥，此处不详述，如有需要，请自行查阅相关资料。
 
 
 
-基于openEuler embedded的sdk应用开发
+基于openEuler Embedded的sdk应用开发
 ********************************************
 
-当前发布的镜像除了体验openEuler Embedded的基本功能外，还可以进行基本的应用开发，也即在openEuler embedded上运行用户自己的程序。
+当前发布的镜像除了体验openEuler Embedded的基本功能外，还可以进行基本的应用开发，也即在openEuler Embedded上运行用户自己的程序。
 
-**1  执行sdk脚本**
+**1  执行sdk脚本安装工具链**
  | 例如 ``sh openeuler-glibc-x86_64-openeuler-image-aarch64-qemu-aarch64-toolchain-22.03.sh``
  | 根据提示输入工具链的安装路径，默认路径是"/opt/openeuler/<openeuler version>/";
  | 若不设置，则按默认路径安装；也可以配置相对路径或绝对路径
@@ -201,7 +201,7 @@ openEuler Embedded登陆后，执行如下命令：
 
 **2   source环境变量设置脚本**
  | 前一步执行结束最后已打印source命令
- | 例如以上：
+ | 按前一步脚本执行提示，则执行以下命令设置环境：
  |  ``. /usr1/openeuler/myfiles/sdk/environment-setup-armv7a-openeuler-linux-gnueabi``
 
 **3   使用sdk编译**
@@ -209,7 +209,7 @@ openEuler Embedded登陆后，执行如下命令：
 
 使用sdk编译hello world样例：
 1）. **准备代码**
-以构建一个hello world程序为例，运行在openEuler根文件系统镜像中。
+以构建一个hello world程序为例，运行在openEuler Embedded根文件系统镜像中。
 
 创建一个hello.c文件，源码如下：
 
@@ -240,11 +240,11 @@ openEuler Embedded登陆后，执行如下命令：
     cmake ..
     make
 
-把编译好的hello程序拷贝到/tmp/某个目录下（例如/tmp/myfiles/）。
+把编译好的hello程序拷贝到openEuler Embedded系统的某个目录下（例如/tmp/myfiles/）。
 
 3）. **运行用户态程序**
 
-在openEuler系统中运行hello程序。
+在openEuler Embedded系统中运行hello程序。
 
 .. code-block:: console
 
