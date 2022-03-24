@@ -1,7 +1,6 @@
 #!/bin/bash
 
 . /etc/init.d/auditd start
-/sbin/syslogd
 
 chmod 640 /var/log/*
 chmod 640 /dev/mem
