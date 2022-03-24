@@ -218,8 +218,8 @@ SRC_BRANCH="$2"
 # manifest file include the git url, revision, path info
 MANIFEST="$3"
 # the fixed git branch
-SRC_BRANCH_FIXED="openEuler-21.09"
-KERNEL_BRANCH="5.10.0-60.16.0"
+SRC_BRANCH_FIXED="openEuler-22.03-LTS"
+KERNEL_BRANCH="5.10.0-60.17.0"
 
 if [[ -z "${SRC_DIR}" ]];then
     usage
