@@ -42,6 +42,7 @@ SRC_URI = "file://lxc/lxc-4.0.3.tar.gz \
           file://lxc/0034-cgfsng-fix-cgroup-attach-cgroup-creation.patch \
 	  file://support_arm32.patch \
 	  file://check_only_rootfs_as_filesystem_type.patch \
+	  file://0036-add-riscv-support.patch \
 	"
 
 

@@ -79,6 +79,11 @@ PNBLACKLIST_DYNAMIC += "\
     gcc-source-${@'${GCCVERSION}'.replace('%', '')} \
 "
 
+#unsupport now for riscv64
+PNBLACKLIST_DYNAMIC_remove_riscv64 += " \
+    gdb-cross-canadian-${TRANSLATED_TARGET_ARCH} \
+"
+
 # We need our -cross recipes to rebuild when the external toolchain changes,
 # to recreate the links / wrapper scripts
 BB_HASHBASE_WHITELIST_remove = "EXTERNAL_TOOLCHAIN"

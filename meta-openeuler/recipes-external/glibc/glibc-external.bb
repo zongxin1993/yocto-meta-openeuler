@@ -197,6 +197,11 @@ FILES_${PN} += "\
     ${datadir}/locale \
     ${datadir}/i18n \
 "
+#For riscv64
+FILES_${PN} += "\
+    ${libdir}/lp64d \
+    ${base_libdir}/lp64d \
+"
 
 FILES_${PN}-dev_remove := "${datadir}/aclocal"
 
