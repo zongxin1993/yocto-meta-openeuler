@@ -1,4 +1,4 @@
-.. _introducing_openeuler_embedded:
+.. _introducing:
 
 
 总体介绍
