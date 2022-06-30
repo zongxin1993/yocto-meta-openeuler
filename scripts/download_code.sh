@@ -40,12 +40,12 @@ update_code_repo()
     local commitid="$4"
     local pkg="$(basename ${repo} | sed "s|\.git$||g")"
     local branchname="$2"
-    [[ -z "$branchname" ]] && exit 1
-    [[ -z "$pkg" ]] && exit 1
+    [ -z "$branchname" ] && exit 1
+    [ -z "$pkg" ] && exit 1
     #branch is also commitid,cannot clone -b <commitid>
     [[ "$branchname" == "$commitid" ]] && branch=""
     #change dir name if required
-    [[ -z "${realdir}" ]] || pkg="$(basename ${realdir})"
+    [ -z "${realdir}" ] || pkg="$(basename ${realdir})"
     #shallow clone for linux kernel as it's too large
     [[ "${pkg}" == "kernel-5.10" ]] && local git_param="--depth 1"
     test -d "${SRC_DIR}" || mkdir -p "${SRC_DIR}"
@@ -70,7 +70,7 @@ update_code_repo()
     if git tag -l | grep "^${branchname}$";then
         branchname="refs/tags/${branchname}"
         tagcommit=$(git show "${branchname}" | grep "^commit " | awk '{print $NF}')
-        if [[ "${tagcommit}" != "${newest_commitid}" ]];then
+        if [ "${tagcommit}" != "${newest_commitid}" ];then
             echo "${repo} ${branchname} checkout failed"
             exit 1
         fi
@@ -96,7 +96,7 @@ download_by_manifest()
         local localpath="$(echo "$line" | grep -o " path=.*" | awk -F\" '{print $2}')"
         local revision="$(echo "$line" | grep -o " revision=.*" | awk -F\" '{print $2}')"
         local upstream="$(echo "$line" | grep -o " upstream=.*" | awk -F\" '{print $2}')"
-        if [[ x"$upstream" =~ x"refs/tags/" ]];then
+        if [ x"$upstream" =~ x"refs/tags/" ];then
             branch=$(echo "$upstream" | sed "s|^refs/tags/||g")
             commitid=""
         else
@@ -190,6 +190,8 @@ download_code()
     update_code_repo src-openeuler/libmetal ${SRC_BRANCH}
     update_code_repo src-openeuler/OpenAMP ${SRC_BRANCH}
     update_code_repo src-openeuler/sysfsutils ${SRC_BRANCH}
+    update_code_repo src-openeuler/tcl ${SRC_BRANCH}
+    update_code_repo src-openeuler/expect ${SRC_BRANCH}
 }
 
 # download iSulad related packages
@@ -242,7 +244,7 @@ unpack_dsoftbus_code()
     #unpack build
     unzip -qd ${dsoftbus_build_dir} ${prefix_dir}/build/${build}.zip
     mv ${dsoftbus_build_dir}/${build} ${dsoftbus_build_dir}/build
-    
+
     #unpack build_tools
     for i in  $gn $ninja
     do
@@ -318,7 +320,7 @@ check_use()
     elif [ -n "$ZSH_NAME" ]; then
         THIS_SCRIPT="$0"
     else
-        THIS_SCRIPT="$(pwd)/compile.sh"
+        THIS_SCRIPT="$(pwd)/download_code.sh"
         if [ ! -e "$THIS_SCRIPT" ]; then
             echo "Error: $THIS_SCRIPT doesn't exist!"
             return 1
@@ -344,21 +346,21 @@ main()
     check_use || return 1
     set -e
 
-    if [[ -z "${SRC_DIR}" ]];then
+    if [ -z "${SRC_DIR}" ];then
         SRC_DIR="$(cd $(dirname $0)/../../;pwd)"
     fi
     SRC_DIR="$(realpath ${SRC_DIR})"
 
-    if [[ -z "${SRC_BRANCH}" ]];then
+    if [ -z "${SRC_BRANCH}" ];then
         # the latest release branch
         SRC_BRANCH="openEuler-22.03-LTS"
     fi
-    [[ -z "${KERNEL_BRANCH}" ]] && KERNEL_BRANCH="${SRC_BRANCH}"
+    [ -z "${KERNEL_BRANCH}" ] && KERNEL_BRANCH="${SRC_BRANCH}"
 
     URL_PREFIX="https://gitee.com/"
     if [ -f "${MANIFEST}" ];then
         download_by_manifest
-    elif [ "$1" == "dsoftbus" ];then
+    elif [[ "$1" == "dsoftbus" ]];then
         SRC_DIR="$(cd $(dirname $0)/../../;pwd)"
         download_dsoftbus_code
     else
