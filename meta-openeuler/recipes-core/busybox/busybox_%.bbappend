@@ -15,3 +15,5 @@ SRC_URI_remove = " \
 SRC_URI += ""
 
 SRC_URI[tarball.sha256sum] = "415fbd89e5344c96acf449d94a6f956dbed62e18e835fc83e064db33a34bd549"
+
+inherit openeuler-toolkit
