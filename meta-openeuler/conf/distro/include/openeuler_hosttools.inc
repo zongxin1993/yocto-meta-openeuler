@@ -73,6 +73,13 @@ ASSUME_PROVIDED += "qemu-native rsync-native nativesdk-qemuwrapper-cross"
 ## \todo remove dwarfsrcfiles-native after elfutil is added into nativesdk
 ASSUME_PROVIDED += "dwarfsrcfiles-native"
 
+# used by libpam
+ASSUME_PROVIDED += "libxml2-native"
+# used by make-mod-scripts
+ASSUME_PROVIDED += "gmp-native"
+# used by cracklib
+ASSUME_PROVIDED += "cracklib-native"
+
 ASSUME_PROVIDED += "gperf-native perl-native  \
                     init-system-helpers \
                     cross-localedef-native nativesdk-glibc-locale \
