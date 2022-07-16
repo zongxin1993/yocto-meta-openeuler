@@ -196,6 +196,10 @@ download_code()
     update_code_repo src-openeuler/expect ${SRC_BRANCH}
     update_code_repo src-openeuler/jitterentropy-library ${SRC_BRANCH}
     update_code_repo src-openeuler/libtool ${SRC_BRANCH}
+    update_code_repo src-openeuler/libidn2 ${SRC_BRANCH}
+    update_code_repo src-openeuler/libunistring ${SRC_BRANCH}
+    update_code_repo src-openeuler/gnutls ${SRC_BRANCH}
+    update_code_repo src-openeuler/nettle ${SRC_BRANCH}
 }
 
 # download iSulad related packages
