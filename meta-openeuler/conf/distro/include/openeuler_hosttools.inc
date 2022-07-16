@@ -34,6 +34,13 @@ ASSUME_PROVIDED +="ldconfig-native "
 HOSTTOOLS_NONFATAL += "xz"
 ASSUME_PROVIDED += "xz-native pigz-native gzip-native"
 
+# used by shadow, built from shadow-native
+HOSTTOOLS_NONFATAL += "pwconv grpconv"
+ASSUME_PROVIDED += "shadow-native"
+
+# used by update-rc.d.bbclass and update-alternatives.bbclass
+HOSTTOOLS_NONFATAL += "update-rc.d update-alternatives"
+ASSUME_PROVIDED += "update-rc.d-native virtual/update-alternatives-native"
 
 # gettext amd documentation related tools
 HOSTTOOLS_NONFATAL += "msgfmt msgmerge makeinfo"
@@ -72,6 +79,13 @@ ASSUME_PROVIDED += "qemu-native rsync-native nativesdk-qemuwrapper-cross"
 ## dwarfsrcfiles-native is used in package.bbclass, it needs elfutil
 ## \todo remove dwarfsrcfiles-native after elfutil is added into nativesdk
 ASSUME_PROVIDED += "dwarfsrcfiles-native"
+
+# used by libpam
+ASSUME_PROVIDED += "libxml2-native attr-native"
+# used by make-mod-scripts
+ASSUME_PROVIDED += "gmp-native"
+# used by cracklib
+ASSUME_PROVIDED += "cracklib-native"
 
 ASSUME_PROVIDED += "gperf-native perl-native  \
                     init-system-helpers \
