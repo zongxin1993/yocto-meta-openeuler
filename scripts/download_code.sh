@@ -134,6 +134,8 @@ download_code()
     update_code_repo src-openeuler/less ${SRC_BRANCH}
     update_code_repo src-openeuler/gzip ${SRC_BRANCH}
     update_code_repo src-openeuler/xz ${SRC_BRANCH}
+    update_code_repo src-openeuler/lzo ${SRC_BRANCH}
+    update_code_repo src-openeuler/lz4 ${SRC_BRANCH}
     update_code_repo src-openeuler/bzip2 ${SRC_BRANCH}
     update_code_repo src-openeuler/sed ${SRC_BRANCH}
     update_code_repo src-openeuler/json-c ${SRC_BRANCH}
@@ -192,6 +194,8 @@ download_code()
     update_code_repo src-openeuler/sysfsutils ${SRC_BRANCH}
     update_code_repo src-openeuler/tcl ${SRC_BRANCH}
     update_code_repo src-openeuler/expect ${SRC_BRANCH}
+    update_code_repo src-openeuler/jitterentropy-library ${SRC_BRANCH}
+    update_code_repo src-openeuler/libtool ${SRC_BRANCH}
     update_code_repo src-openeuler/libidn2 ${SRC_BRANCH}
     update_code_repo src-openeuler/libunistring ${SRC_BRANCH}
     update_code_repo src-openeuler/gnutls ${SRC_BRANCH}
