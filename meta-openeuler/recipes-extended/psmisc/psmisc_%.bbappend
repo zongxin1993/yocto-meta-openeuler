@@ -10,10 +10,11 @@ SRC_URI += " \
 
 S = "${WORKDIR}/${BPN}-${PV}"
 
-do_configure_openeuler() {
+do_configure_prepend() {
     # cannot run po/update-potfiles in new version
-    autotools_do_configure
+    if [ ! -f ${S}/po/update-potfiles ]; then
+        touch ${S}/po/update-potfiles
+        chmod +x ${S}/po/update-potfiles
+    fi
 }
 
-deltask do_configure
-addtask configure_openeuler before do_compile after do_patch do_unpack
