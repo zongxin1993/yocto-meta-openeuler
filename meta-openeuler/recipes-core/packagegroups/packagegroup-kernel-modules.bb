@@ -55,3 +55,5 @@ RDEPENDS_${PN}_raspberrypi4 = " \
 "
 RDEPENDS_${PN}_aarch64-pro = " \
 "
+RDEPENDS_${PN}_riscv64 = " \
+"

@@ -13,6 +13,7 @@ usage()
     echo "                       aarch64-pro"
     echo "                       arm-std"
     echo "                       raspberrypi4-64"
+    echo "                       riscv64-std"
     echo "           Build dir: <above dir of yocto-meta-openeuler >/build (defaut)"
     echo "           External toolchain dir(absoulte path):"
     echo "                       /usr1/openeuler/gcc/openeuler_gcc_arm64le (default)"
@@ -70,6 +71,10 @@ get_build_info()
     "arm-std")
         MACHINE="qemu-arm"
         ;;
+    "riscv64-std")
+        MACHINE="qemu-riscv64"
+        BITBAKE_OPT="openeuler-image openeuler-image-tiny"
+        ;;
     *)
         echo "unknown platform, use aarch64-std as default"
         PLATFORM="aarch64-std"
@@ -82,6 +87,8 @@ get_build_info()
         OPENEULER_TOOLCHAIN_DIR="OPENEULER_TOOLCHAIN_DIR_aarch64";;
     "qemu-arm")
         OPENEULER_TOOLCHAIN_DIR="OPENEULER_TOOLCHAIN_DIR_arm";;
+    "qemu-riscv64")
+        OPENEULER_TOOLCHAIN_DIR="OPENEULER_TOOLCHAIN_DIR_riscv64";;
     *)
         echo "unknown machine"
         usage || return 1
