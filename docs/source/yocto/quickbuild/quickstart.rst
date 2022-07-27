@@ -86,8 +86,8 @@ openEuler Embedded整个构建工程的文件布局如下，假设openeuler_embe
  |                         参数3：下代码的xml文件，标准manifest格式，按xml配置下代码
 
 2）执行下载脚本
- | 下载最新代码: ``sh src/yocto-meta-openeuler/scripts/download_code.sh``
- | 下载指定版本代码: ``sh src/yocto-meta-openeuler/scripts/download_code.sh "" "" "manifest.xml"``
+ | 下载最新代码: ``bash src/yocto-meta-openeuler/scripts/download_code.sh``
+ | 下载指定版本代码: ``bash src/yocto-meta-openeuler/scripts/download_code.sh "" "" "manifest.xml"``
 
  - 指定openEuler Embedded版本的代码的manifest.xml文件从openEuler Embedded发布件目录embedded_img/source-list/下获取
 
