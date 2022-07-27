@@ -50,8 +50,4 @@ do_install_append_arm() {
        echo "unix" >> ${D}/etc/modules
 }
 
-do_install_append_raspberrypi4() {
-	sed -i '/\# load kernel modules/imount -o remount,rw \/' ${D}/etc/rc.d/rc.sysinit
-}
-
 FILES_${PN} = "/"
