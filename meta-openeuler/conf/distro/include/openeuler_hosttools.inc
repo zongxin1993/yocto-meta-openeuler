@@ -12,7 +12,7 @@ HOSTTOOLS_NONFATAL += "cc"
 ASSUME_PROVIDED += "python3-native python3-setuptools-native pkgconfig-native chrpath-replacement-native"
 
 # package management tools
-HOSTTOOLS_NONFATAL += "rpmbuild createrepo_c dnf"
+HOSTTOOLS_NONFATAL += "rpm rpmbuild createrepo_c dnf"
 ASSUME_PROVIDED += "rpm-native createrepo-c-native"
 
 # commands used by kernel build
@@ -87,6 +87,8 @@ ASSUME_PROVIDED += "gmp-native"
 ASSUME_PROVIDED += "cracklib-native"
 # used by glib-2.0
 ASSUME_PROVIDED += "glib-2.0-native"
+# used by libarchive
+ASSUME_PROVIDED += "e2fsprogs-native"
 
 ASSUME_PROVIDED += "gperf-native perl-native \
                     init-system-helpers \
