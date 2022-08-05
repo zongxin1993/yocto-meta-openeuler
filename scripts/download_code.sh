@@ -220,7 +220,6 @@ download_code()
     update_code_repo src-openeuler/groff ${SRC_BRANCH}
     update_code_repo src-openeuler/nasm ${SRC_BRANCH}
     update_code_repo src-openeuler/syslinux ${SRC_BRANCH}
-    update_code_repo src-openeuler/cdrkit ${SRC_BRANCH}
     update_code_repo src-openeuler/yocto-opkg-utils ${SRC_BRANCH}
     update_code_repo src-openeuler/python3 ${SRC_BRANCH}
     update_code_repo src-openeuler/libgpg-error ${SRC_BRANCH}
@@ -231,6 +230,8 @@ download_code()
     # using higher version, otherwise there are too many cve patches to apply.
     update_code_repo src-openeuler/dbus openEuler-22.09
     update_code_repo src-openeuler/wpa_supplicant openEuler-22.09
+    # corss-localedef-native using glibc source code
+    update_code_repo src-openeuler/glibc ${SRC_BRANCH}
 }
 
 # download iSulad related packages
