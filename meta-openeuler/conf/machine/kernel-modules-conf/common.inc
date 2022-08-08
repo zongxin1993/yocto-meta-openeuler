@@ -1,10 +1,7 @@
 INSTALLMODULES = " \
 kernel-module-overlay \
 kernel-module-8021q \
-kernel-module-jbd2 \
-kernel-module-mbcache \
 kernel-module-ext2 \
-kernel-module-ext4 \
 kernel-module-inet-diag \
 kernel-module-ip-tables \
 kernel-module-ip-tunnel \
