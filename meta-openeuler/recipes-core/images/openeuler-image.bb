@@ -8,6 +8,8 @@ do_image_cpio[depends] = ""
 # build an iso image, the live-os use openeuler-image-live, it musn't the same as itself(openeuler-image)
 # when defined LIVE_ROOTFS_TYPE, bug may occered in poky, so just use default value ext4 in image-live.bbclass.
 # notice we need MACHINE_FEATURES += "efi" in machine conf
+#IMAGE_FSTYPES_aarch64 += " iso "
+#IMAGE_FSTYPES_x86-64 += " iso "
 IMAGE_FSTYPES += " iso "
 INITRD_IMAGE_LIVE = "openeuler-image-live"
 
