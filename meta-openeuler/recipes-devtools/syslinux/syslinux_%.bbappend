@@ -27,4 +27,5 @@ SRC_URI[tarball.sha256sum] = "3f6d50a57f3ed47d8234fd0ab4492634eb7c9aaf7dd902f33d
 do_install_append() {
 	install -d ${D}${datadir}/syslinux/
 	install -m 644 ${S}/bios/core/isolinux.bin ${D}${datadir}/syslinux/
+	install -m 644 ${S}/bios/com32/elflink/ldlinux/ldlinux.c32 ${D}${datadir}/syslinux/
 }
