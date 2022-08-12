@@ -237,6 +237,12 @@ download_code()
     update_code_repo src-openeuler/mesa ${SRC_BRANCH}
     update_code_repo src-openeuler/libdrm ${SRC_BRANCH}
     update_code_repo src-openeuler/xorg-x11-proto-devel ${SRC_BRANCH}
+    update_code_repo src-openeuler/intltool openEuler-22.09
+    update_code_repo src-openeuler/tar openEuler-22.09
+    update_code_repo src-openeuler/perl-XML-Parser openEuler-22.09
+    update_code_repo src-openeuler/systemd openEuler-22.09
+    update_code_repo src-openeuler/gnu-efi openEuler-22.09
+    update_code_repo src-openeuler/screen openEuler-22.09
 }
 
 # download iSulad related packages
@@ -409,9 +415,9 @@ main()
         SRC_DIR="$(cd $(dirname $0)/../../;pwd)"
         download_dsoftbus_code
     else
-        download_code
         download_iSulad_code
         download_dsoftbus_code
+        download_code
         create_manifest
     fi
 }
