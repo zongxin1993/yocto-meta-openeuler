@@ -272,79 +272,12 @@ BB_DISKMON_DIRS ??= "\
 # this doesn't mean anything to you.
 CONF_VERSION = "2"
 
-HOSTTOOLS += "python rpmbuild"
+require conf/distro/include/openeuler_hosttools.inc
 
-#commands for packages built by autotools
-HOSTTOOLS += "automake autoreconf aclocal libtoolize m4 autoconf autoheader"
-
-#commands for create image
-HOSTTOOLS_NONFATAL += "createrepo_c dnf ldconfig"
-
-#commands for openeuler packages
-##unpack packages packed by xz
-HOSTTOOLS_NONFATAL += "xz"
-
-##build packages built by cmake/ninja/meson
-HOSTTOOLS_NONFATAL += "cmake ninja meson"
-
-## used by cracklib, built from cracklib-native
-HOSTTOOLS_NONFATAL += "create-cracklib-dict cracklib-format cracklib-packer"
-
-# used by ncurses, built from ncurses-native
-HOSTTOOLS_NONFATAL += "tic"
-
-# used by tzdata, build from tzcode-native
-HOSTTOOLS_NONFATAL += "zic"
-
-##commands used by kernel
-HOSTTOOLS_NONFATAL += "flex bison bc"
-
-HOSTTOOLS_NONFATAL += "chrpath pkg-config libtool \
-                       autopoint autoscan autom4te \
-                       autoupdate libtool pkg-config fmt \
-                       msgfmt msgmerge rpcgen makeinfo gperf \
-                      "
-
-##commands used by opkg-utils only
-HOSTTOOLS_NONFATAL += "pod2man"
-
-##commands used by raspberrrypi4 specially
-HOSTTOOLS_NONFATAL_append_raspberrypi4 += "mkdosfs mcopy mkfs.ext4 debugfs fsck.ext4 dumpe2fs \
-                                           parted mkfs.vfat mmd"
-
-#some commands added in poky by default do not used now, make it optional
-HOSTTOOLS_remove += "diffstat lz4c pzstd"
-HOSTTOOLS_NONFATAL += "diffstat lz4c pzstd"
-
-SANITY_REQUIRED_UTILITIES_remove += "diffstat chrpath"
-CONNECTIVITY_CHECK_URIS = ""
-ASSUME_PROVIDED += "rpm-native dwarfsrcfiles-native depmodwrapper-cross kmod-native bc-native \
-                bison-native make-native gperf-native pigz-native pbzip2-native ldconfig-native \
-                xz-native makedevs-native alsa-lib-native perl-native qemu-native chrpath-native chrpath-replacement-native \
-                kern-tools-native gmp-native libsdl2-native mesa-native virglrenderer-native \
-                pixman-native texinfo-dummy-native python3-native python3-setuptools-native gettext-native \
-                m4-native flex-native unifdef-native rsync-native init-system-helpers automake-native \
-                autoconf-native libtool-native opkg-utils-native patch-native pkgconfig-native \
-                init-system-helpers update-rc.d-native run-postinsts cmake-native ninja-native \
-                cross-localedef-native nativesdk-glibc-locale nativesdk-qemuwrapper-cross gzip-native \
-                parted-native gptfdisk-native dosfstools-native mtools-native meson-native ninja-native \
-                bmap-tools-native openssl-native \
-                "
 PATCHTOOL = "patch"
 TCMODE = "external-openeuler"
 INHERIT_remove += "uninative"
 PATCHDEPENDENCY_remove += "patch-replacement-native:do_populate_sysroot"
-PREMIRRORS = "\
-bzr://.*/.*   file:///${LOCAL_FILES} \n \
-cvs://.*/.*   file:///${LOCAL_FILES} \n \
-git://.*/.*   file:///${LOCAL_FILES} \n \
-hg://.*/.*    file:///${LOCAL_FILES} \n \
-osc://.*/.*   file:///${LOCAL_FILES} \n \
-p4://.*/.*    file:///${LOCAL_FILES} \n \
-svn://.*/.*   file:///${LOCAL_FILES} \n \
-ftp://.*/.*   file:///${LOCAL_FILES} \n \
-http://.*/.*  file:///${LOCAL_FILES} \n \
-https://.*/.* file:///${LOCAL_FILES} \n"
 
 # openEuler software package dir
 # all openeEuler software packages will be downloaded by specific tool
@@ -355,6 +288,12 @@ https://.*/.* file:///${LOCAL_FILES} \n"
 #      .....
 OPENEULER_SP_DIR  = "/usr1/openeuler/src/"
 
+# the sysroot of native sdk of openeuler which contains all the native tools
+# used for building openeuler
+#
+# OPENEULER_NATIVESDK_SYSROOT用于指向nativesdk工具目录
+OPENEULER_NATIVESDK_SYSROOT = "/opt/buildtools/nativesdk/sysroots/x86_64-pokysdk-linux"
+
 # openEuler cross toolchain dir
 # prebuilt toolchain with c library is used to build openEuler embedded
 # distribution.  The prebuilt toolchain should be downloaded and placed in
@@ -364,8 +303,10 @@ OPENEULER_SP_DIR  = "/usr1/openeuler/src/"
 #   openeuler_gcc_arm32le" <the toolchain of arm32 provided by openEuler>
 EXTERNAL_TOOLCHAIN_arm = "/usr1/openeuler/gcc/openeuler_gcc_arm32le"
 EXTERNAL_TOOLCHAIN_aarch64 = "/usr1/openeuler/gcc/openeuler_gcc_arm64le"
+EXTERNAL_TOOLCHAIN_x86-64 = "/usr1/openeuler/gcc/openeuler_gcc_x86_64"
 EXTERNAL_TARGET_SYS_arm = "arm-openeuler-linux-gnueabi"
 EXTERNAL_TARGET_SYS_aarch64 = "aarch64-openeuler-linux-gnu"
+EXTERNAL_TARGET_SYS_x86-64 = "x86_64-openeuler-linux-gnu"
 
 # default openeuler platform
 OPENEULER_PLATFORM = "aarch64-std"
@@ -377,3 +318,10 @@ require conf/distro/include/security_flags_openeuler.inc
 
 # OE-built toolchains assume en_US is utf8
 EXTERNAL_TOOLCHAIN_FEATURES_DEFAULT = "locale-utf8-is-default"
+
+# define root home, default /home/root
+ROOT_HOME ?= "/root"
+
+# define default init and device manager
+OPENEULER_INIT_MANAGER = "mdev-busybox"
+OPENEULER_DEV_MANAGER = "busybox-mdev"

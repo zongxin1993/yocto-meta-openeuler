@@ -1,7 +1,14 @@
 # Description: Config for arm64 machine
 
 MACHINEOVERRIDES =. "march64:"
+KERNEL_IMAGETYPE =. "zImage"
+KERNEL_IMAGETYPE_FOR_MAKE =. "zImage Image"
 require conf/machine/qemu-common.inc
+
+#kernel modules to install and autoload
+require conf/machine/kernel-modules-conf/common.inc
+require conf/machine/kernel-modules-conf/iso-install.inc
+KERNEL_MODULE_AUTOLOAD = "${INSTALLMODULES}"
 
 # Different from arm32, here we use armv8a.inc instead
 # of conf/machine/include/tune-cortexa53.inc because
@@ -21,3 +28,9 @@ MACHINEOVERRIDES_remove_virtclass-multilib-lib32 =. "march64:"
 MACHINEOVERRIDES_append_virtclass-multilib-lib32 =. "march32:"
 TUNE_FEATURES_append_virtclass-multilib-lib32 += " cortexa9"
 TUNE_FEATURES_remove_virtclass-multilib-lib32 += " vfp"
+
+# simplest serial console setting, no VT
+SERIAL_CONSOLES ?= "115200;ttyAMA0"
+USE_VT ?= "0"
+# make a APPEND cmdline for grub.cfg while using iso with grub
+APPEND += " console=ttyAMA0,115200 "

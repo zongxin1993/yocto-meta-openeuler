@@ -13,10 +13,15 @@ inherit packagegroup
 PACKAGES = "${PN} ${PN}-extended"
 
 RDEPENDS_packagegroup-base = " \
-packagegroup-core-base-utils \
 acl \
 attr \
-bind-utils \
+bind-dhclient \
+bind-dhclient-utils \
+dhcp-client \
+dhcp-server \
+dhcp-server-config \
+dhcp-omshell \
+dhcp-relay \
 cifs-utils \
 cronie \
 curl \
@@ -25,9 +30,6 @@ e2fsprogs \
 e2fsprogs-tune2fs \
 ethtool \
 expat \
-gdb \
-gdbserver \
-glib-2.0 \
 grep \
 gzip \
 initscripts \
@@ -38,7 +40,6 @@ kmod \
 less \
 libaio \
 libasm \
-libbfd \
 libcap \
 libcap-bin \
 libcap-ng \
@@ -53,7 +54,6 @@ libpcap \
 libpwquality \
 libselinux-bin \
 libsepol-bin \
-libusb1 \
 libxml2 \
 libxml2-utils \
 logrotate \
@@ -64,8 +64,6 @@ ncurses-libmenu \
 ncurses-libpanel \
 ncurses-terminfo \
 ncurses-terminfo-base \
-nfs-utils \
-nfs-utils-client \
 pciutils \
 policycoreutils \
 policycoreutils-fixfiles \
@@ -85,13 +83,14 @@ tzdata-core \
 util-linux-su \
 util-linux-libfdisk \
 xz \
+nfs-utils \
+nfs-utils-client \
+libusb1 \
+glib-2.0 \
+libbfd \
 "
 
 RDEPENDS_packagegroup-base-extended = " \
-dhcp \
-dhcp-libs \
-dhcp-server \
-dhcp-server-config \
 sysfsutils \
 libmetal \
 openamp \
@@ -99,6 +98,8 @@ openamp \
 
 RDEPENDS_packagegroup-base_append_raspberrypi4 += " \
 e2fsprogs-resize2fs \
+linux-firmware-rpidistro-bcm43455 \
+wpa-supplicant \
 "
 RDEPENDS_packagegroup-base_append_aarch64-std = " \
 dsoftbus \

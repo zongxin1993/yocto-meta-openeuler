@@ -12,6 +12,7 @@ usage()
     echo "                       aarch64-std (default)"
     echo "                       aarch64-pro"
     echo "                       arm-std"
+    echo "                       x86-64-std"
     echo "                       raspberrypi4-64"
     echo "           Build dir: <above dir of yocto-meta-openeuler >/build (defaut)"
     echo "           External toolchain dir(absoulte path):"
@@ -70,7 +71,11 @@ get_build_info()
     "arm-std")
         MACHINE="qemu-arm"
         ;;
-    *)
+    "x86-64-std")
+        MACHINE="qemu-x86-64"
+        BITBAKE_OPT="openeuler-image openeuler-image-tiny"
+        ;;
+   *)
         echo "unknown platform, use aarch64-std as default"
         PLATFORM="aarch64-std"
         MACHINE="qemu-aarch64"
@@ -82,6 +87,8 @@ get_build_info()
         OPENEULER_TOOLCHAIN_DIR="OPENEULER_TOOLCHAIN_DIR_aarch64";;
     "qemu-arm")
         OPENEULER_TOOLCHAIN_DIR="OPENEULER_TOOLCHAIN_DIR_arm";;
+    "qemu-x86-64")
+        OPENEULER_TOOLCHAIN_DIR="OPENEULER_TOOLCHAIN_DIR_x86-64";;
     *)
         echo "unknown machine"
         usage || return 1
@@ -91,9 +98,6 @@ get_build_info()
 # this function sets up the yocto build environment
 set_env()
 {
-    # as tools like ldconfig will be used, add /usr/sbin in $PATH
-    export PATH="/usr/sbin/:$PATH"
-
     # set the TEMPLATECONF of yocto, make build dir and init the yocto build
     # environment
     TEMPLATECONF="${SRC_DIR}/yocto-meta-openeuler/meta-openeuler/conf"
@@ -118,10 +122,6 @@ set_env()
     if echo "$MACHINE" | grep -q "^raspberrypi";then
         grep "meta-raspberrypi" conf/bblayers.conf |grep -qv "^[[:space:]]*#" || sed -i "/\/meta-openeuler /a \  "${SRC_DIR}"/yocto-meta-openeuler/bsp/meta-raspberrypi \\\\" conf/bblayers.conf
     fi
-    # set the correct automake command and add it into HOSTTOOLS
-    # if automake-1.* is not in HOSTOOLS, append it
-    local automake_v=$(ls /usr/bin/automake-1.* |awk -F "/" '{print $4}')
-    grep -q "HOSTTOOLS .*$automake_v" conf/local.conf || echo "HOSTTOOLS += \"$automake_v\"" >> conf/local.conf
 
     # set DATETIME in conf/local.conf
     # you can set DATETIME from environment variable or get time by date

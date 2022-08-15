@@ -115,7 +115,8 @@ download_code()
     update_code_repo openeuler/kernel ${KERNEL_BRANCH} kernel-5.10
     update_code_repo src-openeuler/kernel ${SRC_BRANCH} src-kernel-5.10
     update_code_repo src-openeuler/busybox ${SRC_BRANCH}
-    update_code_repo openeuler/yocto-embedded-tools ${SRC_BRANCH}
+    # update_code_repo openeuler/yocto-embedded-tools ${SRC_BRANCH}
+    update_code_repo openeuler/yocto-embedded-tools yoctor_refactor
     update_code_repo openeuler/yocto-poky ${SRC_BRANCH}
     update_code_repo src-openeuler/yocto-pseudo ${SRC_BRANCH}
     update_code_repo src-openeuler/audit ${SRC_BRANCH}
@@ -123,6 +124,7 @@ download_code()
     update_code_repo src-openeuler/libcap-ng ${SRC_BRANCH}
     update_code_repo src-openeuler/libpwquality ${SRC_BRANCH}
     update_code_repo src-openeuler/openssh ${SRC_BRANCH}
+    update_code_repo src-openeuler/libnsl2 ${SRC_BRANCH}
     update_code_repo src-openeuler/openssl ${SRC_BRANCH}
     update_code_repo src-openeuler/pam ${SRC_BRANCH}
     update_code_repo src-openeuler/shadow ${SRC_BRANCH}
@@ -134,6 +136,8 @@ download_code()
     update_code_repo src-openeuler/less ${SRC_BRANCH}
     update_code_repo src-openeuler/gzip ${SRC_BRANCH}
     update_code_repo src-openeuler/xz ${SRC_BRANCH}
+    update_code_repo src-openeuler/lzo ${SRC_BRANCH}
+    update_code_repo src-openeuler/lz4 ${SRC_BRANCH}
     update_code_repo src-openeuler/bzip2 ${SRC_BRANCH}
     update_code_repo src-openeuler/sed ${SRC_BRANCH}
     update_code_repo src-openeuler/json-c ${SRC_BRANCH}
@@ -187,11 +191,55 @@ download_code()
     update_code_repo src-openeuler/raspberrypi-firmware ${SRC_BRANCH}
     update_code_repo src-openeuler/gmp ${SRC_BRANCH}
     update_code_repo src-openeuler/gdb ${SRC_BRANCH}
-    update_code_repo src-openeuler/libmetal ${SRC_BRANCH}
-    update_code_repo src-openeuler/OpenAMP ${SRC_BRANCH}
+    update_code_repo src-openeuler/libmetal master
+    update_code_repo src-openeuler/OpenAMP master
     update_code_repo src-openeuler/sysfsutils ${SRC_BRANCH}
     update_code_repo src-openeuler/tcl ${SRC_BRANCH}
     update_code_repo src-openeuler/expect ${SRC_BRANCH}
+    update_code_repo src-openeuler/jitterentropy-library ${SRC_BRANCH}
+    update_code_repo src-openeuler/m4 ${SRC_BRANCH}
+    update_code_repo src-openeuler/gdbm ${SRC_BRANCH}
+    update_code_repo src-openeuler/libtool ${SRC_BRANCH}
+    update_code_repo src-openeuler/libidn2 ${SRC_BRANCH}
+    update_code_repo src-openeuler/libunistring ${SRC_BRANCH}
+    update_code_repo src-openeuler/gnutls ${SRC_BRANCH}
+    update_code_repo src-openeuler/nettle ${SRC_BRANCH}
+    update_code_repo src-openeuler/rng-tools ${SRC_BRANCH}
+    update_code_repo src-openeuler/bash-completion ${SRC_BRANCH}
+    update_code_repo src-openeuler/coreutils ${SRC_BRANCH}
+    update_code_repo src-openeuler/findutils ${SRC_BRANCH}
+    update_code_repo src-openeuler/gawk ${SRC_BRANCH}
+    update_code_repo src-openeuler/libmnl ${SRC_BRANCH}
+    update_code_repo src-openeuler/libuv ${SRC_BRANCH}
+    update_code_repo src-openeuler/flex ${SRC_BRANCH}
+    update_code_repo src-openeuler/sqlite ${SRC_BRANCH}
+    update_code_repo src-openeuler/bison ${SRC_BRANCH}
+    update_code_repo src-openeuler/perl ${SRC_BRANCH}
+    update_code_repo src-openeuler/userspace-rcu ${SRC_BRANCH}
+    update_code_repo src-openeuler/lttng-ust ${SRC_BRANCH}
+    update_code_repo src-openeuler/libdb ${SRC_BRANCH}
+    update_code_repo src-openeuler/groff ${SRC_BRANCH}
+    update_code_repo src-openeuler/nasm ${SRC_BRANCH}
+    update_code_repo src-openeuler/syslinux ${SRC_BRANCH}
+    update_code_repo src-openeuler/cdrkit ${SRC_BRANCH}
+    update_code_repo src-openeuler/yocto-opkg-utils ${SRC_BRANCH}
+    update_code_repo src-openeuler/python3 ${SRC_BRANCH}
+    update_code_repo src-openeuler/libgpg-error ${SRC_BRANCH}
+    update_code_repo src-openeuler/libgcrypt ${SRC_BRANCH}
+    update_code_repo src-openeuler/kbd ${SRC_BRANCH}
+    update_code_repo src-openeuler/autoconf-archive ${SRC_BRANCH}
+    update_code_repo src-openeuler/libxslt ${SRC_BRANCH}
+    # using higher version, otherwise there are too many cve patches to apply.
+    update_code_repo src-openeuler/dbus openEuler-22.09
+    update_code_repo src-openeuler/wpa_supplicant openEuler-22.09
+    update_code_repo src-openeuler/grub2 openEuler-22.09
+    update_code_repo src-openeuler/parted openEuler-22.09
+    update_code_repo src-openeuler/intltool openEuler-22.09
+    update_code_repo src-openeuler/tar openEuler-22.09
+    update_code_repo src-openeuler/perl-XML-Parser openEuler-22.09
+    update_code_repo src-openeuler/systemd openEuler-22.09
+    update_code_repo src-openeuler/gnu-efi openEuler-22.09
+    update_code_repo src-openeuler/screen openEuler-22.09
 }
 
 # download iSulad related packages
@@ -215,9 +263,7 @@ download_iSulad_code()
 clone_dsoftbus_code()
 {
     update_code_repo openeuler/dsoftbus_standard ${SRC_BRANCH}
-    # 暂时固定yocto-embedded-tools分支为openEuler-22.03-LTS
-    # update_code_repo openeuler/yocto-embedded-tools ${SRC_BRANCH}
-    update_code_repo openeuler/yocto-embedded-tools "openEuler-22.03-LTS"
+    update_code_repo openeuler/yocto-embedded-tools ${SRC_BRANCH}
     update_code_repo src-openeuler/libboundscheck ${SRC_BRANCH}
 }
 
@@ -366,9 +412,9 @@ main()
         SRC_DIR="$(cd $(dirname $0)/../../;pwd)"
         download_dsoftbus_code
     else
-        download_code
         download_iSulad_code
         download_dsoftbus_code
+        download_code
         create_manifest
     fi
 }
