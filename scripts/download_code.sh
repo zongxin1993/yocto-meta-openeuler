@@ -263,7 +263,8 @@ download_iSulad_code()
 clone_dsoftbus_code()
 {
     update_code_repo openeuler/dsoftbus_standard ${SRC_BRANCH}
-    update_code_repo openeuler/yocto-embedded-tools ${SRC_BRANCH}
+    # update_code_repo openeuler/yocto-embedded-tools ${SRC_BRANCH}
+    update_code_repo openeuler/yocto-embedded-tools yoctor_refactor
     update_code_repo src-openeuler/libboundscheck ${SRC_BRANCH}
 }
 
@@ -412,9 +413,9 @@ main()
         SRC_DIR="$(cd $(dirname $0)/../../;pwd)"
         download_dsoftbus_code
     else
+        download_code
         download_iSulad_code
         download_dsoftbus_code
-        download_code
         create_manifest
     fi
 }
