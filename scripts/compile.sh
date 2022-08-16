@@ -4,14 +4,13 @@
 usage()
 {
     echo "Tip: "
-    echo "     to build dsoftbu:"
-    echo "         # sh $(basename "${BASH_SOURCE[0]}") \"dsoftbus\""
-    echo "     to build openEuler Embedded packages:"
+    echo "     to build openEuler Embedded:"
     echo "         # . $(basename "${BASH_SOURCE[0]}") <PLATFORM> [BUILD_DIR] [TOOLCHAIN_DIR]"
     echo "           Supportted PLATFORM:"
     echo "                       aarch64-std (default)"
     echo "                       aarch64-pro"
     echo "                       arm-std"
+    echo "                       x86-64-std"
     echo "                       raspberrypi4-64"
     echo "           Build dir: <above dir of yocto-meta-openeuler >/build (defaut)"
     echo "           External toolchain dir(absoulte path):"
@@ -70,7 +69,11 @@ get_build_info()
     "arm-std")
         MACHINE="qemu-arm"
         ;;
-    *)
+    "x86-64-std")
+        MACHINE="qemu-x86-64"
+        BITBAKE_OPT="openeuler-image openeuler-image-tiny"
+        ;;
+   *)
         echo "unknown platform, use aarch64-std as default"
         PLATFORM="aarch64-std"
         MACHINE="qemu-aarch64"
@@ -82,6 +85,8 @@ get_build_info()
         OPENEULER_TOOLCHAIN_DIR="OPENEULER_TOOLCHAIN_DIR_aarch64";;
     "qemu-arm")
         OPENEULER_TOOLCHAIN_DIR="OPENEULER_TOOLCHAIN_DIR_arm";;
+    "qemu-x86-64")
+        OPENEULER_TOOLCHAIN_DIR="OPENEULER_TOOLCHAIN_DIR_x86-64";;
     *)
         echo "unknown machine"
         usage || return 1
@@ -91,9 +96,6 @@ get_build_info()
 # this function sets up the yocto build environment
 set_env()
 {
-    # as tools like ldconfig will be used, add /usr/sbin in $PATH
-    export PATH="/usr/sbin/:$PATH"
-
     # set the TEMPLATECONF of yocto, make build dir and init the yocto build
     # environment
     TEMPLATECONF="${SRC_DIR}/yocto-meta-openeuler/meta-openeuler/conf"
@@ -118,10 +120,6 @@ set_env()
     if echo "$MACHINE" | grep -q "^raspberrypi";then
         grep "meta-raspberrypi" conf/bblayers.conf |grep -qv "^[[:space:]]*#" || sed -i "/\/meta-openeuler /a \  "${SRC_DIR}"/yocto-meta-openeuler/bsp/meta-raspberrypi \\\\" conf/bblayers.conf
     fi
-    # set the correct automake command and add it into HOSTTOOLS
-    # if automake-1.* is not in HOSTOOLS, append it
-    local automake_v=$(ls /usr/bin/automake-1.* |awk -F "/" '{print $4}')
-    grep -q "HOSTTOOLS .*$automake_v" conf/local.conf || echo "HOSTTOOLS += \"$automake_v\"" >> conf/local.conf
 
     # set DATETIME in conf/local.conf
     # you can set DATETIME from environment variable or get time by date
@@ -139,46 +137,4 @@ main()
     echo -e "Tip: You can now run 'bitbake ${BITBAKE_OPT}'.\n"
 }
 
-do_dsoftbus_compile()
-{
-    rm -rf ${SRC_DIR}/dsoftbus_build/out
-    cd ${SRC_DIR}/dsoftbus_build
-    ./build.sh --product-name openEuler
-}
-
-do_dsoftbus_package()
-{
-    rm -rf ${SRC_DIR}/dsoftbus_output
-    mkdir ${SRC_DIR}/dsoftbus_output
-    install -d ${SRC_DIR}/dsoftbus_output/usr/include/dsoftbus
-    install -d ${SRC_DIR}/dsoftbus_output/usr/lib64/
-    install -d ${SRC_DIR}/dsoftbus_output/usr/bin
-
-    # prepare so
-    cp ${SRC_DIR}/dsoftbus_build/out/ohos-arm64-release/common/common/*.so ${SRC_DIR}/dsoftbus_output/usr/lib64/
-    cp ${SRC_DIR}/dsoftbus_build/out/ohos-arm64-release/communication/dsoftbus_standard/*.so ${SRC_DIR}/dsoftbus_output/usr/lib64/
-
-    # prepare bin
-    cp ${SRC_DIR}/dsoftbus_build/out/ohos-arm64-release/communication/dsoftbus_standard/softbus_server_main ${SRC_DIR}/dsoftbus_output/usr/bin
-
-    # prepare head files
-    cp \
-	${SRC_DIR}/dsoftbus_build/foundation/communication/dsoftbus/interfaces/kits/discovery/*.h \
-	${SRC_DIR}/dsoftbus_build/foundation/communication/dsoftbus/interfaces/kits/common/*.h \
-	${SRC_DIR}/dsoftbus_build/foundation/communication/dsoftbus/interfaces/kits/bus_center/*.h \
-	${SRC_DIR}/dsoftbus_build/foundation/communication/dsoftbus/interfaces/kits/transport/*.h \
-	${SRC_DIR}/dsoftbus_build/foundation/communication/dsoftbus/core/common/include/softbus_errcode.h \
-	${SRC_DIR}/dsoftbus_output/usr/include/dsoftbus
-}
-
-if [ "$1" == "dsoftbus" ];then
-    SRC_DIR=$2
-    if [ -z "${SRC_DIR}" ];then
-        SRC_DIR="$(cd $(dirname $0)/../../;pwd)"
-    fi
-
-    do_dsoftbus_compile
-    do_dsoftbus_package
-else
-    main "$@"
-fi
+main "$@"

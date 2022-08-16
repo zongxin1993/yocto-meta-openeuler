@@ -1,81 +1,48 @@
-SUMMARY = "OS basic configuration files"
-DESCRIPTION = "base files"
+SUMMARY = "extra basic configuration files of openEuler Embedded"
+DESCRIPTION = "extra basic configuration files as a supplement of poky's base-files bb"
 SECTION = "base"
 PR = "r1"
-LICENSE = "CLOSED"
+LICENSE = "GPLv2"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0-only;md5=801f80980d171dd6425610833a22dbe6"
 
-FILESPATH = "${THISDIR}/${BPN}/"
-DL_DIR = "${THISDIR}/${BPN}/"
-LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE;md5=1acb172ffd3d252285dd1b8b8459941e"
+INHIBIT_DEFAULT_DEPS = "1"
 
-SRC_URI = "file://bashrc \
-	file://fstab \
-	file://rcS \
-	file://group \
-	file://inittab \
-	file://issue \
-	file://issue.net \
-	file://LICENSE \
-	file://motd \
-	file://passwd \
-	file://profile \
-	file://shadow \
-	file://sysctl.conf \
+PACKAGE_ARCH = "${MACHINE_ARCH}"
+
+# we need updat-rc.d to set up links between init.d and rcX.d
+DEPENDS_append = " update-rc.d-native"
+
+SRC_URI = " \
 	file://rc.functions \
 	file://rc.sysinit \
-	file://rc.local \
-        file://modules \
+	file://ethertypes \
+	file://services \
+	file://protocols \
+	file://rpc \
 "
 
-hostname = "openeuler"
-
 do_install() {
-	install -d ${D}/etc
-	cp ${WORKDIR}/bashrc  		${D}/etc/
-	install -m 0600 ${WORKDIR}/fstab ${D}/etc/
-	cp ${WORKDIR}/group  		${D}/etc/
-	cp ${WORKDIR}/inittab  		${D}/etc/
-	cp ${WORKDIR}/issue  		${D}/etc/
-	cp ${WORKDIR}/issue.net  	${D}/etc/
-	cp ${WORKDIR}/motd		${D}/etc/
-	cp ${WORKDIR}/passwd  		${D}/etc/
-	cp ${WORKDIR}/profile  		${D}/etc/
-	install -m 0600 ${WORKDIR}/shadow ${D}/etc/
-	install -m 0600 ${WORKDIR}/sysctl.conf ${D}/etc/
-	install -d ${D}/etc/rc.d
-	install -m 0744 ${WORKDIR}/rc.functions ${D}/etc/rc.d
-	install -m 0744 ${WORKDIR}/rc.sysinit ${D}/etc/rc.d
-	install -m 0744 ${WORKDIR}/rc.local ${D}/etc/rc.d
-        install -m 0755 -d ${D}/etc/init.d/
-	install -m 0750 ${WORKDIR}/rcS ${D}/etc/init.d/
-        install -m 0750 ${WORKDIR}/modules ${D}/etc/
-    mkdir -p ${D}/var/log/
-    touch ${D}/var/log/messages ${D}/var/log/lastlog
-    mkdir -p ${D}/var/run/faillock ${D}/tmp
-    mkdir -p ${D}/proc ${D}/sys ${D}/root ${D}/dev ${D}/sys/fs/cgroup
-    mkdir -p ${D}/var/log/audit ${D}/var/run/sshd ${D}$/lib/modules
-    if [ "${hostname}" ]; then
-        echo ${hostname} > ${D}${sysconfdir}/hostname
-        echo "127.0.1.1 ${hostname}" >> ${D}${sysconfdir}/hosts
-    fi
-    mkdir -p ${D}${sysconfdir}/security/
-    touch ${D}${sysconfdir}/security/opasswd
-    chmod 600 ${D}${sysconfdir}/security/opasswd
-    chmod 750 ${D}$/lib/modules
-    chmod 700 ${D}/root
+## the contents of configuration should be changed according features, user configuration etc.
 
+## add config files in /etc folder
+	install -d ${D}${sysconfdir}
+
+# all init scripts should be in /etc/init.d, currently openeuler embedded specific init functions are mainly
+# located in rc.functions and rc.sysinit
+	install -d ${D}${sysconfdir}/init.d
+	install -m 0744 ${WORKDIR}/rc.functions ${D}${sysconfdir}/init.d
+	install -m 0744 ${WORKDIR}/rc.sysinit ${D}${sysconfdir}/init.d
+# to match busybox's rcS script and buysbox-inittab, set a link in rc5.d to let rc.sysinit run
+	if [ x"${INIT_MANAGER}" = x"mdev-busybox" ]; then
+		install -d ${D}${sysconfdir}/rc5.d
+		update-rc.d -r ${D} rc.sysinit start 50 5 .
+	fi
+
+# necessary infrastructure for basic TCP/IP based networking from netbase_6.2.bb
+	install -m 0644 ${WORKDIR}/rpc ${D}${sysconfdir}/rpc
+	install -m 0644 ${WORKDIR}/protocols ${D}${sysconfdir}/protocols
+	install -m 0644 ${WORKDIR}/services ${D}${sysconfdir}/services
+	install -m 0644 ${WORKDIR}/ethertypes ${D}${sysconfdir}/ethertypes
 }
 
-do_install_append_arm() {
-       echo "unix" >> ${D}/etc/modules
-}
-
-do_install_append_raspberrypi4() {
-	sed -i 's/ttyAMA0/tty1/g' ${D}/etc/inittab
-	sed -i '/\# load kernel modules/imount -o remount,rw \/' ${D}/etc/rc.d/rc.sysinit
-}
-
-PACKAGES =+ "${PN}-sysctl"
 FILES_${PN} = "/"
-FILES_${PN}-sysctl = "${sysconfdir}/sysctl.conf"
-INHIBIT_DEFAULT_DEPS = "1"

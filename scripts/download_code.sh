@@ -115,7 +115,11 @@ download_code()
     update_code_repo openeuler/kernel ${KERNEL_BRANCH} kernel-5.10
     update_code_repo src-openeuler/kernel ${SRC_BRANCH} src-kernel-5.10
     update_code_repo src-openeuler/busybox ${SRC_BRANCH}
-    update_code_repo openeuler/yocto-embedded-tools ${SRC_BRANCH}
+    # dsoftbus repos
+   update_code_repo openeuler/dsoftbus_standard ${SRC_BRANCH}
+   update_code_repo src-openeuler/libboundscheck ${SRC_BRANCH}
+    # update_code_repo openeuler/yocto-embedded-tools ${SRC_BRANCH}
+    update_code_repo openeuler/yocto-embedded-tools yoctor_refactor
     update_code_repo openeuler/yocto-poky ${SRC_BRANCH}
     update_code_repo src-openeuler/yocto-pseudo ${SRC_BRANCH}
     update_code_repo src-openeuler/audit ${SRC_BRANCH}
@@ -123,6 +127,7 @@ download_code()
     update_code_repo src-openeuler/libcap-ng ${SRC_BRANCH}
     update_code_repo src-openeuler/libpwquality ${SRC_BRANCH}
     update_code_repo src-openeuler/openssh ${SRC_BRANCH}
+    update_code_repo src-openeuler/libnsl2 ${SRC_BRANCH}
     update_code_repo src-openeuler/openssl ${SRC_BRANCH}
     update_code_repo src-openeuler/pam ${SRC_BRANCH}
     update_code_repo src-openeuler/shadow ${SRC_BRANCH}
@@ -134,6 +139,8 @@ download_code()
     update_code_repo src-openeuler/less ${SRC_BRANCH}
     update_code_repo src-openeuler/gzip ${SRC_BRANCH}
     update_code_repo src-openeuler/xz ${SRC_BRANCH}
+    update_code_repo src-openeuler/lzo ${SRC_BRANCH}
+    update_code_repo src-openeuler/lz4 ${SRC_BRANCH}
     update_code_repo src-openeuler/bzip2 ${SRC_BRANCH}
     update_code_repo src-openeuler/sed ${SRC_BRANCH}
     update_code_repo src-openeuler/json-c ${SRC_BRANCH}
@@ -187,11 +194,55 @@ download_code()
     update_code_repo src-openeuler/raspberrypi-firmware ${SRC_BRANCH}
     update_code_repo src-openeuler/gmp ${SRC_BRANCH}
     update_code_repo src-openeuler/gdb ${SRC_BRANCH}
-    update_code_repo src-openeuler/libmetal ${SRC_BRANCH}
-    update_code_repo src-openeuler/OpenAMP ${SRC_BRANCH}
+    update_code_repo src-openeuler/libmetal master
+    update_code_repo src-openeuler/OpenAMP master
     update_code_repo src-openeuler/sysfsutils ${SRC_BRANCH}
     update_code_repo src-openeuler/tcl ${SRC_BRANCH}
     update_code_repo src-openeuler/expect ${SRC_BRANCH}
+    update_code_repo src-openeuler/jitterentropy-library ${SRC_BRANCH}
+    update_code_repo src-openeuler/m4 ${SRC_BRANCH}
+    update_code_repo src-openeuler/gdbm ${SRC_BRANCH}
+    update_code_repo src-openeuler/libtool ${SRC_BRANCH}
+    update_code_repo src-openeuler/libidn2 ${SRC_BRANCH}
+    update_code_repo src-openeuler/libunistring ${SRC_BRANCH}
+    update_code_repo src-openeuler/gnutls ${SRC_BRANCH}
+    update_code_repo src-openeuler/nettle ${SRC_BRANCH}
+    update_code_repo src-openeuler/rng-tools ${SRC_BRANCH}
+    update_code_repo src-openeuler/bash-completion ${SRC_BRANCH}
+    update_code_repo src-openeuler/coreutils ${SRC_BRANCH}
+    update_code_repo src-openeuler/findutils ${SRC_BRANCH}
+    update_code_repo src-openeuler/gawk ${SRC_BRANCH}
+    update_code_repo src-openeuler/libmnl ${SRC_BRANCH}
+    update_code_repo src-openeuler/libuv ${SRC_BRANCH}
+    update_code_repo src-openeuler/flex ${SRC_BRANCH}
+    update_code_repo src-openeuler/sqlite ${SRC_BRANCH}
+    update_code_repo src-openeuler/bison ${SRC_BRANCH}
+    update_code_repo src-openeuler/perl ${SRC_BRANCH}
+    update_code_repo src-openeuler/userspace-rcu ${SRC_BRANCH}
+    update_code_repo src-openeuler/lttng-ust ${SRC_BRANCH}
+    update_code_repo src-openeuler/libdb ${SRC_BRANCH}
+    update_code_repo src-openeuler/groff ${SRC_BRANCH}
+    update_code_repo src-openeuler/nasm ${SRC_BRANCH}
+    update_code_repo src-openeuler/syslinux ${SRC_BRANCH}
+    update_code_repo src-openeuler/cdrkit ${SRC_BRANCH}
+    update_code_repo src-openeuler/yocto-opkg-utils ${SRC_BRANCH}
+    update_code_repo src-openeuler/python3 ${SRC_BRANCH}
+    update_code_repo src-openeuler/libgpg-error ${SRC_BRANCH}
+    update_code_repo src-openeuler/libgcrypt ${SRC_BRANCH}
+    update_code_repo src-openeuler/kbd ${SRC_BRANCH}
+    update_code_repo src-openeuler/autoconf-archive ${SRC_BRANCH}
+    update_code_repo src-openeuler/libxslt ${SRC_BRANCH}
+    # using higher version, otherwise there are too many cve patches to apply.
+    update_code_repo src-openeuler/dbus openEuler-22.09
+    update_code_repo src-openeuler/wpa_supplicant openEuler-22.09
+    update_code_repo src-openeuler/grub2 openEuler-22.09
+    update_code_repo src-openeuler/parted openEuler-22.09
+    update_code_repo src-openeuler/intltool openEuler-22.09
+    update_code_repo src-openeuler/tar openEuler-22.09
+    update_code_repo src-openeuler/perl-XML-Parser openEuler-22.09
+    update_code_repo src-openeuler/systemd openEuler-22.09
+    update_code_repo src-openeuler/gnu-efi openEuler-22.09
+    update_code_repo src-openeuler/screen openEuler-22.09
 }
 
 # download iSulad related packages
@@ -210,104 +261,6 @@ download_iSulad_code()
    update_code_repo src-openeuler/http-parser ${SRC_BRANCH}
    update_code_repo src-openeuler/libwebsockets ${SRC_BRANCH}
    update_code_repo src-openeuler/iSulad ${SRC_BRANCH}
-}
-
-clone_dsoftbus_code()
-{
-    update_code_repo openeuler/dsoftbus_standard ${SRC_BRANCH}
-    # 暂时固定yocto-embedded-tools分支为openEuler-22.03-LTS
-    # update_code_repo openeuler/yocto-embedded-tools ${SRC_BRANCH}
-    update_code_repo openeuler/yocto-embedded-tools "openEuler-22.03-LTS"
-    update_code_repo src-openeuler/libboundscheck ${SRC_BRANCH}
-}
-
-init_dsoftbus_codedir()
-{
-    rm -rf ${dsoftbus_build_dir}
-    mkdir -p ${dsoftbus_buildtools}
-    mkdir -p ${dsoftbus_thirdparty}
-    mkdir -p ${dsoftbus_utils}
-    mkdir -p ${dsoftbus_src}
-}
-
-unpack_dsoftbus_code()
-{
-    build="build-OpenHarmony-v3.0.2-LTS"
-    gn="gn-linux-x86-1717"
-    ninja="ninja-linux-x86-1.10.1"
-    cJSON="third_party_cJSON-OpenHarmony-v3.0.2-LTS"
-    jinja2="third_party_jinja2-OpenHarmony-v3.0.2-LTS"
-    libcoap="third_party_libcoap-OpenHarmony-v3.0.2-LTS"
-    markupsafe="third_party_markupsafe-OpenHarmony-v3.0.2-LTS"
-    mbedtls="third_party_mbedtls-OpenHarmony-v3.0.2-LTS"
-    bounds_checking_function="libboundscheck-v1.1.11"
-    utils="utils_native-OpenHarmony-v3.0.2-LTS"
-
-    #unpack build
-    unzip -qd ${dsoftbus_build_dir} ${prefix_dir}/build/${build}.zip
-    mv ${dsoftbus_build_dir}/${build} ${dsoftbus_build_dir}/build
-
-    #unpack build_tools
-    for i in  $gn $ninja
-    do
-        tar -C ${dsoftbus_buildtools} -zxf ${prefix_dir}/build_tools/${i}.tar.gz
-    done
-
-    #unpack third_party
-    for i in  cJSON jinja2 libcoap markupsafe mbedtls
-    do
-	pkg=`eval echo '$'"$i"`
-        unzip -qd ${dsoftbus_thirdparty} ${prefix_dir}/third_party/${i}/${pkg}.zip
-        mv ${dsoftbus_thirdparty}/${pkg} ${dsoftbus_thirdparty}/${i}
-    done
-
-    #unpack boundcheck
-    tar -C ${dsoftbus_thirdparty} -zxf ${SRC_DIR}/libboundscheck/${bounds_checking_function}.tar.gz
-    mv ${dsoftbus_thirdparty}/${bounds_checking_function} ${dsoftbus_thirdparty}/bounds_checking_function
-
-    #unpack utils
-    unzip -qd ${dsoftbus_utils} ${prefix_dir}/utils/${utils}.zip
-    mv ${dsoftbus_utils}/${utils} ${dsoftbus_utils}/native
-}
-
-init_dsoftbus_selfcode()
-{
-    toolchain_path="/usr1/openeuler/gcc/openeuler_gcc_arm64le"
-    build_patch="0001-add-dsoftbus-build-support-for-embedded-env.patch"
-    utils_patch="0001-Adaptation-for-dsoftbus.patch"
-    boundscheck_patch="0001-Adaptation-for-dsoftbus.patch"
-
-    #init gn root
-    ln -s ${dsoftbus_build_dir}/build/build_scripts/build.sh ${dsoftbus_build_dir}/build.sh
-    ln -s ${dsoftbus_build_dir}/build/core/gn/dotfile.gn ${dsoftbus_build_dir}/.gn
-
-    #link selfcode
-    ln -s ${prefix_dir}/productdefine ${dsoftbus_build_dir}/productdefine
-    ln -s ${prefix_dir}/depend ${dsoftbus_build_dir}/depend
-    ln -s ${SRC_DIR}/dsoftbus_standard ${dsoftbus_src}/dsoftbus
-
-    #link toolchain
-    ln -s ${toolchain_path} ${dsoftbus_build_dir}/toolchain
-
-    #do patch
-    patch -p1 -d ${dsoftbus_build_dir}/build < ${prefix_dir}/build/${build_patch}
-    patch -p1 -d ${dsoftbus_utils}/native < ${prefix_dir}/utils/${utils_patch}
-    patch -p1 -d ${dsoftbus_thirdparty}/bounds_checking_function < ${prefix_dir}/bounds_checking_function/${boundscheck_patch}
-}
-
-download_dsoftbus_code()
-{
-    prefix_dir="${SRC_DIR}/yocto-embedded-tools/dsoftbus"
-    dsoftbus_build_dir="${SRC_DIR}/dsoftbus_build"
-    dsoftbus_buildtools="${dsoftbus_build_dir}/prebuilts/build-tools/linux-x86/bin"
-    dsoftbus_thirdparty="${dsoftbus_build_dir}/third_party"
-    dsoftbus_utils="${dsoftbus_build_dir}/utils"
-    dsoftbus_src="${dsoftbus_build_dir}/foundation/communication"
-
-    clone_dsoftbus_code
-    init_dsoftbus_codedir
-    unpack_dsoftbus_code
-    init_dsoftbus_selfcode
 }
 
 usage()
@@ -362,13 +315,9 @@ main()
     URL_PREFIX="https://gitee.com/"
     if [ -f "${MANIFEST}" ];then
         download_by_manifest
-    elif [[ "$1" == "dsoftbus" ]];then
-        SRC_DIR="$(cd $(dirname $0)/../../;pwd)"
-        download_dsoftbus_code
     else
-        download_code
         download_iSulad_code
-        download_dsoftbus_code
+        download_code
         create_manifest
     fi
 }
