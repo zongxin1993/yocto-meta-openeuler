@@ -237,6 +237,9 @@ download_code()
     update_code_repo src-openeuler/wpa_supplicant openEuler-22.09
     update_code_repo src-openeuler/grub2 openEuler-22.09
     update_code_repo src-openeuler/parted openEuler-22.09
+    update_code_repo src-openeuler/mesa ${SRC_BRANCH}
+    update_code_repo src-openeuler/libdrm ${SRC_BRANCH}
+    update_code_repo src-openeuler/xorg-x11-proto-devel ${SRC_BRANCH}
     update_code_repo src-openeuler/intltool openEuler-22.09
     update_code_repo src-openeuler/tar openEuler-22.09
     update_code_repo src-openeuler/perl-XML-Parser openEuler-22.09
