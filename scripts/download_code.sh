@@ -136,7 +136,7 @@ download_code()
     update_code_repo src-openeuler/grep openEuler-22.09
     update_code_repo src-openeuler/pcre openEuler-22.09
     update_code_repo src-openeuler/less openEuler-22.09
-    update_code_repo src-openeuler/gzip ${SRC_BRANCH}
+    update_code_repo src-openeuler/gzip openEuler-22.09
     update_code_repo src-openeuler/xz openEuler-22.09
     update_code_repo src-openeuler/lzo openEuler-22.09
     update_code_repo src-openeuler/lz4 openEuler-22.09
@@ -180,7 +180,7 @@ download_code()
     update_code_repo src-openeuler/nfs-utils openEuler-22.09
     update_code_repo src-openeuler/rpcbind openEuler-22.09
     update_code_repo src-openeuler/cronie openEuler-22.09
-    update_code_repo src-openeuler/kmod ${SRC_BRANCH}
+    update_code_repo src-openeuler/kmod openEuler-22.09
     update_code_repo src-openeuler/kpatch ${SRC_BRANCH}
     update_code_repo src-openeuler/libusbx openEuler-22.09
     update_code_repo src-openeuler/libxml2 openEuler-22.09
