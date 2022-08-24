@@ -6,9 +6,10 @@ PV = "1.9.3"
 S = "${WORKDIR}/${BPN}-${PV}"
 
 # files, patches can't be applied in openeuler or conflict with openeuler
-SRC_URI_remove = " \
-            git://github.com/lz4/lz4.git;branch=release \
-            "
+SRC_URI_remove = "git://github.com/lz4/lz4.git;branch=release;protocol=https \
+           file://run-ptest \
+           file://CVE-2021-3520.patch \
+           "
 
 SRC_URI += " \
         file://${BPN}-${PV}.tar.gz \
