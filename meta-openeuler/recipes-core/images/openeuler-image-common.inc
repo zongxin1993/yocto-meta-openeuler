@@ -42,4 +42,4 @@ set_permissions_from_rootfs() {
 
 }
 
-DISTRO_FEATURES += "glibc"
+DISTRO_FEATURES += "${LIBC}"
