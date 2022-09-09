@@ -19,7 +19,9 @@ LIC_FILES_CHKSUM = "file://LICENSE.md;md5=fe0b8a4beea8f0813b606d15a3df3d3c"
 inherit cmake
 
 ### Build metadata: SRC_URI, SRCDATA, S, B, FILESEXTRAPATHS....
-SRC_URI = "file://libmetal/${BPN}-${PV}.tar.gz"
+SRC_URI = "file://libmetal/${BPN}-${PV}.tar.gz \
+	   file://libmetal-delete-librt-hugetlbfs.patch \
+"
 
 S = "${WORKDIR}/${BPN}-${PV}"
 
