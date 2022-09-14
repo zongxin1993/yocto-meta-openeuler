@@ -115,9 +115,10 @@ download_code()
     update_code_repo openeuler/kernel ${KERNEL_BRANCH} kernel-5.10
     update_code_repo src-openeuler/kernel ${SRC_BRANCH} src-kernel-5.10
     update_code_repo src-openeuler/busybox ${SRC_BRANCH}
-    update_code_repo openeuler/dsoftbus_standard ${SRC_BRANCH}
+    update_code_repo openeuler/dsoftbus_standard v3.1
     update_code_repo src-openeuler/libboundscheck ${SRC_BRANCH}
     update_code_repo openeuler/yocto-embedded-tools master
+    update_code_repo openeuler/embedded-ipc master
     update_code_repo openeuler/yocto-poky ${SRC_BRANCH}
     update_code_repo src-openeuler/yocto-pseudo ${SRC_BRANCH}
     update_code_repo src-openeuler/audit ${SRC_BRANCH}
@@ -243,14 +244,21 @@ download_code()
     update_code_repo src-openeuler/pcre2 ${SRC_BRANCH}
     update_code_repo src-openeuler/mosquitto ${SRC_BRANCH}
     update_code_repo src-openeuler/uthash ${SRC_BRANCH}
+    update_code_repo src-openeuler/check ${SRC_BRANCH}
     update_code_repo src-openeuler/ppp ${SRC_BRANCH}
+    update_code_repo src-openeuler/libinput ${SRC_BRANCH}
+    update_code_repo src-openeuler/mtdev ${SRC_BRANCH}
     update_code_repo src-openeuler/freetype ${SRC_BRANCH}
+    update_code_repo src-openeuler/wayland ${SRC_BRANCH}
     update_code_repo src-openeuler/mesa ${SRC_BRANCH}
     update_code_repo src-openeuler/libdrm ${SRC_BRANCH}
     update_code_repo src-openeuler/xorg-x11-proto-devel ${SRC_BRANCH}
     update_code_repo src-openeuler/tslib ${SRC_BRANCH}
+    update_code_repo src-openeuler/libevdev ${SRC_BRANCH}
     update_code_repo src-openeuler/mtd-utils openEuler-22.03-LTS
     update_code_repo src-openeuler/dtc ${SRC_BRANCH}
+    update_code_repo src-openeuler/libunwind ${SRC_BRANCH}
+    update_code_repo src-openeuler/libatomic_ops ${SRC_BRANCH}
 }
 
 # download iSulad related packages
@@ -304,7 +312,7 @@ main()
     SRC_BRANCH="$2"
     # manifest file include the git url, revision, path info
     MANIFEST="$3"
-    KERNEL_BRANCH="5.10.0-106.8.0"
+    KERNEL_BRANCH="5.10.0-106.18.0"
 
     check_use || return 1
     set -e
@@ -331,3 +339,4 @@ main()
 }
 
 main "$@"
+
