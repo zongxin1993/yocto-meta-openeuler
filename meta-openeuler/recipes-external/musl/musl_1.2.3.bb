@@ -20,17 +20,12 @@ INHIBIT_DEFAULT_DEPS = "1"
 
 PR = "r1"
 
-#require ../../recipes-devtools/gcc/gcc-bin-toolchain.inc
-
-
-SRC_URI = "file://aarch64-openeuler-linux-musl-cross"
-#SRC_URI = "file://aarch64-linux-musl-cross"
+SRC_URI = "file://aarch64-openeuler-linux-musl"
 
 INHIBIT_SYSROOT_STRIP = "1"
 INSANE_SKIP_${PN} += "already-stripped"
 
-S = "${WORKDIR}/aarch64-openeuler-linux-musl-cross"
-#S = "${WORKDIR}/aarch64-linux-musl-cross"
+S = "${WORKDIR}/aarch64-openeuler-linux-musl"
 
 PSEUDO_DISABLED = "1"
 
@@ -45,12 +40,14 @@ do_compile () {
 
 do_install() {
     install -m 0755 -d ${D}/
-    install -m 0755 -d ${D}/lib/
-    cp -pPR ${S}/aarch64-linux-musl/* ${D}/
-    chmod -R 755 ${D}/lib/
+    install -m 0755 -d ${D}/${base_libdir}
+    install -m 0755 -d ${D}/${libdir}
+    cp -pPR ${S}/aarch64-openeuler-linux-musl/sysroot/* ${D}/
+    chmod -R 755 ${D}/${base_libdir}
+    chmod -R 755 ${D}/${libdir}
     rm -rf ${D}/etc/rpc
     rm -rf ${D}${datadir}/info
-    rm -rf ${D}/lib/debug
+    rm -rf ${D}${base_libdir}/debug
     chown root:root ${D}/ -R
 }
 
