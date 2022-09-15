@@ -17,3 +17,8 @@ SRC_URI_remove += " \
            file://0001-add-support-for-ipkg-to-debuginfod.cxx.patch \
            https://sourceware.org/elfutils/ftp/${PV}/${BP}.tar.bz2 \
 "
+
+
+SRC_URI_remove_libc-musl += " \
+           file://0002-musl-libs.patch \
+"
