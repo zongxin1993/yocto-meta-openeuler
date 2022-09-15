@@ -1,0 +1,151 @@
+diff -urN lxc-4.0.3.orig/src/lxc/json/defs.c lxc-4.0.3/src/lxc/json/defs.c
+--- lxc-4.0.3.orig/src/lxc/json/defs.c	2022-09-07 17:05:55.714508559 +0800
++++ lxc-4.0.3/src/lxc/json/defs.c	2022-09-07 17:05:55.711508533 +0800
+@@ -83,8 +83,8 @@
+                 strcmp(tree->u.object.keys[i], "args") &&
+                 strcmp(tree->u.object.keys[i], "env") &&
+                 strcmp(tree->u.object.keys[i], "timeout")) {
+-                if (ctx->stderr > 0)
+-                    fprintf(ctx->stderr, "WARNING: unknown key found: %s\n", tree->u.object.keys[i]);
++                if (ctx->stderr1 > 0)
++                    fprintf(ctx->stderr1, "WARNING: unknown key found: %s\n", tree->u.object.keys[i]);
+             }
+         }
+     return ret;
+diff -urN lxc-4.0.3.orig/src/lxc/json/json_common.h lxc-4.0.3/src/lxc/json/json_common.h
+--- lxc-4.0.3.orig/src/lxc/json/json_common.h	2022-09-07 17:05:55.714508559 +0800
++++ lxc-4.0.3/src/lxc/json/json_common.h	2022-09-07 17:05:55.711508533 +0800
+@@ -39,7 +39,7 @@
+ 
+ struct parser_context {
+     unsigned int options;
+-    FILE *stderr;
++    FILE *stderr1;
+ };
+ 
+ yajl_gen_status reformat_number(void *ctx, const char *str, size_t len);
+@@ -182,4 +182,4 @@
+ }
+ #endif
+ 
+-#endif
+\ No newline at end of file
++#endif
+diff -urN lxc-4.0.3.orig/src/lxc/json/logger_json_file.c lxc-4.0.3/src/lxc/json/logger_json_file.c
+--- lxc-4.0.3.orig/src/lxc/json/logger_json_file.c	2022-09-07 17:05:55.714508559 +0800
++++ lxc-4.0.3/src/lxc/json/logger_json_file.c	2022-09-07 17:05:55.711508533 +0800
+@@ -50,8 +50,8 @@
+ 			                strcmp(tree->u.object.keys[i], "stream") &&
+ 			                strcmp(tree->u.object.keys[i], "time") &&
+ 			                strcmp(tree->u.object.keys[i], "attrs")) {
+-				if (ctx->stderr > 0)
+-					fprintf(ctx->stderr, "WARNING: unknown key found: %s\n", tree->u.object.keys[i]);
++				if (ctx->stderr1 > 0)
++					fprintf(ctx->stderr1, "WARNING: unknown key found: %s\n", tree->u.object.keys[i]);
+ 			}
+ 	}
+ 	return ret;
+diff -urN lxc-4.0.3.orig/src/lxc/json/oci_runtime_spec.c lxc-4.0.3/src/lxc/json/oci_runtime_spec.c
+--- lxc-4.0.3.orig/src/lxc/json/oci_runtime_spec.c	2022-09-07 17:05:55.714508559 +0800
++++ lxc-4.0.3/src/lxc/json/oci_runtime_spec.c	2022-09-07 17:05:55.711508533 +0800
+@@ -67,8 +67,8 @@
+             if (strcmp(tree->u.object.keys[i], "prestart") &&
+                 strcmp(tree->u.object.keys[i], "poststart") &&
+                 strcmp(tree->u.object.keys[i], "poststop")) {
+-                if (ctx->stderr > 0)
+-                    fprintf(ctx->stderr, "WARNING: unknown key found: %s\n", tree->u.object.keys[i]);
++                if (ctx->stderr1 > 0)
++                    fprintf(ctx->stderr1, "WARNING: unknown key found: %s\n", tree->u.object.keys[i]);
+             }
+         }
+     return ret;
+diff -urN lxc-4.0.3.orig/src/lxc/utils.c lxc-4.0.3/src/lxc/utils.c
+--- lxc-4.0.3.orig/src/lxc/utils.c	2022-09-07 17:05:55.715508568 +0800
++++ lxc-4.0.3/src/lxc/utils.c	2022-09-08 14:33:40.632305172 +0800
+@@ -29,6 +29,7 @@
+ #include <unistd.h>
+ #include <sys/sysmacros.h>
+ #include <pwd.h>
++#include <assert.h>
+ 
+ #include "config.h"
+ #include "log.h"
+@@ -2210,6 +2211,78 @@
+     return startat;
+ }
+ 
++static pthread_mutex_t pwent_mutex = PTHREAD_MUTEX_INITIALIZER;
++static int __fgetpwent_r(FILE *stream, struct passwd *pwd, char *buf,
++                         size_t len, struct passwd **result)
++{
++        struct passwd *pwtmp;
++        char *cursor = buf, *end = buf + len;
++
++        *result = NULL;
++        pthread_mutex_lock(&pwent_mutex);
++        pwtmp = stream != NULL ? fgetpwent(stream) : getpwent();
++        if (pwtmp == NULL) {
++                pthread_mutex_unlock(&pwent_mutex);
++                return ENOENT;
++        }
++        memcpy(pwd, pwtmp, sizeof(*pwd));
++        if (pwtmp->pw_name != NULL) {
++                pwd->pw_name = cursor;
++                cursor += strlcpy(cursor, pwtmp->pw_name, end - cursor) + 1;
++                if (cursor > end) {
++                        goto err_unlock;
++                }
++        }
++        if (pwtmp->pw_passwd != NULL) {
++                pwd->pw_passwd = cursor;
++                cursor += strlcpy(cursor, pwtmp->pw_passwd, end - cursor) + 1;
++                if (cursor > end) {
++                        goto err_unlock;
++                }
++        }
++        if (pwtmp->pw_gecos != NULL) {
++                pwd->pw_gecos = cursor;
++                cursor += strlcpy(cursor, pwtmp->pw_gecos, end - cursor) + 1;
++                if (cursor > end) {
++                        goto err_unlock;
++                }
++        }
++        if (pwtmp->pw_dir != NULL) {
++                pwd->pw_dir = cursor;
++                cursor += strlcpy(cursor, pwtmp->pw_dir, end - cursor) + 1;
++                if (cursor > end) {
++                        goto err_unlock;
++                }
++        }
++        if (pwtmp->pw_shell != NULL) {
++                pwd->pw_shell = cursor;
++                cursor += strlcpy(cursor, pwtmp->pw_shell, end - cursor) + 1;
++                if (cursor > end) {
++                        goto err_unlock;
++                }
++        }
++        pthread_mutex_unlock(&pwent_mutex);
++        *result = pwd;
++
++        return 0;
++err_unlock:
++        pthread_mutex_unlock(&pwent_mutex);
++        return ERANGE;
++}
++
++
++int fgetpwent_r(FILE *stream, struct passwd *pwd, char *buf, size_t len,
++                struct passwd **result)
++{
++        assert(stream != NULL);
++
++        return __fgetpwent_r(stream, pwd, buf, len, result);
++}
++
++
++
++
++
+ // isulad: set env home in container
+ int lxc_setup_env_home(uid_t uid)
+ {
