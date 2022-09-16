@@ -2,6 +2,8 @@
 # but we can use native sdk to build pseudo-native to remove the dependency of sqlite-native and attr-native
 DEPENDS_remove_class-native += "sqlite3-native attr-native"
 
+DEPENDS_append_libc-musl = " fts "
+
 OPENEULER_REPO_NAME = "yocto-pseudo"
 
 SRC_URI_remove_class-native = " \
@@ -11,6 +13,11 @@ SRC_URI_remove_class-native = " \
 
 SRC_URI_prepend_class-native = "file://${BP}.tar.gz \
           "
+FILESEXTRAPATHS_prepend := "${THISDIR}/pseudo:"
+SRC_URI_append_libc-musl = " \
+                           file://pseudo0916.patch \
+"
+
 PV_class-native = "df1d1321fb093283485c387e3c933d2d264e509c"
 S_class-native = "${WORKDIR}/${BP}"
 
@@ -28,3 +35,5 @@ do_compile_class-native () {
         fi
         oe_runmake ${MAKEOPTS}
 }
+
+COMPATIBLE_HOST_libc-musl = '.*-musl.*'
