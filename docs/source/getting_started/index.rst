@@ -275,7 +275,7 @@ openEuler Embedded传输文件。
           printf("hello world\n");
       }
 
-  编写CMakelist.txt，和hello.c文件放在同一个目录。
+  编写CMakelists.txt，和hello.c文件放在同一个目录。
 
   ::
 
@@ -313,6 +313,8 @@ openEuler Embedded传输文件。
 
   在设置好SDK环境的基础之上，编译内核模块还需准备相应环境，但只需要准备一次即可。运行如下命令会创建相应的内核模块编译环境：
 
+  (22.09及其之后版本在初始化编译环境变量时，会自动执行此步骤，可以跳过此步骤)
+
   .. code-block:: console
 
       cd <SDK_PATH>/sysroots/<target>-openeuler-linux/usr/src/kernel
@@ -340,8 +342,8 @@ openEuler Embedded传输文件。
           printk("Byebye!");
       }
 
-      module_init(hello_init)
-      module_exit(hello_exit)
+      module_init(hello_init);
+      module_exit(hello_exit);
 
       MODULE_LICENSE("GPL");
 

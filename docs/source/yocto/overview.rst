@@ -13,7 +13,7 @@ OpenEmbedded项目（OpenEmbedded Project，后简称OpenEmbedded），并与之
 
 Yocto为构建定制化的嵌入式Linux发行版提供一系列模板、工具和方法来简化定制Linux开发，允许更换软件配置和构建，避免重复工作
 以及不必要的维护。Yocto鼓励跨各种应用程序和设备类型的创新，支持多种硬件架构，包括X86(32位和64位)、ARM（32w位和64位）、
-、RISC-V、PPC和MIPS等。随着硬件BSP支持的增加和BSP格式的标准化，这个项目创造了巨大的价值。
+RISC-V、PPC和MIPS等。随着硬件BSP支持的增加和BSP格式的标准化，这个项目创造了巨大的价值。
 
 Yocto和OpenEmbedded共享一个核心元数据集合，称为OpenEmbedded-Core。OpenEmbedded为各种体系结构、功能和应用程序
 提供了一套全面的元数据, 而Yocto专注于为一组核心架构和特定单板提供功能强大、易于使用、可互操作、经过良好测试的工具、元数
