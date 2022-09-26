@@ -18,3 +18,8 @@ FILESEXTRAPATHS_append := "${THISDIR}/files/:"
 
 # checksum changed
 SRC_URI[sha256sum] = "a260706dbab849b85f6eabe418f6dc58e22bddf4b9d7fccb681907e43408d0c9"
+
+# add patch to support musl 
+SRC_URI_append_libc-musl += " \
+        file://libgpg-error-musl.patch \
+"
