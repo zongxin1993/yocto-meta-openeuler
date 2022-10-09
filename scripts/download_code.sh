@@ -252,6 +252,7 @@ download_code()
     update_code_repo src-openeuler/tslib ${SRC_BRANCH}
     update_code_repo src-openeuler/mtd-utils openEuler-22.03-LTS
     update_code_repo src-openeuler/dtc ${SRC_BRANCH}
+    update_code_repo src-openeuler/yaffs2 openEuler-22.03-LTS
 }
 
 # download iSulad related packages
