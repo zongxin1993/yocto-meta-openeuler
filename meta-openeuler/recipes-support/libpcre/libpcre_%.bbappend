@@ -6,6 +6,8 @@ PV = "8.45"
 # The MD5 valude of LICENCE file has been changed in this version
 LIC_FILES_CHKSUM = "file://LICENCE;md5=b5d5d1a69a24ea2718263f1ff85a1c58"
 
+DOWNLOAD_REPO = "pcre"
+
 # remove conflict files from poky
 SRC_URI_remove = " \
         https://ftp.pcre.org/pub/pcre/pcre-${PV}.tar.bz2 \

@@ -17,6 +17,8 @@ LIC_FILES_CHKSUM = "file://LICENSE.md;md5=a8d8cf662ef6bf9936a1e1413585ecbf"
 ### Inheritance and includes if needed
 inherit cmake
 
+DOWNLOAD_REPO = "OpenAMP"
+
 ### Build metadata: SRC_URI, SRCDATA, S, B, FILESEXTRAPATHS....
 SRC_URI = "file://OpenAMP/${BPN}-${PV}.tar.gz"
 

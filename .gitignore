@@ -11,3 +11,5 @@ docs/build
 
 # no vscode configuration
 *.vscode
+
+nohup.out

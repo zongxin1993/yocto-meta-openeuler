@@ -8,6 +8,8 @@ SRC_URI_remove = " \
         file://0001-atomic-Rename-local-__atomic_compare_exchange-to-avo.patch \
 "
 
+DOWNLOAD_REPO = "libdb"
+
 # files, patches that come from openeuler
 # patches that apply fail:
 #     add-check-for-device-number-in-__check_lock_fn.patch

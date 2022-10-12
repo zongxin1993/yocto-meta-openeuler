@@ -4,6 +4,8 @@
 PV = "10.39"
 LIC_FILES_CHKSUM = "file://LICENCE;md5=43cfa999260dd853cd6cb174dc396f3d"
 
+OPENEULER_REPO_NAME = "pcre2"
+
 # remove conflict files from poky
 SRC_URI_remove = " \
         https://ftp.pcre.org/pub/pcre/pcre2-${PV}.tar.bz2 \
