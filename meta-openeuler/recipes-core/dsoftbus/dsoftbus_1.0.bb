@@ -6,6 +6,8 @@ LICENSE = "CLOSED"
 # gn\ninja has self contained by this project, no need here
 DEPENDS = "python3-native"
 
+DOWNLOAD_REPO = "yocto-embedded-tools libboundscheck dsoftbus_standard embedded-ipc"
+
 S = "${WORKDIR}/dsoftbus-build"
 dsoftbus-buildtools="${S}/prebuilts/build-tools/linux-x86/bin"
 dsoftbus-thirdparty="${S}/third_party"

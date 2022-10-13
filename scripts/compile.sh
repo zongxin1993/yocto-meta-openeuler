@@ -134,13 +134,35 @@ set_env()
         DATETIME="$(date +%Y%m%d%H%M%S)"
     fi
     grep -q "DATETIME" conf/local.conf || echo "DATETIME = \"${DATETIME}\"" >> conf/local.conf
+
+    CODECONF_DIR="${SRC_DIR}/yocto-meta-openeuler/scripts/conf/codelist.yaml"
+    echo "CODECONF_DIR = \"${CODECONF_DIR}\"" >> conf/local.conf
+
+    SRC_BRANCH="openEuler-22.09"
+    echo "SRC_BRANCH = \"${SRC_BRANCH}\"" >> conf/local.conf
+
+    KERNEL_BRANCH="5.10.0-106.18.0"
+    echo "KERNEL_BRANCH = \"${KERNEL_BRANCH}\"" >> conf/local.conf
 }
 
 main()
 {
+    download_pre_repo
     get_build_info "$@" || return 1
     set_env
     echo -e "Tip: You can now run 'bitbake ${BITBAKE_OPT}'.\n"
+}
+
+download_pre_repo()
+{
+    if [ -z "${SRC_DIR}" ];then
+        SRC_DIR="$(cd $(dirname $0)/../../;pwd)"
+    fi
+    SRC_DIR="$(realpath ${SRC_DIR})"
+    echo ${SRC_DIR}
+
+    git clone https://gitee.com/openeuler/kernel.git -v ${SRC_DIR}/kernel-5.10 -b 5.10.0-106.18.0 --depth 1
+    git clone https://gitee.com/openeuler/yocto-poky.git -v ${SRC_DIR}/yocto-poky -b openEuler-22.09 --depth 1
 }
 
 main "$@"

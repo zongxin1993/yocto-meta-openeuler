@@ -6,6 +6,7 @@ PV = "3.3.17"
 S = "${WORKDIR}/${BPN}-${PV}"
 
 FILESEXTRAPATHS_append := "${THISDIR}/procps/:"
+DOWNLOAD_REPO = "procps-ng"
 
 # files, patches can't be applied in openeuler or conflict with openeuler
 SRC_URI_remove = " \

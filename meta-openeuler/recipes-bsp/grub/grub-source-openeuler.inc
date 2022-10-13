@@ -8,7 +8,7 @@ SRC_URI_remove = " \
 "
 
 SRC_URI_prepend = " \
-    file://grub-${PV}.tar.xz \
+    file://grub2/grub-${PV}.tar.xz \
 "
 
 # Notice: openeuler's patches have much confict to patch, drop it.

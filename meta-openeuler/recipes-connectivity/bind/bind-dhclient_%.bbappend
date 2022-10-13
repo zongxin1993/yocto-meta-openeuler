@@ -3,6 +3,8 @@
 # version in openeuler/dhcp
 PV = "9.11.14"
 
+DOWNLOAD_REPO = "dhcp"
+
 # fix LIC_FILES_CHKSUM error
 LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=8f17f64e47e83b60cd920a1e4b54419e"
 
