@@ -13,19 +13,14 @@ PACKAGES = "${PN} ${PN}-dev ${PN}-staticdev"
 
 PROVIDES += "virtual/libc virtual/libiconv virtual/libintl virtual/crypt"
 
-DEPENDS = "virtual/${TARGET_PREFIX}gcc \
-          bsd-headers \
+DEPENDS = "bsd-headers \
           "
 INHIBIT_DEFAULT_DEPS = "1"
 
 PR = "r1"
 
-SRC_URI = "file://aarch64-openeuler-linux-musl"
-
 INHIBIT_SYSROOT_STRIP = "1"
 INSANE_SKIP_${PN} += "already-stripped"
-
-S = "${WORKDIR}/aarch64-openeuler-linux-musl"
 
 PSEUDO_DISABLED = "1"
 
@@ -42,7 +37,7 @@ do_install() {
     install -m 0755 -d ${D}/
     install -m 0755 -d ${D}/${base_libdir}
     install -m 0755 -d ${D}/${libdir}
-    cp -pPR ${S}/aarch64-openeuler-linux-musl/sysroot/* ${D}/
+    cp -pPR ${EXTERNAL_TOOLCHAIN}/aarch64-openeuler-linux-musl/sysroot/* ${D}/
     chmod -R 755 ${D}/${base_libdir}
     chmod -R 755 ${D}/${libdir}
     rm -rf ${D}/etc/rpc
@@ -69,4 +64,3 @@ INSANE_SKIP += "dev-elf dev-so"
 
 
 SYSROOT_DIRS += "/*"
-
