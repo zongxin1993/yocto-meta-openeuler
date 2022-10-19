@@ -1,5 +1,5 @@
---- iSulad-v2.0.16/src/client/connect/protocol_type.h   2022-09-19 09:11:13.599835541 +0800
-+++ iSulad-v2.0.16/src/client/connect/protocol_type.h   2022-09-19 09:14:51.844509875 +0800
+--- iSulad-v2.0.17/src/client/connect/protocol_type.h   2022-09-19 09:11:13.599835541 +0800
++++ iSulad-v2.0.17/src/client/connect/protocol_type.h   2022-09-19 09:14:51.844509875 +0800
 @@ -54,11 +54,11 @@ struct isula_create_response {
 
  struct isula_start_request {
@@ -42,8 +42,8 @@
      bool attach_stdout;
      bool attach_stderr;
 
---- iSulad-v2.0.16/src/client/connect/protocol_type.c   2022-09-19 09:21:57.492775372 +0800
-+++ iSulad-v2.0.16/src/client/connect/protocol_type.c   2022-09-19 09:23:54.711674661 +0800
+--- iSulad-v2.0.17/src/client/connect/protocol_type.c   2022-09-19 09:21:57.492775372 +0800
++++ iSulad-v2.0.17/src/client/connect/protocol_type.c   2022-09-19 09:23:54.711674661 +0800
 @@ -280,14 +280,14 @@ void isula_start_request_free(struct isu
      free(request->name);
      request->name = NULL;
@@ -108,8 +108,8 @@
      free(request);
  }
 
---- iSulad-v2.0.16/src/client/connect/rest/rest_containers_client.c     2022-09-19 09:27:58.672546293 +0800
-+++ iSulad-v2.0.16/src/client/connect/rest/rest_containers_client.c     2022-09-19 09:38:59.355614190 +0800
+--- iSulad-v2.0.17/src/client/connect/rest/rest_containers_client.c     2022-09-19 09:27:58.672546293 +0800
++++ iSulad-v2.0.17/src/client/connect/rest/rest_containers_client.c     2022-09-19 09:38:59.355614190 +0800
 @@ -87,14 +87,14 @@ static int start_request_to_rest(const s
      if (ls_request->name != NULL) {
          crequest->id = util_strdup_s(ls_request->name);
@@ -174,8 +174,8 @@
      if (le_request->suffix != NULL) {
          crequest->suffix = util_strdup_s(le_request->suffix);
 
---- iSulad-v2.0.16/src/daemon/modules/runtime/engines/lcr/lcr_rt_ops.c  2022-09-19 09:43:42.136783044 +0800
-+++ iSulad-v2.0.16/src/daemon/modules/runtime/engines/lcr/lcr_rt_ops.c  2022-09-19 09:42:58.598449116 +0800
+--- iSulad-v2.0.17/src/daemon/modules/runtime/engines/lcr/lcr_rt_ops.c  2022-09-19 09:43:42.136783044 +0800
++++ iSulad-v2.0.17/src/daemon/modules/runtime/engines/lcr/lcr_rt_ops.c  2022-09-19 09:42:58.598449116 +0800
 @@ -487,8 +487,8 @@ int rt_lcr_attach(const char *name, cons
          goto out;
      }
@@ -188,8 +188,8 @@
          const char *tmpmsg = NULL;
          if (engine_ops->engine_get_errmsg_op != NULL) {
 
---- iSulad-v2.0.16/src/daemon/modules/runtime/isula/isula_rt_ops.c      2022-09-19 09:46:39.902146450 +0800
-+++ iSulad-v2.0.16/src/daemon/modules/runtime/isula/isula_rt_ops.c      2022-09-19 09:47:47.711666534 +0800
+--- iSulad-v2.0.17/src/daemon/modules/runtime/isula/isula_rt_ops.c      2022-09-19 09:46:39.902146450 +0800
++++ iSulad-v2.0.17/src/daemon/modules/runtime/isula/isula_rt_ops.c      2022-09-19 09:47:47.711666534 +0800
 @@ -834,9 +834,9 @@ int rt_isula_create(const char *id, cons
      p.exit_fifo = (char *)params->exit_fifo;
      p.open_tty = params->tty;
@@ -211,8 +211,8 @@
 \ No newline at end of file
 +}
 
---- iSulad-v2.0.16/src/daemon/executor/container_cb/execution.c 2022-09-19 09:49:53.940634672 +0800
-+++ iSulad-v2.0.16/src/daemon/executor/container_cb/execution.c 2022-09-19 09:50:50.743070321 +0800
+--- iSulad-v2.0.17/src/daemon/executor/container_cb/execution.c 2022-09-19 09:49:53.940634672 +0800
++++ iSulad-v2.0.17/src/daemon/executor/container_cb/execution.c 2022-09-19 09:50:50.743070321 +0800
 @@ -270,7 +270,7 @@ static int prepare_start_io(container_t
              goto out;
          }
@@ -223,8 +223,8 @@
              ret = -1;
              goto out;
 
---- iSulad-v2.0.16/src/daemon/executor/container_cb/execution_stream.c  2022-09-19 09:52:35.190871412 +0800
-+++ iSulad-v2.0.16/src/daemon/executor/container_cb/execution_stream.c  2022-09-19 09:54:16.304646931 +0800
+--- iSulad-v2.0.17/src/daemon/executor/container_cb/execution_stream.c  2022-09-19 09:52:35.190871412 +0800
++++ iSulad-v2.0.17/src/daemon/executor/container_cb/execution_stream.c  2022-09-19 09:54:16.304646931 +0800
 @@ -266,7 +266,7 @@ static int attach_prepare_console(const
              goto out;
          }
@@ -247,8 +247,8 @@
 
      (void)isulad_monitor_send_container_event(id, ATTACH, -1, 0, NULL, NULL);
 
---- iSulad-v2.0.16/src/daemon/modules/api/runtime_api.h 2022-09-19 10:21:19.315094981 +0800
-+++ iSulad-v2.0.16/src/daemon/modules/api/runtime_api.h 2022-09-19 10:23:19.310015312 +0800
+--- iSulad-v2.0.17/src/daemon/modules/api/runtime_api.h 2022-09-19 10:21:19.315094981 +0800
++++ iSulad-v2.0.17/src/daemon/modules/api/runtime_api.h 2022-09-19 10:23:19.310015312 +0800
 @@ -70,9 +70,9 @@ typedef struct _rt_create_params_t {
      const char *state;
      void *oci_config_data;
@@ -276,8 +276,8 @@
 
  typedef struct _rt_update_params_t {
 
---- iSulad-v2.0.16/src/daemon/modules/service/service_container.c       2022-09-19 10:45:35.318254990 +0800
-+++ iSulad-v2.0.16/src/daemon/modules/service/service_container.c       2022-09-19 10:47:35.547173581 +0800
+--- iSulad-v2.0.17/src/daemon/modules/service/service_container.c       2022-09-19 10:45:35.318254990 +0800
++++ iSulad-v2.0.17/src/daemon/modules/service/service_container.c       2022-09-19 10:47:35.547173581 +0800
 @@ -825,9 +825,9 @@ static int do_start_container(container_
      create_params.state = cont->state_path;
      create_params.oci_config_data = oci_spec;
@@ -301,8 +301,8 @@
              ret = -1;
              goto out;
 
---- iSulad-v2.0.16/src/cmd/isula/base/start.c   2022-09-19 11:16:14.838156121 +0800
-+++ iSulad-v2.0.16/src/cmd/isula/base/start.c   2022-09-19 11:18:12.374049157 +0800
+--- iSulad-v2.0.17/src/cmd/isula/base/start.c   2022-09-19 11:16:14.838156121 +0800
++++ iSulad-v2.0.17/src/cmd/isula/base/start.c   2022-09-19 11:18:12.374049157 +0800
 @@ -124,9 +124,9 @@ static int do_client_start(const struct
 
      request.name = args->name;
@@ -317,8 +317,8 @@
      request.attach_stdin = args->custom_conf.attach_stdin;
      request.attach_stdout = args->custom_conf.attach_stdout;
 
---- iSulad-v2.0.16/src/cmd/isula/stream/exec.c  2022-09-19 11:22:01.760792010 +0800
-+++ iSulad-v2.0.16/src/cmd/isula/stream/exec.c  2022-09-19 11:22:29.969006333 +0800
+--- iSulad-v2.0.17/src/cmd/isula/stream/exec.c  2022-09-19 11:22:01.760792010 +0800
++++ iSulad-v2.0.17/src/cmd/isula/stream/exec.c  2022-09-19 11:22:29.969006333 +0800
 @@ -60,9 +60,9 @@ static int fill_exec_request(const struc
      request->attach_stdout = args->custom_conf.attach_stdout;
      request->attach_stderr = args->custom_conf.attach_stderr;
@@ -333,8 +333,8 @@
 
      request->user = util_strdup_s(args->custom_conf.user);
 
---- iSulad-v2.0.16/src/cmd/isula/stream/attach.c        2022-09-19 11:23:59.246684654 +0800
-+++ iSulad-v2.0.16/src/cmd/isula/stream/attach.c        2022-09-19 11:24:48.674060200 +0800
+--- iSulad-v2.0.17/src/cmd/isula/stream/attach.c        2022-09-19 11:23:59.246684654 +0800
++++ iSulad-v2.0.17/src/cmd/isula/stream/attach.c        2022-09-19 11:24:48.674060200 +0800
 @@ -398,9 +398,9 @@ static int client_attach(struct client_a
          ret = ECOMMON;
          goto out;
@@ -349,8 +349,8 @@
 
      config = get_connect_config(args);
 
---- iSulad-v2.0.16/src/CMakeLists.txt   2022-09-19 14:44:22.526007835 +0800
-+++ iSulad-v2.0.16/src/CMakeLists.txt   2022-09-19 14:43:07.452410938 +0800
+--- iSulad-v2.0.17/src/CMakeLists.txt   2022-09-19 14:44:22.526007835 +0800
++++ iSulad-v2.0.17/src/CMakeLists.txt   2022-09-19 14:43:07.452410938 +0800
 @@ -49,6 +49,7 @@ target_include_directories(libisulad_too
  )
  set_target_properties(libisulad_tools PROPERTIES PREFIX "")
@@ -360,8 +360,8 @@
  if (ENABLE_OCI_IMAGE)
      target_link_libraries(libisulad_tools ${LIBARCHIVE_LIBRARY})
 
---- iSulad-v2.0.16/src/daemon/modules/image/image_rootfs_handler.c      2022-09-26 09:24:19.359973622 +0800
-+++ iSulad-v2.0.16/src/daemon/modules/image/image_rootfs_handler.c      2022-09-26 09:44:38.957115144 +0800
+--- iSulad-v2.0.17/src/daemon/modules/image/image_rootfs_handler.c      2022-09-26 09:24:19.359973622 +0800
++++ iSulad-v2.0.17/src/daemon/modules/image/image_rootfs_handler.c      2022-09-26 09:44:38.957115144 +0800
 @@ -26,6 +26,8 @@
  #include <stdio.h>
  #include <stdlib.h>
@@ -520,8 +520,8 @@
  {
      ERROR("uids and gids must be in range 0-%lld", MAXUID);
 
---- iSulad-v2.0.16/src/cmd/isulad/main.c        2022-10-14 14:04:50.303324243 +0800
-+++ iSulad-v2.0.16/src/cmd/isulad/main.c        2022-10-14 14:06:08.262895032 +0800
+--- iSulad-v2.0.17/src/cmd/isulad/main.c        2022-10-14 14:04:50.303324243 +0800
++++ iSulad-v2.0.17/src/cmd/isulad/main.c        2022-10-14 14:06:08.262895032 +0800
 @@ -40,6 +40,7 @@
  #include <string.h>
  #include <strings.h>
@@ -530,3 +530,15 @@
  #ifdef ENABLE_SUP_GROUPS
  #include <grp.h>
  #endif
+
+--- iSulad-v2.0.17/src/daemon/modules/image/oci/storage/layer_store/layer_store.c       2022-10-18 08:58:45.194015191 +0000
++++ iSulad-v2.0.17/src/daemon/modules/image/oci/storage/layer_store/layer_store.c       2022-10-18 08:50:36.870156051 +0000
+@@ -31,7 +31,7 @@
+ #include <string.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+-#include <sys/unistd.h>
++#include <unistd.h>
+
+ #include <archive.h>
+ #include <archive_entry.h>
