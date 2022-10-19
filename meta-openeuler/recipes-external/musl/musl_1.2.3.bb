@@ -63,4 +63,4 @@ INSANE_SKIP_${PN} += "installed-vs-shipped"
 INSANE_SKIP += "dev-elf dev-so"
 
 
-SYSROOT_DIRS += "/*"
+SYSROOT_DIRS = "/usr/*"
