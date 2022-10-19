@@ -1,3 +1,6 @@
+#ifndef _EXECINFO_H
+#define _EXECINFO_H
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -7,3 +10,5 @@ void    backtrace_symbols_fd(void *const *, int, int);
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* _EXECINFO_H */

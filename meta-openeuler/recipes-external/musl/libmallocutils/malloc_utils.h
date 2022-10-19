@@ -1,5 +1,6 @@
-//#define __NEED_size_t
-//#include <bits/alltypes.h>
+#ifndef _MALLOC_UTILS_H
+#define _MALLOC_UTILS_H
+
 #include <stddef.h>
 
 #ifdef __cplusplus
@@ -17,3 +18,5 @@ int malloc_trim(size_t pad);
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* _MALLOC_UTILS_H */
