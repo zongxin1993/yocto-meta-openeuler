@@ -13,3 +13,9 @@ SRC_URI_prepend = "\
 
 # change source directory
 S = "${WORKDIR}/${BP}"
+
+# add patch to support musl
+FILESEXTRAPATHS_prepend := "${THISDIR}/rng-tools/:"
+SRC_URI_append_libc-musl = " \
+        file://rng-tools-musl.patch \
+"
