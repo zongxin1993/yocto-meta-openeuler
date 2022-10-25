@@ -246,6 +246,7 @@ download_code()
     update_code_repo src-openeuler/uthash ${SRC_BRANCH}
     update_code_repo src-openeuler/check ${SRC_BRANCH}
     update_code_repo src-openeuler/ppp ${SRC_BRANCH}
+    update_code_repo src-openeuler/qt5-qtbase ${SRC_BRANCH}
     update_code_repo src-openeuler/libinput ${SRC_BRANCH}
     update_code_repo src-openeuler/freetype ${SRC_BRANCH}
     update_code_repo src-openeuler/wayland ${SRC_BRANCH}
