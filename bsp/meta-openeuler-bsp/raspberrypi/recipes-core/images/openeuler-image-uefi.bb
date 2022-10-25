@@ -40,12 +40,14 @@ uefi_configuration() {
 
 # make no login and standard PATH
 set_permissions_from_rootfs_append() {
+    pushd "${IMAGE_ROOTFS}"
     if [ -f ./etc/inittab ]; then
         sed -i "s#respawn:/sbin/getty.*#respawn:-/bin/sh#g" ./etc/inittab
     fi
     if [ -f ./etc/profile ]; then
         sed -i "s#^PATH=.*#PATH=\"/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin\"#g" ./etc/profile
     fi
+    popd
 }
 
 change_bootfiles_to_enable_uefi() {
@@ -72,7 +74,8 @@ change_bootfiles_to_enable_uefi() {
 
     #change grub.cfg to use Image.gz to launch
     sed -i 's/linux \/Image /linux \/Image.gz /' ${DEPLOY_DIR_IMAGE}/EFI/BOOT/grub.cfg
-
+    #set maxcpus=3, reserve cpu3 for clientos
+    sed -i 's/linux \/Image.gz/& maxcpus=3 /' ${DEPLOY_DIR_IMAGE}/EFI/BOOT/grub.cfg
 }
 
 IMAGE_PREPROCESS_COMMAND_append += "change_bootfiles_to_enable_uefi"

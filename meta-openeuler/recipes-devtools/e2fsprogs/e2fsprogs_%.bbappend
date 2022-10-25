@@ -22,7 +22,11 @@ SRC_URI += " \
     file://0009-e2mmpstatus.8.in-detele-filesystem-can-be-UUID-or-LA.patch \
     file://0010-tests-update-expect-file-for-u_direct_io.patch \
     file://0011-libext2fs-don-t-old-the-CACHE_MTX-while-doing-I-O.patch \
-    file://0012-tests-skip-m_rootdir_acl-if-selinux-is-not-disabled.patch \
+    file://0012-tests-fix-ACL-printing-tests.patch \
     file://0013-e2fsck-do-not-clean-up-file-acl-if-the-inode-is-trun.patch \
     file://0014-e2fsck-handle-level-is-overflow-in-ext2fs_extent_get.patch \
+    file://0015-libext2fs-add-sanity-check-to-extent-manipulation.patch \
+    file://0016-e2fsprogs-add-sw64.patch \
+    file://0017-tune2fs-do-not-change-j_tail_sequence-in-journal-sup.patch \
+    file://0018-debugfs-teach-logdump-the-n-num_trans-option.patch \
 "
