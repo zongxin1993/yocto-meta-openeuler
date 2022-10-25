@@ -1,4 +1,8 @@
+#!/usr/bin/env python3
+
+import os
 import docker
+from threading import Thread
 
 class DockerImage:
 
@@ -52,6 +56,43 @@ class DockerProxy(object):
     # 获取某个正在运行容器
     def get_container_by_id(self, container_id):
         return self._client.containers.get(container_id = container_id)
+
+    # 创建可交互的容器
+    def run_container_with_tty(self, image_name : str, command = None, user = None, work_dir = None, volume = None):
+        container = self._client.containers.run(
+            image_name, 
+            stdin_open = True, 
+            tty = True, 
+            command = "bash",
+            detach = True,
+            user = user,
+            working_dir = work_dir,
+            volumes = volume
+            )
+
+        s = container.attach_socket(params = {'stdin': True, 'stdout': True, 'stream': True})
+
+        def write_command(s):
+             while True:
+                command = input()
+                command = command + "\n"
+                os.write(s.fileno(), command.encode())
+    
+        def read_output(s):
+            while True:
+                output = os.read(s.fileno(), 10000).decode()
+                print(output)
+
+        write_c = Thread(target=write_command, args=(s,))
+        write_c.start()
+
+        read_c = Thread(target=read_output, args=(s,))
+        read_c.start()
+
+        if command != None:
+            command = command + "\n"
+            os.write(s.fileno(), command.encode())
+            
 
     # 创建容器（可执行命令，可执行脚本）
     def run_container(self, image_name : str, commands = None, volumes = None, stream = False, work_dir = None, user = None):

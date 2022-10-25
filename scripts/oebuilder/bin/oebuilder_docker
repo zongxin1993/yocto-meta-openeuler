@@ -46,6 +46,30 @@ def main():
             stream = True,
             user = user
         )
+    
+    if action == "exec_tty":
+        print(args.command)
+        volumes = args.volumes
+        if volumes != "":
+            volumes_split = volumes.split(";")
+            volumes = []
+            for item in volumes_split:
+                volumes.append(item)
+
+        imageName = args.image
+        user = args.user
+
+        with open(args.command, 'r') as f:
+            command = f.read()
+        
+        os.remove(args.command)
+        
+        dockerProxy.run_container_with_tty(
+            imageName,
+            command = command,
+            user = user,
+            volume = volumes
+        )
 
 if __name__ == "__main__":
     main()

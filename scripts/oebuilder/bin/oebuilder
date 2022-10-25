@@ -1,5 +1,24 @@
 #!/bin/bash
 
+use_agent()
+{
+
+    cat << EOF
+Usage:
+oebuilder command <option>
+command: 
+    build:  this is for building a openeuler image when you dont't want to interact with mathine
+            the full command for example is 'oebuilder build aarch64-std busybox /home/ubuntu/Desktop/work' to build busybox package, 
+            and then you can find what you want in /home/ubuntu/Desktop/work that you seted. 
+    setenv: this is for environment, the param has following list:
+            WORK_SPACE: the working directory, that source code and build result will store in this directory, but when you run 'build' and it will ignore
+            ARCH_TYPE: the cpu platform  
+    showenv: this is for show environment 
+EOF
+
+}
+
+
 check_build()
 {
     if [ -z "${BUILD_ARCH}" ];then
@@ -17,8 +36,11 @@ check_build()
     return 0
 }
 
+
 build()
 {
+    echo "build"
+
     test -d ${BUILD_WORK} || mkdir -p ${BUILD_WORK}
 
     local srcDir=${BUILD_WORK}/src
@@ -49,50 +71,120 @@ EOF
     oebuilder_docker exec -v ${volumes} -i ${image} -c ${command} -u ${user}
 }
 
-use_agent()
+
+bitbake()
 {
-    cat << EOF
-Usage:
-this is help information
+    # check env if set
+    if [ -z `grep WORK_SPACE= .local` ];then
+        echo "please run 'oebuilder setenv WORK_SPACE=<your work direction>' first to make sure working directory"
+        return 1
+    fi
+    if [ -z `grep ARCH_TYPE= .local` ];then
+        echo "please run 'oebuilder setenv ARCH_TYPE=<cpu platform>' first to make sure building in which platform"
+        return 1
+    fi
+
+    export `grep WORK_SPACE .local`
+    export `grep ARCH_TYPE .local`
+
+    local workDir=$WORK_SPACE
+    local archType=$ARCH_TYPE
+    local srcDir=${workDir}/src
+    test -d ${srcDir} || mkdir -p ${srcDir}
+
+    local yoctoDir=${srcDir}/yocto-meta-openeuler
+    test -d ${yoctoDir} && rm -rf ${yoctoDir}
+
+    local baseDir=`pwd`/../../yocto-meta-openeuler
+    cp -r ${baseDir} $srcDir
+
+    command_dir=$RANDOM
+    cat > ${command_dir} << EOF
+. /opt/buildtools/nativesdk/environment-setup-x86_64-pokysdk-linux
+. /home/openeuler/work/src/yocto-meta-openeuler/scripts/compile.sh ${archType} /home/openeuler/work/build
 EOF
 
-    return 1
+    local volumes=${workDir}:/home/openeuler/work
+    local image=swr.cn-north-4.myhuaweicloud.com/openeuler-embedded/openeuler-container:latest
+    local user=openeuler
+
+    oebuilder_docker exec_tty -v ${volumes} -i ${image} -c ${command_dir} -u ${user}
 }
+
+
+function setenv()
+{
+    test -f .local || touch .local
+    if [[ ${SETENV} == WORK_SPACE=* ]];then
+        if [ -z `grep ^WORK_SPACE=* .local` ];then
+            echo ${SETENV} >> .local
+        else
+            sed -i "`grep -n WORK_SPACE= .local | awk -F ':' '{print $1}'`c ${SETENV}" .local
+        fi
+    fi
+    if [[ ${SETENV} == ARCH_TYPE=* ]];then
+        if [ -z `grep ^ARCH_TYPE=* .local` ];then
+            echo ${SETENV} >> .local
+        else
+            sed -i "`grep -n ARCH_TYPE= .local | awk -F ':' '{print $1}'`c ${SETENV}" .local
+        fi
+    fi
+}
+
+
+function showenv()
+{
+    # "asdfas"
+    test -f .local || touch .local
+    grep "WORK_SPACE" .local
+    grep "ARCH_TYPE" .local
+}
+
 
 check_env()
 {
-    SYSTEM=""
+    local system=""
 
     # check system type for installing next
-    grep -q "Ubuntu" /etc/os-release && SYSTEM="ubuntu"
-    grep -q "Centos" /etc/os-release && SYSTEM="centos"
+    grep -q "Ubuntu" /etc/os-release && system="ubuntu"
+    grep -q "Centos" /etc/os-release && system="centos"
 
     if [ `which docker` == "" ];then
-        if [ ${SYSTEM} == "ubuntu" ];then
+        if [ ${system} == "ubuntu" ];then
             sudo apt install docker
         fi
-        if [ ${SYSTEM} == "centos" ];then
+        if [ ${system} == "centos" ];then
             sudo yum install docker
         fi
     fi
 
     if [ `which python3` == "" ];then
-        if [ ${SYSTEM} == "ubuntu" ];then
+        if [ ${system} == "ubuntu" ];then
             sudo apt install python3
         fi
-        if [ ${SYSTEM} == "centos" ];then
+        if [ ${system} == "centos" ];then
             sudo yum install python3
         fi
     fi
 }
 
+
 testing()
 {
-    oebuilder_test
+
+    command_dir=$RANDOM
+    cat > ${command_dir} << EOF
+. /opt/buildtools/nativesdk/environment-setup-x86_64-pokysdk-linux
+. /home/openeuler/work/src/yocto-meta-openeuler/scripts/compile.sh ${archType} /home/openeuler/work/build
+EOF
+
+    cat ${command_dir}
 }
+
 
 main()
 {
+
     check_env
 
     if [ ${1} == "build" ];then
@@ -101,6 +193,34 @@ main()
         BUILD_WORK="$4"
         check_build || use_agent || return 1
         build
+    fi
+
+    if [ ${1} == "bitbake" ];then
+        bitbake
+    fi
+
+    if [ ${1} == "setenv" ];then
+        if [ -z "${2}" ];then
+            echo "please entry oebuilder setenv <env>=<param> or "
+            return 1
+        fi
+        SETENV=$2
+        setenv
+        echo $SETENV
+    fi
+
+    if [ ${1} == "showenv" ];then
+        test -f .local || touch .local
+        grep "WORK_SPACE" .local
+        grep "ARCH_TYPE" .local
+    fi
+
+    if [ ${1} == "help" ];then
+        use_agent
+    fi
+
+    if [ ${1} == "test" ];then
+        testing
     fi
 }
 
