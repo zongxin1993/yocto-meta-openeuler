@@ -58,7 +58,12 @@ python do_openeuler_fetch() {
             repo = git.Repo(repoDir)
             with repo.config_writer() as wr:
                 wr.set_value('http', 'sslverify', 'false').release()
-            repo.remote().pull()
+            
+            dirNum = 1
+            if os.path.exists(os.path.join(repoDir, "file.lock")):
+                dirNum = dirNum + 1
+            if len(os.listdir(repoDir)) > dirNum:
+                repo.remote().pull()
             repo.git.checkout(branch)
             return
         except Exception as e:
