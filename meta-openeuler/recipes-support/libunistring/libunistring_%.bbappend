@@ -1,4 +1,5 @@
 # main bbfile: yocto-poky/meta/recipes-support/libunistring/libunistring_0.9.10.bb
+PV = "1.1"
 
 # files, patches can't be applied in openeuler or conflict with openeuler
 SRC_URI_remove = " \
@@ -10,5 +11,5 @@ SRC_URI += " \
         file://${BP}.tar.xz;name=tarball \
 "
 
-SRC_URI[tarball.md5sum] = "db08bb384e81968957f997ec9808926e"
-SRC_URI[tarball.sha256sum] = "eb8fb2c3e4b6e2d336608377050892b54c3c983b646c561836550863003c05d7"
+SRC_URI[tarball.md5sum] = "0dfba19989ae06b8e7a49a7cd18472a1"
+SRC_URI[tarball.sha256sum] = "827c1eb9cb6e7c738b171745dac0888aa58c5924df2e59239318383de0729b98"
