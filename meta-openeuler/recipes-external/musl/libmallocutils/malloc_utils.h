@@ -1,5 +1,5 @@
-#ifndef _MALLOC_UTILS_H
-#define _MALLOC_UTILS_H
+#ifndef MALLOC_UTILS_H
+#define MALLOC_UTILS_H
 
 #include <stddef.h>
 
@@ -19,4 +19,4 @@ int malloc_trim(size_t pad);
 }
 #endif
 
-#endif /* _MALLOC_UTILS_H */
+#endif /* MALLOC_UTILS_H */
