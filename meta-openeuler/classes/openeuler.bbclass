@@ -145,11 +145,8 @@ python do_openeuler_fetch() {
                     break
     except GitError as gitError:
         if isLock:
-            shutil.rmtree(repoDir)
-            # remove_lock(repoDir)
-
-        # if repoDir is empty and then delete it
-        # if not os.listdir(repoDir):
+            # shutil.rmtree(repoDir)
+            remove_lock(repoDir)
 
         # can't use bb.fatal here, because there are the following cases:
         # case1:
@@ -165,11 +162,8 @@ python do_openeuler_fetch() {
         return
     except Exception as e:
         if isLock:
-            shutil.rmtree(repoDir)
-            # remove_lock(repoDir)
-
-        # if repoDir is empty and then delete it
-        # if not os.listdir(repoDir):
+            # shutil.rmtree(repoDir)
+            remove_lock(repoDir)
 
         bb.plain("===============")
         bb.plain("OPENEULER_SP_DIR: {}".format(srcDir))
