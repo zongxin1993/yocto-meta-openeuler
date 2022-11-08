@@ -24,13 +24,14 @@ export IMAGE_BASENAME = "openeuler-image-live"
 IMAGE_FSTYPES = "cpio.gz"
 IMAGE_FSTYPES_DEBUGFS = "cpio.gz"
 INITRAMFS_MAXSIZE = "262144"
-do_image_cpio[depends] ?= ""
 
 # make install or nologin when using busybox-inittab
 set_permissions_from_rootfs_append() {
+    pushd "${IMAGE_ROOTFS}"
     if [ -e ./etc/inittab ];then
         sed -i "s#respawn:/sbin/getty.*#respawn:-/bin/sh /init.d/install-efi.sh#g" ./etc/inittab
     fi
+    popd
 }
 
 require recipes-core/images/${MACHINE}.inc

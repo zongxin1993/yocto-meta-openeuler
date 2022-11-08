@@ -8,7 +8,6 @@ LICENSE = "MIT"
 IMAGE_FSTYPES ?= "cpio.gz"
 IMAGE_FSTYPES_DEBUGFS ?= "cpio.gz"
 INITRAMFS_MAXSIZE ?= "262144"
-do_image_cpio[depends] ?= ""
 
 inherit core-image
 
@@ -39,7 +38,7 @@ set_permissions_from_rootfs() {
    pushd "${IMAGE_ROOTFS}"
    # set file permissions for secure
    chmod 750 ./etc/init.d
-
+   popd
 }
 
 DISTRO_FEATURES += "${LIBC}"

@@ -1,15 +1,15 @@
 # get extra config files from openeuler
-FILESEXTRAPATHS_append := "${THISDIR}/files/:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/files/:"
+
+# remove nobash.patch, because we use /bin/bash as default SHELL
+SRC_URI_remove = "https://launchpad.net/debian/+archive/primary/+files/${BPN}_${PV}.tar.gz \
+           file://nobash.patch \
+"
 
 # as it's small, base-passwd's tar.gz is integrated in openEuler Embedded
 # to avoid network download
-SRC_URI = "file://${BPN}_${PV}.tar.gz \
-           file://add_shutdown.patch \
-           file://nobash.patch \
-           file://noshadow.patch \
-           file://input.patch \
-           file://disable-docs.patch \
-           file://kvm.patch \
+SRC_URI_append = "file://${BPN}_${PV}.tar.gz \
+           file://openeuler_secure_nologin.patch \
            "
 
 # a workaround to fix the error ”useradd: /var/run/passwd: No such file or directory“
