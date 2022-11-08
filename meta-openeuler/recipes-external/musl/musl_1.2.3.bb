@@ -46,13 +46,16 @@ do_install() {
     chown root:root ${D}/ -R
 }
 
+do_package_qa[noexec] = "1"
+EXCLUDE_FROM_SHLIBS = "1"
+
 FILES_${PN} = " \
-    /lib/*.so \
-    /lib/*.so.* \
+    /lib64/*.so \
+    /lib64/*.so.* \
     ${base_sbindir}/ldconfig \
 "
 FILES_${PN}-staticdev = " \
-    /lib/*.a \
+    /lib64/*.a \
 "
 
 
