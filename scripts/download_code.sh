@@ -117,9 +117,9 @@ download_code()
     update_code_repo src-openeuler/busybox ${SRC_BRANCH}
     update_code_repo openeuler/dsoftbus_standard v3.1
     update_code_repo src-openeuler/libboundscheck ${SRC_BRANCH}
-    update_code_repo openeuler/yocto-embedded-tools master
+    update_code_repo openeuler/yocto-embedded-tools ${SRC_BRANCH}
     update_code_repo openeuler/embedded-ipc master
-    update_code_repo openeuler/yocto-poky ${SRC_BRANCH}
+    update_code_repo openeuler/yocto-poky openEuler-22.09
     update_code_repo src-openeuler/yocto-pseudo ${SRC_BRANCH}
     update_code_repo openeuler/yocto-meta-openembedded dev_hardknott
     update_code_repo openeuler/yocto-meta-ros dev_hardknott
@@ -127,7 +127,7 @@ download_code()
     update_code_repo src-openeuler/cracklib ${SRC_BRANCH}
     update_code_repo src-openeuler/libcap-ng ${SRC_BRANCH}
     update_code_repo src-openeuler/libpwquality ${SRC_BRANCH}
-    update_code_repo src-openeuler/openssh ${SRC_BRANCH} 
+    update_code_repo src-openeuler/openssh ${SRC_BRANCH}
     update_code_repo src-openeuler/libnsl2 ${SRC_BRANCH}
     update_code_repo src-openeuler/openssl ${SRC_BRANCH}
     update_code_repo src-openeuler/pam ${SRC_BRANCH}
@@ -149,7 +149,7 @@ download_code()
     update_code_repo src-openeuler/expat ${SRC_BRANCH}
     update_code_repo src-openeuler/acl ${SRC_BRANCH}
     update_code_repo src-openeuler/attr ${SRC_BRANCH}
-    update_code_repo src-openeuler/readline ${SRC_BRANCH} 
+    update_code_repo src-openeuler/readline ${SRC_BRANCH}
     update_code_repo src-openeuler/libaio ${SRC_BRANCH}
     update_code_repo src-openeuler/libffi ${SRC_BRANCH}
     update_code_repo src-openeuler/popt ${SRC_BRANCH}
@@ -159,7 +159,7 @@ download_code()
     update_code_repo src-openeuler/psmisc ${SRC_BRANCH}
     update_code_repo src-openeuler/squashfs-tools ${SRC_BRANCH}
     update_code_repo src-openeuler/strace ${SRC_BRANCH}
-    update_code_repo src-openeuler/util-linux ${SRC_BRANCH} 
+    update_code_repo src-openeuler/util-linux ${SRC_BRANCH}
     update_code_repo src-openeuler/libsepol ${SRC_BRANCH}
     update_code_repo src-openeuler/libselinux ${SRC_BRANCH}
     update_code_repo src-openeuler/libsemanage ${SRC_BRANCH}
@@ -177,7 +177,7 @@ download_code()
     update_code_repo src-openeuler/dhcp ${SRC_BRANCH}
     update_code_repo src-openeuler/libhugetlbfs ${SRC_BRANCH}
     update_code_repo src-openeuler/libnl3 ${SRC_BRANCH}
-    update_code_repo src-openeuler/libpcap ${SRC_BRANCH} 
+    update_code_repo src-openeuler/libpcap ${SRC_BRANCH}
     update_code_repo src-openeuler/nfs-utils ${SRC_BRANCH}
     update_code_repo src-openeuler/rpcbind ${SRC_BRANCH}
     update_code_repo src-openeuler/cronie ${SRC_BRANCH}
@@ -189,7 +189,7 @@ download_code()
     update_code_repo src-openeuler/pciutils ${SRC_BRANCH}
     update_code_repo src-openeuler/procps-ng ${SRC_BRANCH}
     update_code_repo src-openeuler/tzdata ${SRC_BRANCH}
-    update_code_repo src-openeuler/glib2 ${SRC_BRANCH} 
+    update_code_repo src-openeuler/glib2 ${SRC_BRANCH}
     update_code_repo src-openeuler/raspberrypi-firmware ${SRC_BRANCH}
     update_code_repo src-openeuler/gmp ${SRC_BRANCH}
     update_code_repo src-openeuler/gdb ${SRC_BRANCH}
@@ -198,7 +198,7 @@ download_code()
     update_code_repo src-openeuler/sysfsutils ${SRC_BRANCH}
     update_code_repo src-openeuler/tcl ${SRC_BRANCH}
     update_code_repo src-openeuler/expect ${SRC_BRANCH}
-    update_code_repo src-openeuler/jitterentropy-library ${SRC_BRANCH} 
+    update_code_repo src-openeuler/jitterentropy-library ${SRC_BRANCH}
     update_code_repo src-openeuler/m4 ${SRC_BRANCH}
     update_code_repo src-openeuler/gdbm ${SRC_BRANCH}
     update_code_repo src-openeuler/libtool ${SRC_BRANCH}
@@ -326,7 +326,7 @@ main()
 
     if [ -z "${SRC_BRANCH}" ];then
         # the latest release branch
-        SRC_BRANCH="openEuler-22.09"
+        SRC_BRANCH="master"
     fi
     [ -z "${KERNEL_BRANCH}" ] && KERNEL_BRANCH="${SRC_BRANCH}"
 

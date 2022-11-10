@@ -17,7 +17,6 @@ SRC_URI = "https://ftp.isc.org/isc/bind9/${PV}/${PACKAGE_FETCH_NAME}-${PV}.tar.g
            file://generate-rndc-key.sh \
            file://make-etc-initd-bind-stop-work.patch \
            file://init.d-add-support-for-read-only-rootfs.patch \
-           file://bind-ensure-searching-for-json-headers-searches-sysr.patch \
            file://0001-configure.in-remove-useless-L-use_openssl-lib.patch \
            file://0001-named-lwresd-V-and-start-log-hide-build-options.patch \
            file://0001-avoid-start-failure-with-bind-user.patch \
