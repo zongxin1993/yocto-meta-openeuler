@@ -157,7 +157,7 @@ download_pre_repo()
 main()
 {
     KERNEL_BRANCH="5.10.0-106.18.0"
-    SRC_BRANCH="openEuler-22.09"
+    SRC_BRANCH="master"
     GIT_PRE="https://gitee.com"
     GIT_SPACE="src-openeuler"
     download_pre_repo
