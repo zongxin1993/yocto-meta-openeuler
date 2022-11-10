@@ -7,6 +7,9 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files/:"
 
 BASE_SRC_URI_remove = "${SOURCEFORGE_MIRROR}/tcl/${BPN}${PV}-src.tar.gz \
 "
+SRC_URI_remove = "file://fix_non_native_build_issue.patch \
+                  file://no_packages.patch \
+"
 
 # source code package name has been changed
 BASE_SRC_URI =+ "file://${BPN}-core${PV}-src.tar.gz \
