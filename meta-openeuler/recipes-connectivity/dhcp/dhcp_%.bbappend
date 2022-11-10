@@ -1,7 +1,7 @@
 # source bb: meta-overc/recipes-connectivity/dhcp/dhcp_4.4.2-P1.bb
 
 # version in openEuler
-PV = "4.4.2"
+PV = "4.4.3"
 
 # apply patches in openEuler
 SRC_URI_prepend = "file://backport-0001-change-bug-url.patch \
@@ -28,6 +28,7 @@ SRC_URI_prepend = "file://backport-0001-change-bug-url.patch \
            file://backport-0022-dhclient-make-sure-link-local-address-is-ready-in-st.patch \
            file://backport-0023-option-97-pxe-client-id.patch \
            file://backport-0024-Detect-system-time-changes.patch \
+           file://backport-0025-bind-Detect-system-time-changes.patch \
            file://backport-0026-Add-dhclient-5-B-option-description.patch \
            file://backport-0027-Add-missed-sd-notify-patch-to-manage-dhcpd-with-syst.patch \
            file://bugfix-dhcp-4.2.5-check-dhclient-pid.patch \
@@ -36,20 +37,20 @@ SRC_URI_prepend = "file://backport-0001-change-bug-url.patch \
            file://dhcpd-coredump-infiniband.patch \
            file://bugfix-dhclient-check-if-pid-was-held.patch \
            file://bugfix-dhcp-64-bit-lease-parse.patch \
-           file://backport-CVE-2021-25217.patch \
-           file://fix-multiple-definition-with-gcc-10-1.patch \
-           file://fix-multiple-definition-with-gcc-10-2.patch \
            file://fix-coredump-when-client-active-is-NULL.patch \
-           file://bugfix-error-message-display.patch \
            file://feature-lease-time-config-ipv6.patch \
            file://add-a-test-case-to-parse-code93-in-option_unittest.patch \
+           file://bugfix-error-message-display.patch \
+           file://backport-Fix-CVE-2021-25220.patch \
+           file://backport-Fix-CVE-2022-2928.patch \
+           file://backport-Fix-CVE-2022-2929.patch \
 "
 
 SRC_URI[sha256sum] = "1a7ccd64a16e5e68f7b5e0f527fd07240a2892ea53fe245620f4f5f607004521"
 SRC_URI[md5sum] = "2afdaf8498dc1edaf3012efdd589b3e1"
 
-# it will make a error when using dhclient 
-# because backport-0007-Change-paths-to-conform-to-our-standards.patch 
+# it will make a error when using dhclient
+# because backport-0007-Change-paths-to-conform-to-our-standards.patch
 # changed the path /sbin/dhclient-script to /usr/sbin/dhclient-script for dhclient finding dhclient-script
 # so re-install the dhclient-script to fix it.
 do_install_append() {
