@@ -199,7 +199,8 @@ download_code()
     update_code_repo src-openeuler/jitterentropy-library ${SRC_BRANCH} 
     update_code_repo src-openeuler/m4 ${SRC_BRANCH}
     update_code_repo src-openeuler/gdbm ${SRC_BRANCH}
-    update_code_repo src-openeuler/libtool ${SRC_BRANCH}
+    # set libtool to openEuler-22.09 is to fix nativesdk's libtool version
+    update_code_repo src-openeuler/libtool openEuler-22.09
     update_code_repo src-openeuler/libidn2 ${SRC_BRANCH}
     update_code_repo src-openeuler/libunistring ${SRC_BRANCH}
     update_code_repo src-openeuler/gnutls ${SRC_BRANCH}
