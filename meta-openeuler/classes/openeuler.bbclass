@@ -60,8 +60,8 @@ python do_openeuler_fetch() {
             repo = git.Repo(repoDir)
             with repo.config_writer() as wr:
                 wr.set_value('http', 'sslverify', 'false').release()
-            repo.remote().pull()
             repo.git.checkout(branch)
+            repo.remote().pull()
             return
         except Exception as e:
             # do git init action in empty directory
