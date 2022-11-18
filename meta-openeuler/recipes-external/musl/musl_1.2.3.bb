@@ -25,6 +25,12 @@ INSANE_SKIP_${PN} += "already-stripped"
 
 PSEUDO_DISABLED = "1"
 
+# this patch is to support perf compile
+FILESEXTRAPATHS_prepend := "${THISDIR}/musl/:"
+SRC_URI = " \
+        file://musl-add-cdefs.patch;patchdir=${EXTERNAL_TOOLCHAIN}/aarch64-openeuler-linux-musl/sysroot/ \
+"
+
 do_configure() {
         :
 }
