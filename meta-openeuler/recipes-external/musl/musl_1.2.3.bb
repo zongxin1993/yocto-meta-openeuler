@@ -14,6 +14,7 @@ PACKAGES = "${PN} ${PN}-dev ${PN}-staticdev"
 PROVIDES += "virtual/libc virtual/libiconv virtual/libintl virtual/crypt"
 
 DEPENDS = "bsd-headers \
+           libssp-nonshared \
           "
 INHIBIT_DEFAULT_DEPS = "1"
 
@@ -59,7 +60,7 @@ FILES_${PN}-staticdev = " \
 "
 
 
-RDEPENDSPN_${}-dev += "bsd-headers-dev"
+RDEPENDSPN_${}-dev += "bsd-headers-dev libssp-nonshared-staticdev"
 
 
 INSANE_SKIP_${PN} += "installed-vs-shipped"
