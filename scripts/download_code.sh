@@ -117,10 +117,13 @@ download_code()
     update_code_repo src-openeuler/busybox ${SRC_BRANCH}
     update_code_repo openeuler/dsoftbus_standard v3.1
     update_code_repo src-openeuler/libboundscheck ${SRC_BRANCH}
+    update_code_repo src-openeuler/cjson ${SRC_BRANCH}
     update_code_repo openeuler/yocto-embedded-tools master
     update_code_repo openeuler/embedded-ipc master
     update_code_repo openeuler/yocto-poky ${SRC_BRANCH}
     update_code_repo src-openeuler/yocto-pseudo ${SRC_BRANCH}
+    update_code_repo openeuler/yocto-meta-openembedded dev_hardknott
+    update_code_repo openeuler/yocto-meta-ros dev_hardknott
     update_code_repo src-openeuler/audit ${SRC_BRANCH}
     update_code_repo src-openeuler/cracklib ${SRC_BRANCH}
     update_code_repo src-openeuler/libcap-ng ${SRC_BRANCH}
@@ -258,6 +261,62 @@ download_code()
     update_code_repo src-openeuler/dtc ${SRC_BRANCH}
     update_code_repo src-openeuler/libunwind ${SRC_BRANCH}
     update_code_repo src-openeuler/libatomic_ops ${SRC_BRANCH}
+    update_code_repo src-openeuler/libmodbus master
+    update_code_repo src-openeuler/python-argcomplete master
+    update_code_repo src-openeuler/python-asn1crypto master
+    update_code_repo src-openeuler/python-cmd2 master
+    update_code_repo src-openeuler/python-Cython master
+    update_code_repo src-openeuler/python-dateutil master
+    update_code_repo src-openeuler/python-docutils master
+    update_code_repo src-openeuler/python-idna master
+    update_code_repo src-openeuler/python-importlib-metadata master
+    update_code_repo src-openeuler/python-lxml master
+    update_code_repo src-openeuler/python-mccabe master
+    update_code_repo src-openeuler/python-mock master
+    update_code_repo src-openeuler/python-more-itertools master
+    update_code_repo src-openeuler/python-netifaces master
+    update_code_repo src-openeuler/numpy master
+    update_code_repo src-openeuler/python-packaging master
+    update_code_repo src-openeuler/python-pathlib2 master
+    update_code_repo src-openeuler/python-pep8 master
+    update_code_repo src-openeuler/python-pip master
+    update_code_repo src-openeuler/python-ply master
+    update_code_repo src-openeuler/python-prettytable master
+    update_code_repo src-openeuler/pybind11 master
+    update_code_repo src-openeuler/pyflakes master
+    update_code_repo src-openeuler/pyparsing master
+    update_code_repo src-openeuler/python-pyperclip master
+    update_code_repo src-openeuler/pytest master
+    # PyYAML current we have trouble with higher verion for uncompatible with setuptools:_sysconfigdate
+    update_code_repo src-openeuler/PyYAML openEuler-20.03-LTS
+    update_code_repo src-openeuler/python-setuptools openEuler-22.03-LTS-Next
+    update_code_repo src-openeuler/python-setuptools_scm master
+    update_code_repo src-openeuler/python-toml master
+    update_code_repo src-openeuler/python-zipp master
+    update_code_repo src-openeuler/meson master
+    update_code_repo src-openeuler/gnupg2 master
+    update_code_repo src-openeuler/gobject-introspection master
+    update_code_repo src-openeuler/libassuan master
+    update_code_repo src-openeuler/gpgme master
+    update_code_repo src-openeuler/gtk-doc master
+    update_code_repo src-openeuler/libdnf master
+    update_code_repo src-openeuler/libksba master
+    update_code_repo src-openeuler/libmodulemd master
+    update_code_repo src-openeuler/libyaml master
+    update_code_repo src-openeuler/lua master
+    update_code_repo src-openeuler/npth master
+    update_code_repo src-openeuler/pinentry master
+    update_code_repo src-openeuler/python-six master
+    update_code_repo src-openeuler/python-iniparse master
+    update_code_repo src-openeuler/python-setuptools master
+    update_code_repo src-openeuler/swig master
+    update_code_repo src-openeuler/dnf master
+    update_code_repo src-openeuler/file master
+    update_code_repo src-openeuler/libcomps master
+    update_code_repo src-openeuler/librepo master
+    update_code_repo src-openeuler/zstd master
+    update_code_repo src-openeuler/libsolv master
+    update_code_repo src-openeuler/rpm master
     update_code_repo src-openeuler/bridge-utils ${SRC_BRANCH}
 }
 
