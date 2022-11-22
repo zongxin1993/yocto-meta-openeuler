@@ -191,8 +191,8 @@ download_code()
     update_code_repo src-openeuler/raspberrypi-firmware ${SRC_BRANCH}
     update_code_repo src-openeuler/gmp ${SRC_BRANCH}
     update_code_repo src-openeuler/gdb ${SRC_BRANCH}
-    update_code_repo src-openeuler/libmetal ${SRC_BRANCH}
-    update_code_repo src-openeuler/OpenAMP ${SRC_BRANCH}
+    update_code_repo src-openeuler/libmetal openEuler-22.03-LTS-Next
+    update_code_repo src-openeuler/OpenAMP openEuler-22.03-LTS-Next
     update_code_repo src-openeuler/sysfsutils ${SRC_BRANCH}
     update_code_repo src-openeuler/tcl ${SRC_BRANCH}
     update_code_repo src-openeuler/expect ${SRC_BRANCH}
@@ -315,7 +315,7 @@ main()
 
     if [ -z "${SRC_BRANCH}" ];then
         # the latest release branch
-        SRC_BRANCH="openEuler-22.03-LTS-Next"
+        SRC_BRANCH="openEuler-22.03-LTS-SP1"
     fi
     [ -z "${KERNEL_BRANCH}" ] && KERNEL_BRANCH="${SRC_BRANCH}"
 
