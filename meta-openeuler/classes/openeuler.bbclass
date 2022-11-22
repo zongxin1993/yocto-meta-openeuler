@@ -13,12 +13,21 @@ python set_rpmdeps() {
 addhandler set_rpmdeps
 set_rpmdeps[eventmask] = "bb.event.RecipePreFinalise"
 
+# qemu.bbclass; fix build error: the kernel is too old
+QEMU_OPTIONS_remove = "-r ${OLDEST_KERNEL}"
+
+# fetch multi repos in one recipe bb file, an example is
+# dsoftbus_1.0.bb where multi repos required by dsoftbus are
+# fetched by re-implementation of do_fetch, and it will call
+# do_openeuler_fetches
 python do_openeuler_fetchs() {
 
     # Stage the variables related to the original package
     repoName = d.getVar("OPENEULER_REPO_NAME")
+    localName = d.getVar("OPENEULER_LOCAL_NAME")
     gitSpace = d.getVar("OPENEULER_GIT_SPACE")
     branch = d.getVar("OPENEULER_BRANCH")
+    gitPre = d.getVar('OPENEULER_GIT_PRE')
 
     repoList = d.getVar("PKG_REPO_LIST")
     for item in repoList:
@@ -27,15 +36,24 @@ python do_openeuler_fetchs() {
             d.setVar("OPENEULER_GIT_SPACE", item["git_space"])
         if "branch" in item:
             d.setVar("OPENEULER_BRANCH", item["branch"])
+        if "local" in item:
+            d.setVar("OPENEULER_LOCAL_NAME", item["local"])
+        else:
+            d.setVar("OPENEULER_LOCAL_NAME", item["repo_name"])
 
         bb.build.exec_func("do_openeuler_fetch", d)
 
     # Restore the variables related to the original package
     d.setVar("OPENEULER_REPO_NAME", repoName)
+    d.setVar("OPENEULER_LOCAL_NAME", localName)
     d.setVar("OPENEULER_GIT_SPACE", gitSpace)
     d.setVar("OPENEULER_BRANCH", branch)
+    d.setVar('OPENEULER_GIT_PRE', gitPre)
 }
 
+# fetch software package from openeuler's repos first,
+# if failed, go to the original do_fetch defined in
+# base.bbclass
 python do_openeuler_fetch() {
     import os
     import git
@@ -89,13 +107,21 @@ python do_openeuler_fetch() {
     # get source directory where to download
     srcDir = d.getVar('OPENEULER_SP_DIR')
     repoName = d.getVar('OPENEULER_REPO_NAME')
+    localName = d.getVar('OPENEULER_LOCAL_NAME') if d.getVar('OPENEULER_LOCAL_NAME')  else repoName
     gitPre = d.getVar('OPENEULER_GIT_PRE')
     gitSpace = d.getVar('OPENEULER_GIT_SPACE')
     repoBranch = d.getVar('OPENEULER_BRANCH')
 
+    urls = d.getVar("SRC_URI").split()
+
+    # for fake recipes without SRC_URI pass
+    src_uri = (d.getVar('SRC_URI') or "").split()
+    if len(src_uri) == 0:
+        return
+
     isLock = False
     try:
-        repoDir = os.path.join(srcDir, repoName)
+        repoDir = os.path.join(srcDir, localName)
         lockFile = os.path.join(repoDir, "file.lock")
         # checkout repo code
         repoUrl = os.path.join(gitPre, gitSpace, repoName + ".git")
@@ -108,7 +134,7 @@ python do_openeuler_fetch() {
             isLock=True
 
             init_repo(repoDir, repoUrl, repoBranch)
-    
+
             # delete lock file
             remove_lock(repoDir)
         else:
@@ -121,34 +147,39 @@ python do_openeuler_fetch() {
                     # create file.lock for other component compete
                     add_lock(repoDir)
                     isLock=True
-                    
+
                     # checkout repo code
                     init_repo(repoDir, repoUrl, repoBranch)
-            
+
                     # delete lock file
                     remove_lock(repoDir)
                     break
     except GitError as gitError:
         if isLock:
-            shutil.rmtree(repoDir)
-            # remove_lock(repoDir)
-        
-        # if repoDir is empty and then delete it
-        # if not os.listdir(repoDir):
+            # shutil.rmtree(repoDir)
+            remove_lock(repoDir)
 
+        # can't use bb.fatal here, because there are the following cases:
+        # case1:
+        #      gitee repo exists, but git clone failed, then do_openeuler_fetch
+        #      should re-run, so bb.fatal is required
+        # case2:
+        #      gitee repo does not exist, then try the original fetch, i.e.
+        #      bb.fetch2.Fetch, so bb.fatal cannot be used
+        # case3:
+        #     all SRC_URI are in local, no need to do git clone, do_openeuler_fetch
+        #     should bypass,the original fetch
         bb.note("could not find gitee repository {}".format(repoName))
         return
     except Exception as e:
         if isLock:
-            shutil.rmtree(repoDir)
-            # remove_lock(repoDir)
+            # shutil.rmtree(repoDir)
+            remove_lock(repoDir)
 
-        # if repoDir is empty and then delete it
-        # if not os.listdir(repoDir): 
-        
         bb.plain("===============")
         bb.plain("OPENEULER_SP_DIR: {}".format(srcDir))
         bb.plain("OPENEULER_REPO_NAME: {}".format(repoName))
+        bb.plain("OPENEULER_LOCAL_NAME: {}".format(localName))
         bb.plain("OPENEULER_GIT_PRE: {}".format(gitPre))
         bb.plain("OPENEULER_GIT_SPACE: {}".format(gitSpace))
         bb.plain("OPENEULER_BRANCH: {}".format(repoBranch))
@@ -157,7 +188,29 @@ python do_openeuler_fetch() {
         bb.fatal(str(e))
 }
 
-addtask do_openeuler_fetch before do_fetch
+# do openeuler fetch at the beginning of do_fetch,
+# it will fetch software packages and its patches and other files
+# from openeuler's gitee repo.
+# if success,  other part of base_do_fetch will skip download as
+# files are already downloaded by do_openeuler_fetch
+python base_do_fetch_prepend() {
+    # add OPENEULER_SRC_URI_REMOVE to remove some url that start with
+    # some string we set, because we maybe does not need to download it 
+    if d.getVar('OPENEULER_SRC_URI_REMOVE'):
+        REMOVELIST = d.getVar('OPENEULER_SRC_URI_REMOVE').split(' ')
+        URI = []
+        for line in d.getVar('SRC_URI').split(' '):
+            URI.append(line)
+            for removeItem in REMOVELIST:
+                if line.strip().startswith(removeItem.strip()):
+                    URI.pop()
+                    break
+        URI = ' '.join(URI)
+        d.setVar('SRC_URI', URI)
+    
+    if not d.getVar('OPENEULER_FETCH') or d.getVar('OPENEULER_FETCH') == "enable":
+        bb.build.exec_func("do_openeuler_fetch", d)
+}
 
 python do_openeuler_clean() {
     import os
