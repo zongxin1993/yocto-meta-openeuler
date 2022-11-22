@@ -28,6 +28,7 @@ curl \
 dosfstools \
 e2fsprogs \
 e2fsprogs-tune2fs \
+ethercat \
 ethtool \
 expat \
 grep \
@@ -47,6 +48,7 @@ libcap-ng-bin \
 libdw \
 libffi \
 libhugetlbfs \
+libmodbus \
 libnl \
 libnl-cli \
 libnl-xfrm \
@@ -64,6 +66,7 @@ ncurses-libmenu \
 ncurses-libpanel \
 ncurses-terminfo \
 ncurses-terminfo-base \
+nlopt \
 pciutils \
 perf \
 policycoreutils \
