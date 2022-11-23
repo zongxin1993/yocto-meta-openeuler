@@ -1,0 +1,31 @@
+--- LVM2.2.03.14.orig/lib/mm/memlock.c	2021-10-20 18:25:05.000000000 +0800
++++ LVM2.2.03.14/lib/mm/memlock.c	2022-07-12 10:26:36.591427839 +0800
+@@ -158,6 +158,28 @@
+ 	}
+ }
+ 
++
++struct mallinfo {
++        int arena;    /* Non-mmapped space allocated (bytes) */
++        int ordblks;  /* Number of free chunks */
++        int smblks;   /* Number of free fastbin blocks */
++        int hblks;    /* Number of mmapped regions */
++        int hblkhd;   /* Space allocated in mmapped regions (bytes) */
++        int usmblks;  /* Maximum total allocated space (bytes) */
++        int fsmblks;  /* Space in freed fastbin blocks (bytes) */
++        int uordblks; /* Total allocated space (bytes) */
++        int fordblks; /* Total free space (bytes) */
++        int keepcost; /* Top-most, releasable space (bytes) */
++};
++
++struct mallinfo mallinfo(void)
++{
++        struct mallinfo info;
++        memset(&info, 0, sizeof(info));
++        return info;
++}
++
++
+ static void _allocate_memory(void)
+ {
+ #ifndef VALGRIND_POOL

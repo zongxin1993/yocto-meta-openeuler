@@ -1,0 +1,133 @@
+diff -Nur pseudo-df1d1321fb093283485c387e3c933d2d264e509c/ports/linux/nostatx/portdefs.h pseudo-build/ports/linux/nostatx/portdefs.h
+--- pseudo-df1d1321fb093283485c387e3c933d2d264e509c/ports/linux/nostatx/portdefs.h	2022-03-22 07:03:50.000000000 +0800
++++ pseudo-build/ports/linux/nostatx/portdefs.h	2022-09-16 09:38:09.601383147 +0800
+@@ -7,32 +7,32 @@
+ 
+ struct statx_timestamp
+ {
+-  __int64_t tv_sec;
+-  __uint32_t tv_nsec;
+-  __int32_t __statx_timestamp_pad1[1];
++ int64_t tv_sec;
++ uint32_t tv_nsec;
++ int32_t __statx_timestamp_pad1[1];
+ };
+ 
+ struct statx
+ {
+-  __uint32_t stx_mask;
+-  __uint32_t stx_blksize;
+-  __uint64_t stx_attributes;
+-  __uint32_t stx_nlink;
+-  __uint32_t stx_uid;
+-  __uint32_t stx_gid;
+-  __uint16_t stx_mode;
+-  __uint16_t __statx_pad1[1];
+-  __uint64_t stx_ino;
+-  __uint64_t stx_size;
+-  __uint64_t stx_blocks;
+-  __uint64_t stx_attributes_mask;
++  uint32_t stx_mask;
++  uint32_t stx_blksize;
++  uint64_t stx_attributes;
++  uint32_t stx_nlink;
++  uint32_t stx_uid;
++  uint32_t stx_gid;
++  uint16_t stx_mode;
++  uint16_t __statx_pad1[1];
++  uint64_t stx_ino;
++  uint64_t stx_size;
++  uint64_t stx_blocks;
++  uint64_t stx_attributes_mask;
+   struct statx_timestamp stx_atime;
+   struct statx_timestamp stx_btime;
+   struct statx_timestamp stx_ctime;
+   struct statx_timestamp stx_mtime;
+-  __uint32_t stx_rdev_major;
+-  __uint32_t stx_rdev_minor;
+-  __uint32_t stx_dev_major;
+-  __uint32_t stx_dev_minor;
+-  __uint64_t __statx_pad2[14];
++  uint32_t stx_rdev_major;
++  uint32_t stx_rdev_minor;
++  uint32_t stx_dev_major;
++  uint32_t stx_dev_minor;
++  uint64_t __statx_pad2[14];
+ };
+diff -Nur pseudo-df1d1321fb093283485c387e3c933d2d264e509c/ports/linux/wrapfuncs.in pseudo-build/ports/linux/wrapfuncs.in
+--- pseudo-df1d1321fb093283485c387e3c933d2d264e509c/ports/linux/wrapfuncs.in	2022-03-22 07:03:50.000000000 +0800
++++ pseudo-build/ports/linux/wrapfuncs.in	2022-09-16 09:38:09.601383147 +0800
+@@ -1,4 +1,3 @@
+-int open(const char *path, int flags, ...{mode_t mode}); /* flags=flags&O_NOFOLLOW, noignore_path=1 */
+ char *get_current_dir_name(void);
+ int __xstat(int ver, const char *path, struct stat *buf);
+ int __lxstat(int ver, const char *path, struct stat *buf); /* flags=AT_SYMLINK_NOFOLLOW */
+@@ -6,7 +5,6 @@
+ int lchmod(const char *path, mode_t mode); /* flags=AT_SYMLINK_NOFOLLOW */
+ int lchown(const char *path, uid_t owner, gid_t group); /* flags=AT_SYMLINK_NOFOLLOW */
+ int __fxstatat(int ver, int dirfd, const char *path, struct stat *buf, int flags);
+-int openat(int dirfd, const char *path, int flags, ...{mode_t mode}); /* flags=flags&O_NOFOLLOW, noignore_path=1 */
+ int __openat_2(int dirfd, const char *path, int flags); /* flags=flags&O_NOFOLLOW, noignore_path=1 */
+ int mknod(const char *path, mode_t mode, dev_t dev); /* real_func=pseudo_mknod */
+ int mknodat(int dirfd, const char *path, mode_t mode, dev_t dev); /* real_func=pseudo_mknodat */
+@@ -20,28 +18,15 @@
+ int open64(const char *path, int flags, ...{mode_t mode}); /* flags=flags&O_NOFOLLOW, noignore_path=1 */
+ int openat64(int dirfd, const char *path, int flags, ...{mode_t mode}); /* flags=flags&O_NOFOLLOW, noignore_path=1 */
+ int __openat64_2(int dirfd, const char *path, int flags); /* flags=flags&O_NOFOLLOW, noignore_path=1 */
+-int creat64(const char *path, mode_t mode);
+-int stat(const char *path, struct stat *buf); /* real_func=pseudo_stat */
+-int lstat(const char *path, struct stat *buf); /* real_func=pseudo_lstat, flags=AT_SYMLINK_NOFOLLOW */
+ int fstat(int fd, struct stat *buf); /* real_func=pseudo_fstat */
+ int fstatat(int dirfd, const char *path, struct stat *buf, int flags);
+ int stat64(const char *path, struct stat64 *buf); /* real_func=pseudo_stat64 */
+ int lstat64(const char *path, struct stat64 *buf); /* real_func=pseudo_lstat64, flags=AT_SYMLINK_NOFOLLOW */
+-int fstat64(int fd, struct stat64 *buf); /* real_func=pseudo_fstat64 */
+-int fstatat64(int dirfd, const char *path, struct stat64 *buf, int flags);
+ int __xstat64(int ver, const char *path, struct stat64 *buf);
+ int __lxstat64(int ver, const char *path, struct stat64 *buf); /* flags=AT_SYMLINK_NOFOLLOW */
+ int __fxstat64(int ver, int fd, struct stat64 *buf);
+ int __fxstatat64(int ver, int dirfd, const char *path, struct stat64 *buf, int flags);
+-FILE *fopen64(const char *path, const char *mode); /* noignore_path=1 */
+-int nftw64(const char *path, int (*fn)(const char *, const struct stat64 *, int, struct FTW *), int nopenfd, int flag); /* noignore_path=1 */
+-FILE *freopen64(const char *path, const char *mode, FILE *stream);  /* noignore_path=1 */
+-int ftw64(const char *path, int (*fn)(const char *, const struct stat64 *, int), int nopenfd);
+-int glob64(const char *pattern, int flags, int (*errfunc)(const char *, int), glob64_t *pglob);
+ int scandir64(const char *path, struct dirent64 ***namelist, int (*filter)(const struct dirent64 *), int (*compar)());
+-int truncate64(const char *path, off64_t length);
+-int mkostemp64(char *template, int oflags); /* flags=AT_SYMLINK_NOFOLLOW */
+-int mkstemp64(char *template); /* flags=AT_SYMLINK_NOFOLLOW */
+ int getgrouplist(const char *user, gid_t group, gid_t *groups, int *ngroups);
+ int setgroups(size_t size, const gid_t *list);
+ int setfsgid(gid_t fsgid);
+@@ -50,7 +35,6 @@
+ int setresuid(uid_t ruid, uid_t euid, uid_t suid);
+ int getresgid(gid_t *rgid, gid_t *egid, gid_t *sgid);
+ int getresuid(uid_t *ruid, uid_t *euid, uid_t *suid);
+-int scandir(const char *path, struct dirent ***namelist, int (*filter)(const struct dirent *), int (*compar)());
+ int getgroups(int size, gid_t *list);
+ int lckpwdf(void);
+ int ulckpwdf(void);
+diff -Nur pseudo-df1d1321fb093283485c387e3c933d2d264e509c/pseudolog.c pseudo-build/pseudolog.c
+--- pseudo-df1d1321fb093283485c387e3c933d2d264e509c/pseudolog.c	2022-03-22 07:03:50.000000000 +0800
++++ pseudo-build/pseudolog.c	2022-09-16 09:38:09.602383155 +0800
+@@ -9,7 +9,7 @@
+ /* We need _XOPEN_SOURCE for strptime(), but if we define that,
+  * we then don't get S_IFSOCK... _GNU_SOURCE turns on everything. */
+ #define _GNU_SOURCE
+-
++# define ALLPERMS (S_ISUID|S_ISGID|S_ISVTX|S_IRWXU|S_IRWXG|S_IRWXO)/* 07777 */
+ #include <ctype.h>
+ #include <limits.h>
+ #include <stdio.h>
+diff -Nur pseudo-df1d1321fb093283485c387e3c933d2d264e509c/pseudo_util.c pseudo-build/pseudo_util.c
+--- pseudo-df1d1321fb093283485c387e3c933d2d264e509c/pseudo_util.c	2022-03-22 07:03:50.000000000 +0800
++++ pseudo-build/pseudo_util.c	2022-09-16 09:38:09.602383155 +0800
+@@ -8,7 +8,7 @@
+  */
+ /* we need access to RTLD_NEXT for a horrible workaround */
+ #define _GNU_SOURCE
+-
++#define __restrict_arr       restrict
+ #include <ctype.h>
+ #include <errno.h>
+ #include <stdarg.h>

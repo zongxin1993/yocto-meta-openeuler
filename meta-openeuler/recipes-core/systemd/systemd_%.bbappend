@@ -69,3 +69,32 @@ pkg_postinst_udev-hwdb () {
     :
 }
 
+SRC_URI_remove_libc-musl += " ${SRC_URI_MUSL}"
+
+SRC_URI_append_libc-musl += " \
+                            file://0002-don-t-use-glibc-specific-qsort_r-openeuler.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0003-missing_type.h-add-__compare_fn_t-and-comparison_fn_openeuler.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0004-add-fallback-parse_printf_format-implementation-openeuler.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0005-src-basic-missing.h-check-for-missing-strndupa-openeuler.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0006-Include-netinet-if_ether.h-openeuler.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0007-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0008-add-missing-FTW_-macros-for-musl.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0009-fix-missing-of-__register_atfork-for-non-glibc-build.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0010-Use-uintmax_t-for-handling-rlim_t.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0011-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0012-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat-openeuler.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0013-Define-glibc-compatible-basename-for-non-glibc-syste.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0014-Do-not-disable-buffering-when-writing-to-oom_score_a.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0015-distinguish-XSI-compliant-strerror_r-from-GNU-specif-openeuler.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0016-Hide-__start_BUS_ERROR_MAP-and-__stop_BUS_ERROR_MAP.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0017-missing_type.h-add-__compar_d_fn_t-definition.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0018-avoid-redefinition-of-prctl_mm_map-structure.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0019-Handle-missing-LOCK_EX.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0020-Fix-incompatible-pointer-type-struct-sockaddr_un.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0021-test-json.c-define-M_PIl.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0022-do-not-disable-buffer-in-writing-files-openeuler.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0025-Handle-__cpu_mask-usage.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0026-Handle-missing-gshadow-openeuler.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://0028-missing_syscall.h-Define-MIPS-ABI-defines-for-musl-openeuler.patch;patchdir=${WORKDIR}/systemd-${PV} \
+                            file://systemd-musl.patch;patchdir=${WORKDIR}/systemd-${PV} \
+"

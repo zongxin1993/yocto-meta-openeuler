@@ -19,3 +19,9 @@ SRC_URI += " \
 "
 
 SRC_URI[sha256sum] = "56d7dcb05b564c94cf6e4549cec2f93f2dc58085355c08dcb2a8f8249c946080"
+
+# musl 
+FILESEXTRAPATHS_prepend := "${THISDIR}/iproute2:"
+SRC_URI_append_libc-musl =" \
+    file://missing-include.patch \
+"

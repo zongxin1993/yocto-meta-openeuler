@@ -1,0 +1,44 @@
+--- a/src/basic/percent-util.c	2022-09-27 18:00:07.812728549 +0800
++++ b/src/basic/percent-util.c	2022-09-27 23:23:43.000326791 +0800
+@@ -3,6 +3,7 @@
+ #include "percent-util.h"
+ #include "string-util.h"
+ #include "parse-util.h"
++#include "missing_stdlib.h"
+
+ static int parse_parts_value_whole(const char *p, const char *symbol) {
+         const char *pc, *n;
+
+--- a/src/network/networkd-setlink.c  2022-09-28 09:33:59.989482374 +0800
++++ b/src/network/networkd-setlink.c  2022-09-28 09:36:56.739808113 +0800
+@@ -2,7 +2,6 @@
+
+ #include <netinet/in.h>
+ #include <linux/if.h>
+-#include <linux/if_arp.h>
+
+ #include "missing_network.h"
+ #include "netlink-util.h"
+
+--- a/src/network/networkd-link.c     2022-09-28 09:38:52.390672185 +0800
++++ b/src/network/networkd-link.c     2022-09-28 09:39:24.402911366 +0800
+@@ -6,6 +6,7 @@
+ #include <linux/if_link.h>
+ #include <sys/socket.h>
+ #include <unistd.h>
++#include <linux/netdevice.h>
+
+ #include "alloc-util.h"
+ #include "batadv.h"
+
+--- a/src/basic/rlimit-util.c       2022-09-28 09:52:03.493582837 +0800
++++ b/arc/basic/rlimit-util.c       2022-09-28 09:53:46.209350273 +0800
+@@ -43,7 +43,7 @@ int setrlimit_closest(int resource, cons
+             fixed.rlim_max == highest.rlim_max)
+                 return 0;
+
+-        log_debug("Failed at setting rlimit " RLIM_FMT " for resource RLIMIT_%s. Will attempt setting value " RLIM_FMT " instead.", rlim->rlim_max, rlimit_to_string(resource), fixed.rlim_max);
++        log_debug("Failed at setting rlimit " RLIM_FMT " for resource RLIMIT_%s. Will attempt setting value " RLIM_FMT " instead.", (uintmax_t)rlim->rlim_max, rlimit_to_string(resource), (uintmax_t)fixed.rlim_max);
+
+         if (setrlimit(resource, &fixed) < 0)
+                 return -errno;

@@ -11,3 +11,7 @@ SRC_URI_prepend =+ " \
 SRC_URI_remove += " \
             http://www.cpan.org/modules/by-module/XML/XML-Parser-${PV}.tar.gz \
 "
+do_configure_append_libc-musl () {
+   sed -i 's/\-m64/\ /g'        ${S}/Makefile
+   sed -i 's/\-m64/\ /g'        ${S}/Expat/Makefile
+}
