@@ -9,11 +9,11 @@
                 #address-cells = <2>;
                 #size-cells = <1>;
 
-                mcsconfig: mcs@70000000 {
+                mcsconfig: mcs@MCS_MEM_AT {
                     compatible = "mcs_mem";
                     #address-cells = <2>;
                     #size-cells = <1>;
-                    reg = <0x0 0x70000000 0x10000000>;
+                    reg = <0x0 MCS_MEM_START MCS_MEM_SIZE>;
                 };
             };
 		};
