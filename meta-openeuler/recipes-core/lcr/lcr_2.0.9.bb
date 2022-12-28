@@ -14,7 +14,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/GPL-2.0-only;m
 inherit cmake
 
 ### Build metadata
-SRC_URI = "file://v${PV}.tar.gz
+SRC_URI = "file://v${PV}.tar.gz \
 "
 
 S = "${WORKDIR}/${BPN}-v${PV}"
