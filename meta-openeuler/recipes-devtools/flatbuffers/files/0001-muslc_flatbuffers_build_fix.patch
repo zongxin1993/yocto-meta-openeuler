@@ -1,0 +1,80 @@
+diff -urpN a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	2022-12-20 05:45:33.610790522 +0000
++++ b/CMakeLists.txt	2022-12-20 05:47:07.915680967 +0000
+@@ -94,7 +94,7 @@ endif()
+ if(NOT DEFINED FLATBUFFERS_LOCALE_INDEPENDENT)
+   include(CheckCXXSymbolExists)
+ 
+-  set(FLATBUFFERS_LOCALE_INDEPENDENT 0)
++  set(FLATBUFFERS_LOCALE_INDEPENDENT 1)
+   if(MSVC)
+     check_cxx_symbol_exists(_strtof_l stdlib.h FLATBUFFERS_HAS_STRTOF_L)
+     check_cxx_symbol_exists(_strtoui64_l stdlib.h FLATBUFFERS_HAS_STRTOULL_L)
+@@ -756,4 +756,4 @@ add_library(FlatBuffers::FlatBuffers ALI
+ target_include_directories(
+   FlatBuffers
+   INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+-            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/include>)
+\ No newline at end of file
++            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/include>)
+diff -urpN a/include/flatbuffers/util.h b/include/flatbuffers/util.h
+--- a/include/flatbuffers/util.h	2022-12-20 05:45:35.589809210 +0000
++++ b/include/flatbuffers/util.h	2022-12-20 05:46:37.627394978 +0000
+@@ -218,13 +218,13 @@ inline std::string IntToStringHex(int i,
+   };
+ 
+   #ifdef _MSC_VER
+-    #define __strtoull_impl(s, pe, b) _strtoui64_l(s, pe, b, ClassicLocale::Get())
+-    #define __strtoll_impl(s, pe, b) _strtoi64_l(s, pe, b, ClassicLocale::Get())
++  //  #define __strtoull_impl(s, pe, b) _strtoui64_l(s, pe, b, ClassicLocale::Get())
++  //  #define __strtoll_impl(s, pe, b) _strtoi64_l(s, pe, b, ClassicLocale::Get())
+     #define __strtod_impl(s, pe) _strtod_l(s, pe, ClassicLocale::Get())
+     #define __strtof_impl(s, pe) _strtof_l(s, pe, ClassicLocale::Get())
+   #else
+-    #define __strtoull_impl(s, pe, b) strtoull_l(s, pe, b, ClassicLocale::Get())
+-    #define __strtoll_impl(s, pe, b) strtoll_l(s, pe, b, ClassicLocale::Get())
++  //  #define __strtoull_impl(s, pe, b) strtoull_l(s, pe, b, ClassicLocale::Get())
++  //  #define __strtoll_impl(s, pe, b) strtoll_l(s, pe, b, ClassicLocale::Get())
+     #define __strtod_impl(s, pe) strtod_l(s, pe, ClassicLocale::Get())
+     #define __strtof_impl(s, pe) strtof_l(s, pe, ClassicLocale::Get())
+   #endif
+@@ -232,22 +232,22 @@ inline std::string IntToStringHex(int i,
+   #define __strtod_impl(s, pe) strtod(s, pe)
+   #define __strtof_impl(s, pe) static_cast<float>(strtod(s, pe))
+   #ifdef _MSC_VER
+-    #define __strtoull_impl(s, pe, b) _strtoui64(s, pe, b)
+-    #define __strtoll_impl(s, pe, b) _strtoi64(s, pe, b)
++   // #define __strtoull_impl(s, pe, b) _strtoui64(s, pe, b)
++   // #define __strtoll_impl(s, pe, b) _strtoi64(s, pe, b)
+   #else
+-    #define __strtoull_impl(s, pe, b) strtoull(s, pe, b)
+-    #define __strtoll_impl(s, pe, b) strtoll(s, pe, b)
++   // #define __strtoull_impl(s, pe, b) strtoull(s, pe, b)
++   // #define __strtoll_impl(s, pe, b) strtoll(s, pe, b)
+   #endif
+ #endif
+ 
+ inline void strtoval_impl(int64_t *val, const char *str, char **endptr,
+                                  int base) {
+-    *val = __strtoll_impl(str, endptr, base);
++    //*val = __strtoll_impl(str, endptr, base);
+ }
+ 
+ inline void strtoval_impl(uint64_t *val, const char *str, char **endptr,
+                                  int base) {
+-  *val = __strtoull_impl(str, endptr, base);
++  //*val = __strtoull_impl(str, endptr, base);
+ }
+ 
+ inline void strtoval_impl(double *val, const char *str, char **endptr) {
+@@ -259,8 +259,8 @@ __supress_ubsan__("float-cast-overflow")
+ inline void strtoval_impl(float *val, const char *str, char **endptr) {
+   *val = __strtof_impl(str, endptr);
+ }
+-#undef __strtoull_impl
+-#undef __strtoll_impl
++//#undef __strtoull_impl
++//#undef __strtoll_impl
+ #undef __strtod_impl
+ #undef __strtof_impl
+ // clang-format on
