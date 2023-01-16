@@ -56,12 +56,8 @@ do_install_append() {
     find ${WORKDIR}/build/tests -maxdepth 1 -type f -executable -exec cp $CP_ARGS {} ${D}${bindir} \;
     cp $CP_ARGS ${WORKDIR}/build/UnitTests  ${D}${bindir}
 
-    install -d ${D}${TESTVECS_INSTALL_DIR}/testvecs
-    install -m 0555 ${WORKDIR}/grace_hopper.jpg ${D}${TESTVECS_INSTALL_DIR}/testvecs
     chrpath -d ${D}${bindir}/*
 }
-
-FILES_${PN} += "${TESTVECS_INSTALL_DIR}"
 
 FILES_${PN}-dev += "{libdir}/cmake/*"
 INSANE_SKIP_${PN}-dev = "dev-elf"

@@ -1,23 +1,11 @@
-diff --git a/SConstruct b/SConstruct
-index 7d396fabc..bacc51f8c 100644
---- a/SConstruct
-+++ b/SConstruct
-@@ -164,7 +164,7 @@ if env['arch'] == 'armv7a':
-     env.Append(CXXFLAGS = ['-march=armv7-a', '-mthumb', '-mfpu=neon'])
- 
-     if env['os'] == 'linux':
--        prefix = "arm-linux-gnueabihf-"
-+        prefix = ""
-         env.Append(CXXFLAGS = ['-mfloat-abi=hard'])
-     elif env['os'] == 'bare_metal':
-         prefix = "arm-eabi-"
-@@ -313,3 +313,9 @@ if env['examples'] and env['os'] != 'bare_metal' and env['exceptions']:
- 
- if env['os'] != 'bare_metal' and env['exceptions']:
-     SConscript('./tests/SConscript', variant_dir='%s/tests' % build_path, duplicate=0)
-+
-+for ev in ["PATH", "PKG_CONFIG", "PKG_CONFIG_PATH", "PKG_CONFIG_SYSROOT_DIR"]:
-+	if os.environ.get(ev) != None:
-+		env["ENV"][ev] = os.environ.get(ev)
-+	if os.environ["LDFLAGS"] != None:
-+		env.AppendUnique(LINKFLAGS = Split(os.environ["LDFLAGS"]))
+--- a/SConstruct	2022-12-09 09:12:36.260399839 +0000
++++ b/SConstruct	2022-12-09 09:15:03.923701343 +0000
+@@ -359,7 +359,7 @@
+             auto_toolchain_prefix = "armv7l-tizen-linux-gnueabi-"
+     elif env['estate'] == '64' and 'v8' in env['arch']:
+         if env['os'] == 'linux':
+-            auto_toolchain_prefix = "aarch64-linux-gnu-"
++            auto_toolchain_prefix = ""
+         elif env['os'] == 'bare_metal':
+             auto_toolchain_prefix = "aarch64-elf-"
+         elif env['os'] == 'android':

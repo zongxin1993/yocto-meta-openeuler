@@ -8,7 +8,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=f3c5879801d3cffc4ac2399f2b8e8ec5"
 
 SRC_URI = " \
     file://ComputeLibrary-${PV}.tar.gz \
-    file://0002-update-scon-configuration-for-yocto-build.patch \
+    file://0001-update-scon-configuration-for-yocto-build.patch \
 "
 SRC_URI[arm-compute-library.sha256sum] = "2f70f54d84390625222503ea38650c00c49d4b70bc86a6b9aeeebee9d243865f"
 

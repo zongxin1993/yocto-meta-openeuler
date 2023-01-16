@@ -1,4 +1,4 @@
-#main bb file: yocto-meta-openeuler/meta-openeuler/recipes-arm/armnn/armnn_22.11.bb
+#main bb file: yocto-meta-openeuler/meta-openeuler/recipes-arm/arm-compute-library/armnn_22.11.bb
 PV = "22.11"
 
 OPENEULER_BRANCH = "master"
@@ -73,6 +73,7 @@ SRC_URI_remove = " \
     file://0005-add-support-more-examples.patch \
     file://TfLiteMobilenetQuantized_0_25-Armnn.cpp \
     file://TfLiteMobilenetQuantized_1_0-Armnn.cpp \
+    file://grace_hopper.jpg \
 "
 SRC_URI += " \
    file://armnn-${PV}.tar.gz \
