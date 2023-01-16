@@ -11,11 +11,11 @@ EXTRA_OECMAKE:append:class-target = " -DFLATBUFFERS_BUILD_FLATC=0"
 
 SRC_URI = " \
         file://v${PV}.tar.gz \
-        0001-flatbuffers_cross_build_fix.patch \
+        file://0001-flatbuffers_cross_build_fix.patch \
 "
 
 SRC_URI_remove_class-native = " \
-        0001-flatbuffers_cross_build_fix.patch \
+        file://0001-flatbuffers_cross_build_fix.patch \
 "
 
 S = "${WORKDIR}/${BP}"
