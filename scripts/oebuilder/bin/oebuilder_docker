@@ -1,0 +1,75 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import argparse
+
+sys.path.insert(0, os.path.join(os.getcwd(), 'oebuilder'))
+from lib.docker_proxy import DockerProxy, DockerImage
+
+def init_args():
+    """
+    init args
+    :return:
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument("action")
+    parser.add_argument("-v", type=str, dest="volumes", default="", required=False)
+    parser.add_argument("-c", type=str, dest="command", default="", required=False)
+    parser.add_argument("-i", type=str, dest="image", default="", required=False)
+    parser.add_argument("-u", type=str, dest="user", default="", required=False)
+
+    return parser.parse_args()
+   
+
+def main():
+    args = init_args()
+    dockerProxy = DockerProxy()
+
+    action = args.action
+    if action == "exec":
+        volumes = args.volumes
+        if volumes != "":
+            volumes_split = volumes.split(",")
+            volumes = []
+            for item in volumes_split:
+                volumes.append(item)
+
+        imageName = args.image
+        command = args.command
+        user = args.user
+
+        dockerProxy.run_container(
+            image_name = imageName,
+            commands = command,
+            volumes = volumes,
+            stream = True,
+            user = user
+        )
+    
+    if action == "exec_tty":
+        print(args.command)
+        volumes = args.volumes
+        if volumes != "":
+            volumes_split = volumes.split(";")
+            volumes = []
+            for item in volumes_split:
+                volumes.append(item)
+
+        imageName = args.image
+        user = args.user
+
+        with open(args.command, 'r') as f:
+            command = f.read()
+        
+        os.remove(args.command)
+        
+        dockerProxy.run_container_with_tty(
+            imageName,
+            command = command,
+            user = user,
+            volume = volumes
+        )
+
+if __name__ == "__main__":
+    main()

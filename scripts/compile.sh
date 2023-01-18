@@ -168,6 +168,8 @@ download_pre_repo()
     fi
     SRC_DIR="$(realpath ${SRC_DIR})"
 
+    echo ${SRC_DIR}
+
     POKY_DIR=${SRC_DIR}/yocto-poky
     test -d ${POKY_DIR} || git clone https://gitee.com/openeuler/yocto-poky.git -v ${POKY_DIR} -b ${SRC_BRANCH} --depth 1
 }
@@ -178,8 +180,8 @@ main()
     SRC_BRANCH="openEuler-22.09"
     GIT_PRE="https://gitee.com"
     GIT_SPACE="src-openeuler"
-    download_pre_repo
     get_build_info "$@" || return 1
+    download_pre_repo
     set_env
     echo -e "Tip: You can now run 'bitbake ${BITBAKE_OPT}'.\n"
 }
