@@ -16,3 +16,4 @@
    nativesdk.rst
    rust.rst
    qt5_wayland.rst
+   armnn.rst
