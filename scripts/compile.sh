@@ -159,6 +159,22 @@ set_env()
     grep -q "OPENEULER_GIT_URL = \"${GIT_URL}\"" conf/local.conf || echo "OPENEULER_GIT_URL = \"${GIT_URL}\"" >> conf/local.conf
 }
 
+repo_pull()
+{
+    local repodir=$1
+    local remote=${GIT_PRE}/$2
+    local branch=$3
+
+    if [ -d ${repodir} ];then
+        pushd ${repodir}
+        git checkout ${branch}
+        git pull
+        popd
+    else
+        git clone ${remote} -v ${repodir} -b ${branch}
+    fi
+}
+
 download_pre_repo()
 {
     if [ -z "${SRC_DIR}" ];then
@@ -166,8 +182,17 @@ download_pre_repo()
     fi
     SRC_DIR="$(realpath ${SRC_DIR})"
 
+    # download or checkout yocto-poky
     POKY_DIR=${SRC_DIR}/yocto-poky
-    test -d ${POKY_DIR} || git clone https://gitee.com/openeuler/yocto-poky.git -v ${POKY_DIR} -b ${SRC_BRANCH} --depth 1
+    repo_pull ${POKY_DIR} openeuler/yocto-poky ${SRC_BRANCH}
+
+    # download or checkout yocto-meta-ros
+    ROS_DIR=${SRC_DIR}/yocto-meta-ros
+    repo_pull ${ROS_DIR} openeuler/yocto-meta-ros dev_hardknott
+
+    # download or checkout yocto-meta-openembedded
+    EMBEDDED_DIR=${SRC_DIR}/yocto-meta-openembedded
+    repo_pull ${EMBEDDED_DIR} openeuler/yocto-meta-openembedded dev_hardknott
 }
 
 main()
