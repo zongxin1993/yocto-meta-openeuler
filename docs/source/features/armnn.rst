@@ -45,7 +45,7 @@ ArmNN软件兼容 yocto-meta-openeuler 上做了很多准备工作，如 tensorf
       attr \
       ...
 
-  接下来按照官方 `参考容器构建指导 <https://openeuler.gitee.io/yocto-meta-openeuler/yocto/quickbuild/container-build.html>`_ 指导构建使用即可。
+  接下来按照官方 ref:容器环境下的快速构建指导 <container_build> 指导构建使用即可。
 
 **步骤2**
 
@@ -77,8 +77,10 @@ AI推理性能验证结果
 ***********************************
 
 以目标检测为示例，验证ArmNN的推理加速效果：
-1）模型：yolov3 tiny（FLOAT32量化）  
+1）模型：yolov3 tiny（FLOAT32量化） 
+ 
 2）训练数据：COCO
+
 3）测试数据：640*480 H264视频
 
 **ArmNN推理速度**
@@ -87,7 +89,7 @@ AI推理性能验证结果
 
   .. image:: ../../image/armnn/inference_speed_diagram.jpg
 
-由以上表格可得，在模型初始化和加载阶段，Ref模式比Acc模式快近4倍，但是在数据推理阶段，Acc模式比Ref模式有两个数量级的提升，可见硬件指令加速对于推理速度有极大的提升。
+由以上图可得，在模型初始化和加载阶段，Ref模式比Acc模式快近4倍，但是在数据推理阶段，Acc模式比Ref模式有两个数量级的提升，可见硬件指令加速对于推理速度有极大的提升。
 
 **ArmNN内存占用率**
 
