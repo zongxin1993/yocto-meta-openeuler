@@ -1,4 +1,6 @@
-PV = "2.61"
+PV = "2.66"
+
+OPENEULER_BRANCH = "openEuler-23.03"
 
 LIC_FILES_CHKSUM = "file://License;md5=e2370ba375efe9e1a095c26d37e483b8"
 SRC_URI[sha256sum] = "4897da3617ab7a0364a82da7c8c5aa49be8129d84018df92f0982d1363a53758"
@@ -7,7 +9,6 @@ SRC_URI[sha256sum] = "4897da3617ab7a0364a82da7c8c5aa49be8129d84018df92f0982d1363
 SRC_URI = " \
     file://${BPN}-${PV}.tar.gz \
     file://libcap-buildflags.patch \
-    file://Fix-syntax-error-in-DEBUG-protected-setcap.c-code.patch \
 "
 # patches from poky
 SRC_URI += " \
