@@ -8,6 +8,18 @@ SRC_URI_append = " \
     file://logo \
 "
 
+# if you want to build rk3568-8897-ddr4-v1-linux-hdmi.dtb instead of OK3568-C-linux.dtb, 
+# please uncomment next line
+# RK3568_KERNEL_DTB_NAME = "rk3568-8897-ddr4-v1-linux-hdmi.dtb"
+
+# patches for rk3568-8897-ddr4-v1-linux-hdmi.dtb
+SRC_URI_append = " \
+    ${@bb.utils.contains('RK3568_KERNEL_DTB_NAME', 'rk3568-8897-ddr4-v1-linux-hdmi.dtb', \
+    ' file://patches/0001-devicetree-rk3568-8897-ddr4-v1-linux-base.patch \
+      file://patches/0002-ryd-gpio-controls-c.patch \
+      file://patches/0003-ryd-gpio-control.patch \
+    ', '' ,d)}"
+
 # more support of device is comming. so we documented this patch md5sum.
 SRC_URI[ok3568-kernel-patch.md5sum] = "f6599687190dbf8381a0029980973b46"
 
@@ -20,9 +32,10 @@ OPENEULER_KERNEL_CONFIG = "../config/OK3568-C-linux_defconfig"
 do_compile_append_ok3568(){
     cp ../logo/* ./
     scripts/mkkrnlimg ${KERNEL_OUTPUT_DIR}/Image kernel.img
-    ../tools/mkimg --dtb OK3568-C-linux.dtb
-    sed "s:path_to_kernel:${WORKDIR}\/build:g" ../tools/its_config >.tmp_its_config
-    ../tools/mkimage -f .tmp_its_config   -E -p 0x800 boot.img
+    ../tools/mkimg --dtb ${RK3568_KERNEL_DTB_NAME}
+    sed -e "s:path_to_kernel:${WORKDIR}\/build:g" -e "s:dtb_name:${RK3568_KERNEL_DTB_NAME}:g" \
+        ${WORKDIR}/tools/its_config > .tmp_its_config
+    ../tools/mkimage -f .tmp_its_config -E -p 0x800 boot.img
     rm -rf .tmp_its_config
 }
 
