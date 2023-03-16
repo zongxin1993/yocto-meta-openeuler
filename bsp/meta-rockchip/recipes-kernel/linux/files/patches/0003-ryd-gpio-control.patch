@@ -1,0 +1,26 @@
+diff --git a/drivers/char/Kconfig b/drivers/char/Kconfig
+index f75f9e3ea..7b075bc11 100644
+--- a/drivers/char/Kconfig
++++ b/drivers/char/Kconfig
+@@ -7,6 +7,12 @@ menu "Character devices"
+ 
+ source "drivers/tty/Kconfig"
+ 
++config RYD_GPIO_CONTROL
++	tristate "Support New RYD GPIO Control (Not use anymore)"
++	default y
++	help
++	  If you say Y here, you will get support for a character device
++
+ config TTY_PRINTK
+ 	tristate "TTY driver to output user messages via printk"
+ 	depends on EXPERT && TTY
+diff --git a/drivers/char/Makefile b/drivers/char/Makefile
+index 362d4a9cd..6920dbb7d 100644
+--- a/drivers/char/Makefile
++++ b/drivers/char/Makefile
+@@ -49,3 +49,4 @@ obj-$(CONFIG_POWERNV_OP_PANEL)	+= powernv-op-panel.o
+ obj-$(CONFIG_ADI)		+= adi.o
+ obj-$(CONFIG_PIN_MEMORY_DEV)	+= pin_memory.o
+ obj-$(CONFIG_HISI_SVM)		+= svm.o
++obj-y	+= ryd_gpio_controls.o
