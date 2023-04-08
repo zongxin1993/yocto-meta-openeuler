@@ -3,6 +3,8 @@ DESCRIPTION = "Small image capable of booting a device. The kernel includes \
 the Minimal RAM-based Initial Root Filesystem (initramfs), which finds the \
 first 'init' program more efficiently."
 
+DEPENDS = "coremark dhrystone"
+
 INITRAMFS_SCRIPTS = "\
                       initramfs-boot packagegroup-core-boot \
 		     "
