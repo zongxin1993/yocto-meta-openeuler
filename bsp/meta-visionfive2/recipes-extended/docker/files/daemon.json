@@ -1,0 +1,8 @@
+{
+  "experimental": false,
+  "registry-mirrors": [
+    "https://docker.mirrors.ustc.edu.cn"
+  ],
+  "debug": true,
+  "live-restore": true
+}
