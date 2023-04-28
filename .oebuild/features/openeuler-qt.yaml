@@ -1,6 +1,6 @@
 type: feature
 
-support: raspberrypi4-64|ok3568|ryd-3568
+support: raspberrypi4-aarch64|ok3568-aarch64|ryd3568-aarch64
 
 repos:
   yocto-meta-qt5:
