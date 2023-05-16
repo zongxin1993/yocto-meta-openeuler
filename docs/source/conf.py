@@ -13,12 +13,13 @@
 # import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
+import re
 import sphinx_rtd_theme
 
 # -- Project information -----------------------------------------------------
 
 project = 'openEuler Embedded在线文档'
-copyright = '2022, openEuler Embedded'
+copyright = '2023, openEuler Embedded'
 author = 'openEuler Embedded'
 
 # The full version, including alpha/beta/rc tags
@@ -77,3 +78,5 @@ html_static_path = ['_static']
 master_doc= 'index'
 
 html_show_sourcelink = False
+
+smv_branch_whitelist = r'^(master|openEuler-\d{2}\.\d{2})\S*$'
