@@ -35,3 +35,34 @@ packagegroup-roscore \
 # You can add extra user here, suck like:
 # inherit extrausers
 # EXTRA_USERS_PARAMS = "useradd -p '' openeuler;"
+
+# add tools for sdk
+TOOLCHAIN_TARGET_TASK += " \
+ament-cmake \
+ament-cmake-auto \
+ament-cmake-core \
+ament-cmake-export-definitions \
+ament-cmake-export-dependencies \
+ament-cmake-export-include-directories \
+ament-cmake-export-interfaces \
+ament-cmake-export-libraries \
+ament-cmake-export-link-flags \
+ament-cmake-export-targets \
+ament-cmake-gmock \
+ament-cmake-gtest \
+ament-cmake-include-directories \
+ament-cmake-libraries \
+ament-cmake-pytest \
+ament-cmake-python \
+ament-cmake-ros \
+ament-cmake-target-dependencies \
+ament-cmake-test \
+ament-cmake-version \
+ament-package \
+python3-numpy \
+python3-numpy-staticdev \
+ceres-solver-staticdev \
+foonathan-memory-staticdev \
+libyaml-staticdev \
+googletest \
+"
