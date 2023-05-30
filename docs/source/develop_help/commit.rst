@@ -5,6 +5,7 @@ git commit提交规范
 
 开发人员通过git commit和gitee pr的形式向openEuler Embedded进行贡献，其中git commit msg需遵循相应的规范。
 openEuler Embedded部署了基于gitlint的机制来检查git commit是否符合规划，具体的规则位于 :file:`.gitlint` 文件中。
+这是测试更新
 
 - **commit msg规范**
 
