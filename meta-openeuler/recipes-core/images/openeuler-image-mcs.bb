@@ -12,6 +12,7 @@ IMAGE_INSTALL = " \
 packagegroup-core-boot \
 packagegroup-kernel-modules \
 packagegroup-openssh \
+packagegroup-core-tools-debug \
 packagegroup-mcs \
 "
 
