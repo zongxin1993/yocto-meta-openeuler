@@ -170,7 +170,7 @@ manifest_list:
     version: 603b423090de124bbeb2126857b7a8b10cc0d016
   glog:
     remote_url: https://gitee.com/src-openeuler/glog.git
-    version: 036df3dc807fba0bb0ead788c08933fcc7a9e080
+    version: cbd825ec8b2698ef9f79f44dea31359b137c247c
   gmp:
     remote_url: https://gitee.com/src-openeuler/gmp.git
     version: 5a5e303b40e80a2266244c539c2f0fdfd35b0d8f
@@ -293,7 +293,7 @@ manifest_list:
     version: 1fdb406ad64c058565318a1d378406c848c82bd4
   libffi:
     remote_url: https://gitee.com/src-openeuler/libffi.git
-    version: efed57920ddaa573f7c17e3a5c6c7c279478cb38
+    version: e2da93464db46f7fb4e676b2aa4350301e2968e2
   libgcrypt:
     remote_url: https://gitee.com/src-openeuler/libgcrypt.git
     version: 6c7dc4542be4cd481e0a7fe0352839ee64e88b0b
@@ -531,6 +531,9 @@ manifest_list:
   python-docutils:
     remote_url: https://gitee.com/src-openeuler/python-docutils.git
     version: 257be78ad8bbc4d29d03baef211f14d850d59734
+  python-docopt:
+    remote_url: https://gitee.com/src-openeuler/python-docopt.git
+    version: 6de180c379485aa23cdb01054e27c0852ad0ec43
   python-humanfriendly:
     remote_url: https://gitee.com/src-openeuler/python-humanfriendly.git
     version: 08a6f88833ba4f41057974c8fb7221ce2b1973bc
@@ -555,6 +558,9 @@ manifest_list:
   python-packaging:
     remote_url: https://gitee.com/src-openeuler/python-packaging.git
     version: fbc94756803f39c61adde2931c5fe32a104f1d6b
+  python-pathlib2:
+    remote_url: https://gitee.com/src-openeuler/python-pathlib2.git
+    version: 678955fa7a0433bd52acb1b5f85c4d625ef6e453
   python-pep8:
     remote_url: https://gitee.com/src-openeuler/python-pep8.git
     version: a3ae17fd37d420597e4ddbb28d9e92ef47a5036a
@@ -578,7 +584,7 @@ manifest_list:
     version: 8ac8a08e26e79790a02fb647378e305f7d848a6c
   python3:
     remote_url: https://gitee.com/src-openeuler/python3.git
-    version: a4c17510088534a5ac3e7a7302aaf88b96814798
+    version: 5f848e0a95c52a971c1d11e6a4910905320ae73e
   qt5-qtbase:
     remote_url: https://gitee.com/src-openeuler/qt5-qtbase.git
     version: c41d3f406aa9fa6ae271dabea1f706cc23bc1951
@@ -662,7 +668,7 @@ manifest_list:
     version: 9fd2e6f9b698396a887208d2426a8c479d5d8771
   tinyxml2:
     remote_url: https://gitee.com/src-openeuler/tinyxml2.git
-    version: e0e993959c2d780e6a7e2b01a5bd0866971324e5
+    version: 29d8318f8837dccf7205d0a72ec6823d6d5aa09f
   tslib:
     remote_url: https://gitee.com/src-openeuler/tslib.git
     version: 1370aeba6969b893018bd157b49aa2c64e7fe2da
@@ -716,19 +722,19 @@ manifest_list:
     version: fbe5a7627b629a9400c2d7e7099c1934b592e355
   yocto-meta-openembedded:
     remote_url: https://gitee.com/openeuler/yocto-meta-openembedded.git
-    version: 54204353f2953d0cd36a8d5ed35ce9a560852ff7
+    version: a82d92c8a6525da01524bf8f4a60bf6b35dcbb3d
   yocto-meta-qt5:
     remote_url: https://gitee.com/openeuler/yocto-meta-qt5.git
-    version: 43f8f539d40070a70fe89136db89bf5bb1dfe7ed
+    version: bff5bd937f0776166e81a63f3dd39ede348ef758
   yocto-meta-ros:
     remote_url: https://gitee.com/openeuler/yocto-meta-ros.git
-    version: 5e89706808f08397dda040395acfe9fc294b229f
+    version: 6e559558c8c7ddf1b828a5f82d33eb0274bc2fc3
   yocto-opkg-utils:
     remote_url: https://gitee.com/src-openeuler/yocto-opkg-utils.git
     version: 1d04472046d0225e013dd7e18c62dddf82025969
   yocto-poky:
     remote_url: https://gitee.com/openeuler/yocto-poky.git
-    version: 230e29ee70a751dea2bbba1d69b6fa803db51353
+    version: f53ab3a2ff206a130cdc843839dd0ea5ec4ad02f
   yocto-pseudo:
     remote_url: https://gitee.com/src-openeuler/yocto-pseudo.git
     version: 3c4978a07fbb5a0c6288e77ae5b24ee33ddf34f9
@@ -786,6 +792,9 @@ manifest_list:
   cyclonedds:
     remote_url: https://gitee.com/src-openeuler/cyclonedds.git
     version: f27e645561d9f09569cc06be645b99f5d60a476c
+  file:
+    remote_url: https://gitee.com/src-openeuler/file.git
+    version: c7ccd582bee9d30c11e7e32ec99910d88314b9e1
   foonathan-memory-vendor:
     remote_url: https://gitee.com/src-openeuler/foonathan_memory_vendor.git
     version: 32fda3aed4aa6a9e76e876d452cb6c330a658360
@@ -1077,9 +1086,9 @@ manifest_list:
   python-importlib-metadata:
     remote_url: https://gitee.com/src-openeuler/python-importlib-metadata.git
     version: 23459166b1eb538ddbdef034502db91b9d227c8b
-  python-pathlib2:
-    remote_url: https://gitee.com/src-openeuler/python-pathlib2.git
-    version: 192f4c408e560f3b3af5423b34c6983fc1a743c5
   pybind11:
     remote_url: https://gitee.com/src-openeuler/pybind11.git
     version: 7c290bcfa00902ac5d07752b24a87a970a5cb481
+  meson:
+    remote_url: https://gitee.com/src-openeuler/meson.git
+    version: d76179822e845ae6bc24bc434757bc032f94bb43
