@@ -14,9 +14,9 @@ SRC_URI += " \
 "
 
 # BUILD_GPERF is now reserved, please use USE_GPERF=yes or no instead.
-EXTRA_OEMAKE_remove = "BUILD_GPERF=yes \
+EXTRA_OEMAKE:remove = "BUILD_GPERF=yes \
 "
-EXTRA_OEMAKE_append = "USE_GPERF=yes \
+EXTRA_OEMAKE:append = "USE_GPERF=yes \
 "
 
 # use cross compile objcopy

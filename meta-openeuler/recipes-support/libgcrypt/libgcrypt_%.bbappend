@@ -2,7 +2,7 @@
 PV = "1.9.4"
 
 # patches in openEuler
-SRC_URI_prepend = "file://backport-libgcrypt-1.8.5-use-fipscheck.patch \
+SRC_URI:prepend = "file://backport-libgcrypt-1.8.5-use-fipscheck.patch \
            file://backport-libgcrypt-1.8.4-fips-keygen.patch \
            file://backport-libgcrypt-1.8.4-tests-fipsmode.patch \
            file://backport-libgcrypt-1.7.3-fips-cavs.patch \

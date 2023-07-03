@@ -14,8 +14,8 @@ S = "${WORKDIR}/${BP}"
 
 inherit autotools
 
-FILES_${PN} = "${bindir} ${libdir}/${BPN}.so*"
+FILES:${PN} = "${bindir} ${libdir}/${BPN}.so*"
 
-do_compile_prepend() {
+do_compile:prepend() {
         cp ${B}/include/seccomp.h ${S}/include
 }

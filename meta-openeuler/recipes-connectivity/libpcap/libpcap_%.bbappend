@@ -3,7 +3,7 @@
 # version in openEuler
 PV = "1.10.3"
 
-SRC_URI_prepend = "file://0003-pcap-linux-apparently-ctc-interfaces-on-s390-has-eth.patch \
+SRC_URI:prepend = "file://0003-pcap-linux-apparently-ctc-interfaces-on-s390-has-eth.patch \
            file://pcap-config-mitigate-multilib-conflict.patch \
            "
 

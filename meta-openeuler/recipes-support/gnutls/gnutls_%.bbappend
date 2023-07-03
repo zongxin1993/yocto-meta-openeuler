@@ -4,7 +4,7 @@
 PV = "3.7.8"
 
 # files, patches can't be applied in openeuler or conflict with openeuler
-SRC_URI_remove = " \
+SRC_URI:remove = " \
         https://www.gnupg.org/ftp/gcrypt/gnutls/v${SHRT_VER}/gnutls-${PV}.tar.xz \
 "
 
@@ -16,6 +16,6 @@ SRC_URI += " \
         file://backport-02-CVE-2023-0361.patch \
 "
 
-EXTRA_OECONF_remove = "--enable-local-libopts"
+EXTRA_OECONF:remove = "--enable-local-libopts"
 
 SRC_URI[sha256sum] = "646e6c5a9a185faa4cea796d378a1ba8e1148dbb197ca6605f95986a25af2752"

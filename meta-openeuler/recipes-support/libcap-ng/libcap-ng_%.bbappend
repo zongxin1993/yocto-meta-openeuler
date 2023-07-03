@@ -4,7 +4,7 @@ OPENEULER_SRC_URI_REMOVE = "https git"
 PV = "0.8.3"
 
 # determinism.patch no need for 0.8.3
-SRC_URI_remove += "file://determinism.patch"
+SRC_URI:remove = "file://determinism.patch"
 
 SRC_URI += " \
         file://libcap-ng-${PV}.tar.gz \

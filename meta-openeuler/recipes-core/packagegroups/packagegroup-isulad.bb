@@ -5,7 +5,7 @@ PR = "r1"
 
 PACKAGES = "${PN}"
 
-RDEPENDS_${PN} = "\
+RDEPENDS:${PN} = "\
 libseccomp \
 libwebsockets \
 yajl \

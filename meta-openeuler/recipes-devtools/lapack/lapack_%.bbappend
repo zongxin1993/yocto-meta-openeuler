@@ -11,10 +11,10 @@ PV = "3.10.0"
 S = "${WORKDIR}/lapack-${PV}"
 
 # files, patches can't be applied in openeuler or conflict with openeuler
-SRC_URI_remove = " \
+SRC_URI:remove = " \
 "
 # files, patches that come from openeuler
-SRC_URI_prepend = " \
+SRC_URI:prepend = " \
     file://v${PV}.tar.gz \
     file://0001-fix-lapack-devel-build-error.patch \
     file://0002-Fix-out-of-bounds-read-in-slarrv.patch \

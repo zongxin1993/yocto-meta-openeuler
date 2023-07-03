@@ -2,10 +2,10 @@ PV = "2.74.4"
 OPENEULER_REPO_NAME = "glib2"
 
 # use new relocate-modules.patch to fix build error of glib-2.0-native
-FILESEXTRAPATHS_prepend := "${THISDIR}/files/:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files/:"
 
 # no such file, add dependency on libpcre
-LIC_FILES_CHKSUM_remove = " file://glib/pcre/pcre.h;beginline=8;endline=36;md5=3e2977dae4ad05217f58c446237298fc \
+LIC_FILES_CHKSUM:remove = " file://glib/pcre/pcre.h;beginline=8;endline=36;md5=3e2977dae4ad05217f58c446237298fc \
 "
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=41890f71f740302b785c27661123bff5"
@@ -18,23 +18,23 @@ DEPENDS += "libpcre2"
 SRC_URI = "file://glib-${PV}.tar.xz \
            file://0001-fix-compile-error-for-arm32.patch \
            "
-EXTRA_OEMESON_remove = "-Dfam=false"
+EXTRA_OEMESON:remove = "-Dfam=false"
 
 SRC_URI[sha256sum] = "0e82da5ea129b4444227c7e4a9e598f7288d1994bf63f129c44b90cfd2432172"
 
 # delete depends to shared-mime-info
-SHAREDMIMEDEP_remove += "shared-mime-info"
+SHAREDMIMEDEP:remove = "shared-mime-info"
 
 # glib2-codegn is a collection of python scripts.
 # here, remove the runtime depends of python3, to simplify build
 # when python3 support becomes mature, remove the following codes
-RDEPENDS_${PN}-codegen = ""
+RDEPENDS:${PN}-codegen = ""
 # glib needs meson, meson needs python3-native
 # here use nativesdk's meson-native and python3-native
-DEPENDS_remove += "python3-native"
+DEPENDS:remove = "python3-native"
 
 # delete depends to util-linux-native
-PACKAGECONFIG_remove_class-target += "libmount"
+PACKAGECONFIG:remove:class-target += "libmount"
 # no internal_pcre configuration option
 PACKAGECONFIG[system-pcre] = ""
 
@@ -55,10 +55,10 @@ GIO_MODULE_PACKAGES = ""
 # QA Issue: glib-2.0: Files/directories were installed but not shipped in any package:
 #  /usr/libexec
 #  /usr/libexec/gio-launch-desktop
-FILES_${PN} += " ${libexecdir}/*gio-launch-desktop \"
+FILES:${PN} += " ${libexecdir}/*gio-launch-desktop \"
 
 # rpath may generate by meson and may not auto delete rpath, it is no secure, so let we do it as a workaround
-do_install_append () {
+do_install:append () {
     if [ -f ${D}${libexecdir}/gio-querymodules${EXEEXT} ]; then
         chrpath --delete ${D}${libexecdir}/gio-querymodules${EXEEXT}
     fi

@@ -5,7 +5,7 @@ OPENEULER_SRC_URI_REMOVE = "git https http"
 
 PV = "1.0.18"
 
-SRC_URI_append = " \
+SRC_URI:append = " \
         file://libsodium-${PV}.tar.gz \
 "
 

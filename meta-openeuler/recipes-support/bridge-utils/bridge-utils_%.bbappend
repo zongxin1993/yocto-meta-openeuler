@@ -4,12 +4,12 @@
 PV = "1.7.1"
 
 # files, patches can't be applied in openeuler or conflict with openeuler
-SRC_URI_remove = "\
+SRC_URI:remove = "\
     git://git.kernel.org/pub/scm/network/bridge/bridge-utils.git;branch=main \
 "
 
 # files, patches that come from openeuler
-SRC_URI_prepend = "\
+SRC_URI:prepend = "\
     file://${BP}.tar.gz \
     file://bugfix-avoid-showmacs-memory-leak.patch \
     file://bugfix-bridge-not-check-parameters.patch \

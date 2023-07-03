@@ -38,7 +38,7 @@ S = "${WORKDIR}/newlib-${PV}"
 B = "${WORKDIR}/build"
 
 ## disable stdlib
-TARGET_CC_ARCH_append = " -nostdlib"
+TARGET_CC_ARCH:append = " -nostdlib"
 
 # when to use elf, when to use eabi
 # depends on toolchain and architecture
@@ -87,7 +87,7 @@ do_install() {
 }
 
 # put the *.specs file and cpu-init into dev package
-FILES_${PN}-dev += " ${libdir}/*.specs ${libdir}/cpu-init "
+FILES:${PN}-dev += " ${libdir}/*.specs ${libdir}/cpu-init "
 
 # No rpm package is actually created but -dev depends on it, avoid dnf error
-RDEPENDS_${PN}-dev = ""
+RDEPENDS:${PN}-dev = ""

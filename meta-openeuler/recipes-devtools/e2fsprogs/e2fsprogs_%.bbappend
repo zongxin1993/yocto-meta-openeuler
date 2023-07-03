@@ -2,7 +2,7 @@ PV = "1.46.5"
 
 S = "${WORKDIR}/${BPN}-${PV}"
 # delete package from poky
-SRC_URI_remove += "git://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git \
+SRC_URI:remove = "git://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git \
                 git://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git;branch=master \
                 file://0001-e2fsck-fix-last-mount-write-time-when-e2fsck-is-forc.patch \
                 "

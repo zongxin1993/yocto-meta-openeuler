@@ -12,7 +12,7 @@ SRC_URI += " \
 
 S = "${WORKDIR}/${BPN}-${PV}"
 
-do_configure_prepend() {
+do_configure:prepend() {
     # cannot run po/update-potfiles in new version
     if [ ! -f ${S}/po/update-potfiles ]; then
         touch ${S}/po/update-potfiles

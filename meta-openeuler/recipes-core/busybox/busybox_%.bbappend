@@ -1,10 +1,10 @@
 PV = "1.34.1"
 
 # use openEuler defconfig
-FILESEXTRAPATHS_prepend := "${THISDIR}/files/:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files/:"
 
 # files, patches can't be applied in openeuler or conflict with openeuler
-SRC_URI_remove = " \
+SRC_URI:remove = " \
             file://busybox-udhcpc-no_deconfig.patch \
             file://0001-testsuite-check-uudecode-before-using-it.patch \
             file://0001-gen_build_files-Use-C-locale-when-calling-sed-on-glo.patch \
@@ -13,7 +13,7 @@ SRC_URI_remove = " \
             "
 
 #we always want busybox with mdev\init packages to support multi init manager
-SRC_URI_append = " \
+SRC_URI:append = " \
         file://backport-CVE-2022-28391.patch \
         file://backport-CVE-2022-30065.patch \
         file://backport-fix-use-after-free-in-bc-module.patch \
@@ -27,7 +27,7 @@ SRC_URI_append = " \
 DEPENDS += "libtirpc"
 CFLAGS += "${@bb.utils.contains('DEPENDS', 'libtirpc', '-I${STAGING_INCDIR}/tirpc', '', d)}"
 
-do_prepare_config_append () {
+do_prepare_config:append () {
     set +e
     grep -E '^CONFIG_FEATURE_MOUNT_NFS=y|^CONFIG_FEATURE_INETD_RPC=y' ${S}/.config
     ret=$?
@@ -41,7 +41,7 @@ do_prepare_config_append () {
     set -e
 }
 
-do_install_append () {
+do_install:append () {
     if grep -q "CONFIG_INIT=y" ${B}/.config ; then
         install -D -m 0755 ${WORKDIR}/rcS ${D}${sysconfdir}/init.d/rcS
         install -D -m 0755 ${WORKDIR}/rcK ${D}${sysconfdir}/init.d/rcK

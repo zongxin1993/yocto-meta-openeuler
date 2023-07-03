@@ -4,7 +4,7 @@ PV = "6.4"
 
 # files, patches can't be applied in openeuler or conflict with openeuler
 # CVE-2021-39537.patch from poky is for 6.2 and no need for openeuler 6.3 version
-SRC_URI_remove += " \
+SRC_URI:remove = " \
             file://0002-configure-reproducible.patch \
             file://0003-gen-pkgconfig.in-Do-not-include-LDFLAGS-in-generated.patch \
             file://CVE-2021-39537.patch \

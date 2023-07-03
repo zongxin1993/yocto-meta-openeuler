@@ -4,7 +4,7 @@ OPENEULER_REPO_NAME = "libdb"
 # files, patches can't be applied in openeuler or conflict with openeuler
 # patches that apply fail:
 #     0001-atomic-Rename-local-__atomic_compare_exchange-to-avo.patch
-SRC_URI_remove = "file://0001-atomic-Rename-local-__atomic_compare_exchange-to-avo.patch \
+SRC_URI:remove = "file://0001-atomic-Rename-local-__atomic_compare_exchange-to-avo.patch \
 "
 
 # files, patches that come from openeuler
@@ -15,7 +15,7 @@ SRC_URI_remove = "file://0001-atomic-Rename-local-__atomic_compare_exchange-to-a
 #     db-5.3.28-condition-variable-ppc.patch 
 #     db-5.3.28-rpm-lock-check.patch 
 #     add-check-for-device-number-in-__check_lock_fn.patch
-SRC_URI_prepend = "file://libdb-multiarch.patch \
+SRC_URI:prepend = "file://libdb-multiarch.patch \
            file://db-4.6.21-1.85-compat.patch \
            file://db-4.5.20-jni-include-dir.patch \
            file://007-mt19937db.c_license.patch \

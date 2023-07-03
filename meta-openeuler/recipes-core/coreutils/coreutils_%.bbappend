@@ -4,7 +4,7 @@
 PV = "9.0"
 
 # solve lic check failed
-LIC_FILES_CHKSUM_remove = " \
+LIC_FILES_CHKSUM:remove = " \
         file://src/ls.c;beginline=1;endline=15;md5=b7d80abf5b279320fb0e4b1007ed108b \
 "
 LIC_FILES_CHKSUM += " \
@@ -12,7 +12,7 @@ LIC_FILES_CHKSUM += " \
 "
 
 # files, patches can't be applied in openeuler or conflict with openeuler
-SRC_URI_remove = " \
+SRC_URI:remove = " \
         ${GNU_MIRROR}/coreutils/${BP}.tar.xz \
         file://remove-usr-local-lib-from-m4.patch \
         file://fix-selinux-flask.patch \
@@ -22,7 +22,7 @@ SRC_URI_remove = " \
 "
 
 # files, patches that come from openeuler
-SRC_URI_prepend = " \
+SRC_URI:prepend = " \
         file://${BP}.tar.xz \
         file://0001-disable-test-of-rwlock.patch \
         file://coreutils-8.2-uname-processortype.patch \

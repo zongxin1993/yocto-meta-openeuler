@@ -2,7 +2,7 @@
 # use as many as possible prebuilt nativesdk/host tools to replace native tools.
 # this file has related HOSTTOOLS and ASSUME_PROVIDED settings.
 
-HOSTTOOLS_remove += "chrpath cpp rpcgen"
+HOSTTOOLS:remove = "chrpath cpp rpcgen"
 HOSTTOOLS_NONFATAL += "chrpath cpp rpcgen"
 # basic tools
 HOSTTOOLS += "python3 python pod2man pkg-config"
@@ -60,10 +60,10 @@ ASSUME_PROVIDED +=  "pixman-native mesa-native virglrenderer-native libsdl2-nati
 ASSUME_PROVIDED += "alsa-lib-native"
 
 #some commands added in poky by default do not used now, make it optional
-HOSTTOOLS_remove += "diffstat lz4c pzstd"
+HOSTTOOLS:remove = "diffstat lz4c pzstd"
 HOSTTOOLS_NONFATAL += "diffstat lz4c pzstd"
 
-SANITY_REQUIRED_UTILITIES_remove += "diffstat chrpath"
+SANITY_REQUIRED_UTILITIES:remove = "diffstat chrpath"
 CONNECTIVITY_CHECK_URIS = ""
 
 # Misc. assume provided software package

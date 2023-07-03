@@ -4,7 +4,7 @@
 PV = "7.86.0"
 
 # files, patches can't be applied in openeuler or conflict with openeuler
-SRC_URI_remove = " \
+SRC_URI:remove = " \
         https://curl.haxx.se/download/curl-${PV}.tar.bz2 \
         file://0001-vtls-add-isproxy-argument-to-Curl_ssl_get-addsession.patch \
         file://0002-transfer-strip-credentials-from-the-auto-referer-hea.patch \
@@ -43,7 +43,7 @@ SRC_URI[sha256sum] = "2d61116e5f485581f6d59865377df4463f2e788677ac43222b496d4e49
 LIC_FILES_CHKSUM = "file://COPYING;md5=190c514872597083303371684954f238"
 
 # the version 7.86.0 in install function add a sed command
-do_install_append_class-target() {
+do_install:append:class-target() {
 	# cleanup buildpaths from curl-config
 	sed -i \
 	    -e 's|${@" ".join(d.getVar("DEBUG_PREFIX_MAP").split())}||g' \
@@ -51,7 +51,7 @@ do_install_append_class-target() {
 }
 
 # configure.ac in openEuler can't handle --without-libmetalink variable
-EXTRA_OECONF_remove = " \
+EXTRA_OECONF:remove = " \
         --without-libmetalink \
 "
 
@@ -61,13 +61,13 @@ PACKAGECONFIG[openssl] = "--with-openssl,--without-openssl,openssl"
 PACKAGECONFIG[ssl] = ""
 PACKAGECONFIG[zstd] = "--with-zstd,--without-zstd,zstd"
 
-EXTRA_OECONF_append = " \
+EXTRA_OECONF:append = " \
     ${@'--without-ssl' if (bb.utils.filter('PACKAGECONFIG', 'gnutls mbedtls nss openssl', d) == '') else ''} \
 "
 
 # It is not safe to pack crt files in rootfs by default, if you sure what you want, comment these lines:
-EXTRA_OECONF_remove += " \
+EXTRA_OECONF:remove = " \
         --with-ca-bundle=${sysconfdir}/ssl/certs/ca-certificates.crt \
         --without-libmetalink \
 "
-RRECOMMENDS_lib${BPN}_remove += "ca-certificates"
+RRECOMMENDS_lib${BPN}:remove = "ca-certificates"

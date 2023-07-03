@@ -1,6 +1,6 @@
 PV = "5.19"
 
-SRC_URI:remove += " ${KERNELORG_MIRROR}/software/network/ethtool/ethtool-${PV}.tar.gz "
+SRC_URI:remove = " ${KERNELORG_MIRROR}/software/network/ethtool/ethtool-${PV}.tar.gz "
 
 # ptest patch: avoid_parallel_tests.patch
 SRC_URI = "file://${BP}.tar.xz \

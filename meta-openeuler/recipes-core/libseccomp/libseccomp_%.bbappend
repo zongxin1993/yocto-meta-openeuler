@@ -2,5 +2,5 @@
 
 PV = "2.5.4"
 
-SRC_URI_prepend = "file://backport-arch-disambiguate-in-arch-syscall-validate.patch \
+SRC_URI:prepend = "file://backport-arch-disambiguate-in-arch-syscall-validate.patch \
 "
