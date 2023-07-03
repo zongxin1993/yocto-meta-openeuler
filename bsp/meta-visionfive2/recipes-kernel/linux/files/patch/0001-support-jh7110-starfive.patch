@@ -12066,7 +12066,7 @@ index 000000000000..b328a0c83a28
 +	return ret;
 +}
 +
-+static int jh7110_cryp_remove(struct platform_device *pdev)
++static int jh7110_cryp:remove(struct platform_device *pdev)
 +{
 +	struct jh7110_sec_dev *sdev = platform_get_drvdata(pdev);
 +	int ret;
@@ -12151,7 +12151,7 @@ index 000000000000..b328a0c83a28
 +
 +static struct platform_driver jh7110_cryp_driver = {
 +	.probe  = jh7110_cryp_probe,
-+	.remove = jh7110_cryp_remove,
++	.remove = jh7110_cryp:remove,
 +	.driver = {
 +		.name           = DRIVER_NAME,
 +		.pm		= &jh7110_cryp_pm_ops,
@@ -12438,7 +12438,7 @@ index 000000000000..fc8269ce8845
 +	return 0;
 +}
 +
-+static void jh7110_hash_append_sg(struct jh7110_sec_request_ctx *rctx)
++static void jh7110_hash:append:sg(struct jh7110_sec_request_ctx *rctx)
 +{
 +	struct jh7110_sec_ctx *ctx = rctx->ctx;
 +	size_t count;
@@ -12542,12 +12542,12 @@ index 000000000000..fc8269ce8845
 +
 +	while ((rctx->total >= rctx->buflen) ||
 +			(rctx->bufcnt + rctx->total >= rctx->buflen)) {
-+		jh7110_hash_append_sg(rctx);
++		jh7110_hash:append:sg(rctx);
 +		err = jh7110_hash_xmit(ctx, 0);
 +		rctx->bufcnt = 0;
 +	}
 +
-+	jh7110_hash_append_sg(rctx);
++	jh7110_hash:append:sg(rctx);
 +
 +	if (final) {
 +		err = jh7110_hash_xmit(ctx,
@@ -12729,7 +12729,7 @@ index 000000000000..fc8269ce8845
 +	rctx->offset = 0;
 +
 +	if ((rctx->bufcnt + rctx->total < rctx->buflen)) {
-+		jh7110_hash_append_sg(rctx);
++		jh7110_hash:append:sg(rctx);
 +		return 0;
 +	}
 +
@@ -17611,7 +17611,7 @@ index 000000000000..0b7341cecc45
 +	return -ENODEV;
 +no_panel:
 +	mipi_dsi_device_unregister(jd_panel->dsi);
-+	//drm_panel_remove(&jd_panel->panel);
++	//drm_panel:remove(&jd_panel->panel);
 +	//mipi_dsi_detach(jd_panel->dsi);
 +
 +	return -ENODEV;
@@ -17619,12 +17619,12 @@ index 000000000000..0b7341cecc45
 +
 +}
 +
-+static int panel_remove(struct i2c_client *client)
++static int panel:remove(struct i2c_client *client)
 +{
 +	struct jadard *jd_panel = i2c_get_clientdata(client);
 +
 +	mipi_dsi_detach(jd_panel->dsi);
-+	drm_panel_remove(&jd_panel->panel);
++	drm_panel:remove(&jd_panel->panel);
 +	mipi_dsi_device_unregister(jd_panel->dsi);
 +	return 0;
 +}
@@ -17646,7 +17646,7 @@ index 000000000000..0b7341cecc45
 +		.of_match_table = panel_dt_ids,
 +	},
 +	.probe		= panel_probe,
-+	.remove		= panel_remove,
++	.remove		= panel:remove,
 +	.id_table	= panel_id,
 +};
 +
@@ -17671,12 +17671,12 @@ index 000000000000..0b7341cecc45
 +	return 0;
 +}
 +
-+static int jadard_dsi_remove(struct mipi_dsi_device *dsi)
++static int jadard_dsi:remove(struct mipi_dsi_device *dsi)
 +{
 +	struct jadard *jadard = mipi_dsi_get_drvdata(dsi);
 +
 +	mipi_dsi_detach(dsi);
-+	drm_panel_remove(&jadard->panel);
++	drm_panel:remove(&jadard->panel);
 +
 +	return 0;
 +}
@@ -17689,7 +17689,7 @@ index 000000000000..0b7341cecc45
 +
 +static struct mipi_dsi_driver jadard_mipi_driver = {
 +	.probe = jadard_dsi_probe,
-+	.remove = jadard_dsi_remove,
++	.remove = jadard_dsi:remove,
 +	.driver.name = DSI_DRIVER_NAME,
 +};
 +//module_mipi_dsi_driver(jadard_driver);
@@ -18579,11 +18579,11 @@ index 000000000000..860f18db0be5
 +	return 0;
 +}
 +
-+static int mbox_test_remove(struct platform_device *pdev)
++static int mbox_test:remove(struct platform_device *pdev)
 +{
 +	struct mbox_test_device *tdev = platform_get_drvdata(pdev);
 +
-+	debugfs_remove_recursive(tdev->root_debugfs_dir);
++	debugfs:remove:recursive(tdev->root_debugfs_dir);
 +
 +	if (tdev->tx_channel)
 +		mbox_free_channel(tdev->tx_channel);
@@ -18605,7 +18605,7 @@ index 000000000000..860f18db0be5
 +		.of_match_table = mbox_test_match,
 +	},
 +	.probe  = mbox_test_probe,
-+	.remove = mbox_test_remove,
++	.remove = mbox_test:remove,
 +};
 +module_platform_driver(mbox_test_driver);
 +
@@ -18914,7 +18914,7 @@ index 000000000000..c73ed9c453ed
 +	return 0;
 +}
 +
-+static int starfive_mbox_remove(struct platform_device *pdev)
++static int starfive_mbox:remove(struct platform_device *pdev)
 +{
 +	struct starfive_mbox *mbox = platform_get_drvdata(pdev);
 +
@@ -18953,7 +18953,7 @@ index 000000000000..c73ed9c453ed
 +};
 +static struct platform_driver starfive_mbox_driver = {
 +	.probe  = starfive_mbox_probe,
-+	.remove = starfive_mbox_remove,
++	.remove = starfive_mbox:remove,
 +	.driver = {
 +	.name = "mailbox",
 +		.of_match_table = starfive_mbox_of_match,
@@ -20670,7 +20670,7 @@ index 000000000000..5ed8a3d19795
 +	return ret;
 +}
 +
-+static int imx219_remove(struct i2c_client *client)
++static int imx219:remove(struct i2c_client *client)
 +{
 +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 +	struct imx219 *imx219 = to_imx219(sd);
@@ -20704,7 +20704,7 @@ index 000000000000..5ed8a3d19795
 +		.pm = &imx219_pm_ops,
 +	},
 +	.probe_new = imx219_probe,
-+	.remove = imx219_remove,
++	.remove = imx219:remove,
 +};
 +
 +module_i2c_driver(imx219_i2c_driver);
@@ -22609,7 +22609,7 @@ index 000000000000..78f49d0fa43f
 +	return ret;
 +}
 +
-+static int ov13850_remove(struct i2c_client *client)
++static int ov13850:remove(struct i2c_client *client)
 +{
 +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 +	struct ov13850_dev *sensor = to_ov13850_dev(sd);
@@ -22641,7 +22641,7 @@ index 000000000000..78f49d0fa43f
 +	},
 +	.id_table = ov13850_id,
 +	.probe_new = ov13850_probe,
-+	.remove   = ov13850_remove,
++	.remove   = ov13850:remove,
 +};
 +
 +module_i2c_driver(ov13850_i2c_driver);
@@ -25579,7 +25579,7 @@ index 000000000000..1aa390446eb3
 +	return ret;
 +}
 +
-+static int ov4689_remove(struct i2c_client *client)
++static int ov4689:remove(struct i2c_client *client)
 +{
 +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 +	struct ov4689_dev *sensor = to_ov4689_dev(sd);
@@ -25621,7 +25621,7 @@ index 000000000000..1aa390446eb3
 +	},
 +	.id_table = ov4689_id,
 +	.probe_new = ov4689_probe,
-+	.remove   = ov4689_remove,
++	.remove   = ov4689:remove,
 +};
 +
 +module_i2c_driver(ov4689_i2c_driver);
@@ -28822,7 +28822,7 @@ index 000000000000..16a3881a3855
 +	return ret;
 +}
 +
-+static int ov5640_remove(struct i2c_client *client)
++static int ov5640:remove(struct i2c_client *client)
 +{
 +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 +	struct ov5640_dev *sensor = to_ov5640_dev(sd);
@@ -28854,7 +28854,7 @@ index 000000000000..16a3881a3855
 +	},
 +	.id_table = ov5640_id,
 +	.probe_new = ov5640_probe,
-+	.remove   = ov5640_remove,
++	.remove   = ov5640:remove,
 +};
 +
 +module_i2c_driver(ov5640_i2c_driver);
@@ -30736,7 +30736,7 @@ index 000000000000..c44c1849cb2a
 +	return ret;
 +}
 +
-+static int sc2235_remove(struct i2c_client *client)
++static int sc2235:remove(struct i2c_client *client)
 +{
 +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
 +	struct sc2235_dev *sensor = to_sc2235_dev(sd);
@@ -30778,7 +30778,7 @@ index 000000000000..c44c1849cb2a
 +	},
 +	.id_table = sc2235_id,
 +	.probe_new = sc2235_probe,
-+	.remove   = sc2235_remove,
++	.remove   = sc2235:remove,
 +};
 +
 +module_i2c_driver(sc2235_i2c_driver);
@@ -41839,8 +41839,8 @@ index 000000000000..bb58bca91991
 +	return 0;
 +
 +#ifdef CONFIG_DEBUG_FS
-+	debugfs_remove(stfcamss->vin_debugfs);
-+	debugfs_remove_recursive(stfcamss->debugfs_entry);
++	debugfs:remove(stfcamss->vin_debugfs);
++	debugfs:remove:recursive(stfcamss->debugfs_entry);
 +	stfcamss->debugfs_entry = NULL;
 +#endif
 +
@@ -41858,15 +41858,15 @@ index 000000000000..bb58bca91991
 +	return ret;
 +}
 +
-+static int stfcamss_remove(struct platform_device *pdev)
++static int stfcamss:remove(struct platform_device *pdev)
 +{
 +	struct stfcamss *stfcamss = platform_get_drvdata(pdev);
 +
 +	dev_info(&pdev->dev, "remove done\n");
 +
 +#ifdef CONFIG_DEBUG_FS
-+	debugfs_remove(stfcamss->vin_debugfs);
-+	debugfs_remove_recursive(stfcamss->debugfs_entry);
++	debugfs:remove(stfcamss->vin_debugfs);
++	debugfs:remove:recursive(stfcamss->debugfs_entry);
 +	stfcamss->debugfs_entry = NULL;
 +#endif
 +
@@ -42040,7 +42040,7 @@ index 000000000000..bb58bca91991
 +
 +static struct platform_driver stfcamss_driver = {
 +	.probe = stfcamss_probe,
-+	.remove = stfcamss_remove,
++	.remove = stfcamss:remove,
 +	.driver = {
 +		.name = DRV_NAME,
 +		.pm = &stfcamss_pm_ops,
@@ -42426,13 +42426,13 @@ index 000000000000..614cac5adeb6
 +	return 0;
 +}
 +
-+static int dw_mci_starfive_remove(struct platform_device *pdev)
++static int dw_mci_starfive:remove(struct platform_device *pdev)
 +{
 +	pm_runtime_disable(&pdev->dev);
 +	pm_runtime_set_suspended(&pdev->dev);
 +	pm_runtime_put_noidle(&pdev->dev);
 +
-+	return dw_mci_pltfm_remove(pdev);
++	return dw_mci_pltfm:remove(pdev);
 +}
 +
 +static const struct dev_pm_ops dw_mci_starfive_pm_ops = {
@@ -42444,7 +42444,7 @@ index 000000000000..614cac5adeb6
 +
 +static struct platform_driver dw_mci_starfive_driver = {
 +	.probe = dw_mci_starfive_probe,
-+	.remove = dw_mci_starfive_remove,
++	.remove = dw_mci_starfive:remove,
 +	.driver = {
 +		.name = "dwmmc_starfive",
 +		.pm   = &dw_mci_starfive_pm_ops,
@@ -42648,12 +42648,12 @@ index 000000000000..b9eb63dc8711
 +disable_tx:
 +	clk_disable_unprepare(dwmac->clk_tx);
 +err:
-+	stmmac_remove_config_dt(pdev, plat_dat);
++	stmmac:remove:config_dt(pdev, plat_dat);
 +
 +	return err;
 +}
 +
-+static int starfive_eth_plat_remove(struct platform_device *pdev)
++static int starfive_eth_plat:remove(struct platform_device *pdev)
 +{
 +	struct starfive_dwmac *dwmac = get_stmmac_bsp_priv(&pdev->dev);
 +
@@ -42667,7 +42667,7 @@ index 000000000000..b9eb63dc8711
 +
 +static struct platform_driver starfive_eth_plat_driver = {
 +	.probe  = starfive_eth_plat_probe,
-+	.remove = starfive_eth_plat_remove,
++	.remove = starfive_eth_plat:remove,
 +	.driver = {
 +		.name			= "starfive-eth-plat",
 +		.pm				= &stmmac_pltfr_pm_ops,
@@ -43153,10 +43153,10 @@ index 000000000000..fc5c7ecee628
 +	}
 +
 +	if (msi->msi_domain)
-+		irq_domain_remove(msi->msi_domain);
++		irq_domain:remove(msi->msi_domain);
 +
 +	if (msi->inner_domain)
-+		irq_domain_remove(msi->inner_domain);
++		irq_domain:remove(msi->inner_domain);
 +#endif
 +}
 +
@@ -43174,7 +43174,7 @@ index 000000000000..fc5c7ecee628
 +			if (irq > 0)
 +				irq_dispose_mapping(irq);
 +		}
-+		irq_domain_remove(pcie->legacy_irq_domain);
++		irq_domain:remove(pcie->legacy_irq_domain);
 +	}
 +
 +	if (pci_msi_enabled())
@@ -43198,7 +43198,7 @@ index 000000000000..fc5c7ecee628
 +						    msi->inner_domain);
 +	if (!msi->msi_domain) {
 +		dev_err(&pcie->pdev->dev, "Failed to create msi IRQ domain\n");
-+		irq_domain_remove(msi->inner_domain);
++		irq_domain:remove(msi->inner_domain);
 +		return -ENOMEM;
 +	}
 +#endif
@@ -43679,7 +43679,7 @@ index 000000000000..fc5c7ecee628
 +	return ret;
 +}
 +
-+static int plda_pcie_remove(struct platform_device *pdev)
++static int plda_pcie:remove(struct platform_device *pdev)
 +{
 +	struct plda_pcie *pcie = platform_get_drvdata(pdev);
 +
@@ -43740,7 +43740,7 @@ index 000000000000..fc5c7ecee628
 +#endif
 +	},
 +	.probe = plda_pcie_probe,
-+	.remove = plda_pcie_remove,
++	.remove = plda_pcie:remove,
 +};
 +module_platform_driver(plda_pcie_driver);
 +
@@ -44332,7 +44332,7 @@ index 000000000000..6abbfedd0aa6
 +
 +	ret = perf_pmu_register(&pmu->pmu, "cpu", PERF_TYPE_RAW);
 +	if (ret) {
-+		cpuhp_state_remove_instance(CPUHP_AP_PERF_RISCV_STARTING, &pmu->node);
++		cpuhp_state:remove:instance(CPUHP_AP_PERF_RISCV_STARTING, &pmu->node);
 +		return ret;
 +	}
 +
@@ -48112,12 +48112,12 @@ index 000000000000..0874bbb49aa6
 +	return 0;
 +}
 +
-+static int starfive_pwm_ptc_remove(struct platform_device *dev)
++static int starfive_pwm_ptc:remove(struct platform_device *dev)
 +{
 +	struct starfive_pwm_ptc_device *pwm = platform_get_drvdata(dev);
 +	struct pwm_chip *chip = &pwm->chip;
 +
-+	pwmchip_remove(chip);
++	pwmchip:remove(chip);
 +
 +	pm_runtime_force_suspend(&dev->dev);
 +
@@ -48166,7 +48166,7 @@ index 000000000000..0874bbb49aa6
 +
 +static struct platform_driver starfive_pwm_ptc_driver = {
 +	.probe = starfive_pwm_ptc_probe,
-+	.remove = starfive_pwm_ptc_remove,
++	.remove = starfive_pwm_ptc:remove,
 +	.driver = {
 +		.name = "pwm-starfive-ptc",
 +		.of_match_table = of_match_ptr(starfive_pwm_ptc_of_match),
@@ -49388,7 +49388,7 @@ index 000000000000..a3a3dfbc3ccb
 +	return ret;
 +}
 +
-+static int sft_rtc_remove(struct platform_device *pdev)
++static int sft_rtc:remove(struct platform_device *pdev)
 +{
 +	struct sft_rtc *srtc = platform_get_drvdata(pdev);
 +
@@ -49438,7 +49438,7 @@ index 000000000000..a3a3dfbc3ccb
 +		.pm   = &sft_rtc_pm_ops,
 +	},
 +	.probe = sft_rtc_probe,
-+	.remove = sft_rtc_remove,
++	.remove = sft_rtc:remove,
 +};
 +module_platform_driver(starfive_rtc_driver);
 +
@@ -51242,7 +51242,7 @@ index 000000000000..dd68ee34098c
 +	pl022->dma_running = false;
 +}
 +
-+static void pl022_dma_remove(struct pl022 *pl022)
++static void pl022_dma:remove(struct pl022 *pl022)
 +{
 +	if (pl022->dma_running)
 +		terminate_dma(pl022);
@@ -51269,7 +51269,7 @@ index 000000000000..dd68ee34098c
 +	return 0;
 +}
 +
-+static inline void pl022_dma_remove(struct pl022 *pl022)
++static inline void pl022_dma:remove(struct pl022 *pl022)
 +{
 +}
 +#endif
@@ -52366,7 +52366,7 @@ index 000000000000..dd68ee34098c
 +
 +err_spi_register:
 +	if (platform_info->enable_dma)
-+		pl022_dma_remove(pl022);
++		pl022_dma:remove(pl022);
 +err_no_irq:
 +	reset_control_assert(pl022->rst);
 +err_no_rst_clr:
@@ -52587,7 +52587,7 @@ index 000000000000..dd68ee34098c
 +
 + err_spi_register:
 +	if (platform_info->enable_dma)
-+		pl022_dma_remove(pl022);
++		pl022_dma:remove(pl022);
 + err_no_irq:
 +	reset_control_assert(pl022->rst);
 + err_no_rst_clr:
@@ -52606,7 +52606,7 @@ index 000000000000..dd68ee34098c
 +}
 +
 +static int
-+pl022_remove(struct amba_device *adev)
++pl022:remove(struct amba_device *adev)
 +{
 +	struct pl022 *pl022 = amba_get_drvdata(adev);
 +
@@ -52621,7 +52621,7 @@ index 000000000000..dd68ee34098c
 +
 +	load_ssp_default_config(pl022);
 +	if (pl022->master_info->enable_dma)
-+		pl022_dma_remove(pl022);
++		pl022_dma:remove(pl022);
 +
 +	clk_disable_unprepare(pl022->clk);
 +	amba_release_regions(adev);
@@ -52792,7 +52792,7 @@ index 000000000000..dd68ee34098c
 +	},
 +	.id_table	= pl022_ids,
 +	.probe		= pl022_probe,
-+	.remove		= pl022_remove,
++	.remove		= pl022:remove,
 +};
 +
 +static int __init pl022_init(void)
@@ -52851,7 +52851,7 @@ index 000000000000..dd68ee34098c
 +	return ret;
 +}
 +
-+static int starfive_of_pl022_remove(struct platform_device *pdev)
++static int starfive_of_pl022:remove(struct platform_device *pdev)
 +{
 +	struct pl022 *pl022 = dev_get_drvdata(&pdev->dev);
 +
@@ -52863,7 +52863,7 @@ index 000000000000..dd68ee34098c
 +
 +	load_ssp_default_config(pl022);
 +	if (pl022->master_info->enable_dma)
-+		pl022_dma_remove(pl022);
++		pl022_dma:remove(pl022);
 +
 +	clk_disable_unprepare(pl022->clk);
 +	tasklet_disable(&pl022->pump_transfers);
@@ -52891,7 +52891,7 @@ index 000000000000..dd68ee34098c
 +		.pm	= &pl022_dev_pm_ops,
 +	},
 +	.probe = starfive_of_pl022_probe,
-+	.remove = starfive_of_pl022_remove,
++	.remove = starfive_of_pl022:remove,
 +};
 +#if !IS_MODULE(CONFIG_SPI_PL022_STARFIVE)
 +	module_platform_driver(starfive_of_pl022_driver);
@@ -53268,7 +53268,7 @@ index 000000000000..60700a969a93
 +	return ret;
 +}
 +
-+static int cdns_starfive_remove_core(struct device *dev, void *c)
++static int cdns_starfive:remove:core(struct device *dev, void *c)
 +{
 +	struct platform_device *pdev = to_platform_device(dev);
 +
@@ -53277,13 +53277,13 @@ index 000000000000..60700a969a93
 +	return 0;
 +}
 +
-+static int cdns_starfive_remove(struct platform_device *pdev)
++static int cdns_starfive:remove(struct platform_device *pdev)
 +{
 +	struct device *dev = &pdev->dev;
 +	struct cdns_starfive *data = dev_get_drvdata(dev);
 +
 +	pm_runtime_get_sync(dev);
-+	device_for_each_child(dev, NULL, cdns_starfive_remove_core);
++	device_for_each_child(dev, NULL, cdns_starfive:remove:core);
 +
 +	reset_control_assert(data->resets);
 +	clk_bulk_disable_unprepare(data->num_clks, data->clks);
@@ -53341,7 +53341,7 @@ index 000000000000..60700a969a93
 +
 +static struct platform_driver cdns_starfive_driver = {
 +	.probe		= cdns_starfive_probe,
-+	.remove		= cdns_starfive_remove,
++	.remove		= cdns_starfive:remove,
 +	.driver		= {
 +		.name	= "cdns3-starfive",
 +		.of_match_table	= cdns_starfive_of_match,
@@ -53382,7 +53382,7 @@ index 102977790d60..805244ac58b8 100644
 +	struct usb_hcd *shared_hcd;
 +	struct notifier_block pm_notifier;
 +	int (*pm_setup)(struct usb_hcd *hcd);
-+	int (*pm_remove)(struct cdns3 *cdns);
++	int (*pm:remove)(struct cdns3 *cdns);
 +};
 +static struct cdns_hiber_data cdns3_hiber_data;
 +
@@ -53457,7 +53457,7 @@ index 102977790d60..805244ac58b8 100644
 +#ifdef CONFIG_PM_SLEEP
 +	if (cdns->pdata && (cdns->pdata->quirks & CDNS3_REGISTER_PM_NOTIFIER)) {
 +		cdns3_hiber_data.pm_setup = cdns_register_pm_notifier;
-+		cdns3_hiber_data.pm_remove = cdns_unregister_pm_notifier;
++		cdns3_hiber_data.pm:remove = cdns_unregister_pm_notifier;
 +	}
 +#endif
  	ret = platform_device_add_data(xhci, cdns->xhci_plat_data,
@@ -53468,9 +53468,9 @@ index 102977790d60..805244ac58b8 100644
  static void cdns3_host_exit(struct cdns3 *cdns)
  {
 +#ifdef CONFIG_PM_SLEEP
-+	if (cdns3_hiber_data.pm_remove) {
-+		cdns3_hiber_data.pm_remove(cdns);
-+		cdns3_hiber_data.pm_remove = NULL;
++	if (cdns3_hiber_data.pm:remove) {
++		cdns3_hiber_data.pm:remove(cdns);
++		cdns3_hiber_data.pm:remove = NULL;
 +		cdns3_hiber_data.pm_setup = NULL;
 +	}
 +#endif
@@ -54281,7 +54281,7 @@ index 000000000000..d316767fcaf5
 +	return ret;
 +}
 +
-+static int starfive_wdt_remove(struct platform_device *dev)
++static int starfive_wdt:remove(struct platform_device *dev)
 +{
 +	int ret;
 +	struct starfive_wdt *wdt = platform_get_drvdata(dev);
@@ -54388,7 +54388,7 @@ index 000000000000..d316767fcaf5
 +
 +static struct platform_driver starfive_starfive_wdt_driver = {
 +	.probe		= starfive_wdt_probe,
-+	.remove		= starfive_wdt_remove,
++	.remove		= starfive_wdt:remove,
 +	.shutdown	= starfive_wdt_shutdown,
 +	.id_table	= starfive_wdt_ids,
 +	.driver		= {
@@ -59171,7 +59171,7 @@ index 000000000000..8a92602be6f8
 +	return ret;
 +}
 +
-+static int dw_i2s_remove(struct platform_device *pdev)
++static int dw_i2s:remove(struct platform_device *pdev)
 +{
 +#ifndef CONFIG_PM
 +	struct dw_i2s_dev *dev = dev_get_drvdata(&pdev->dev);
@@ -59202,7 +59202,7 @@ index 000000000000..8a92602be6f8
 +
 +static struct platform_driver dw_i2s_driver = {
 +	.probe		= dw_i2s_probe,
-+	.remove		= dw_i2s_remove,
++	.remove		= dw_i2s:remove,
 +	.driver		= {
 +		.name	= "starfive-i2s",
 +		.of_match_table = of_match_ptr(dw_i2s_of_match),
@@ -59804,7 +59804,7 @@ index 000000000000..ba0a9143f57b
 +	return 0;
 +}
 +
-+static int sf_pdm_dev_remove(struct platform_device *pdev)
++static int sf_pdm_dev:remove(struct platform_device *pdev)
 +{
 +	pm_runtime_disable(&pdev->dev);
 +	return 0;
@@ -59828,7 +59828,7 @@ index 000000000000..ba0a9143f57b
 +		.pm = &sf_pdm_pm_ops,
 +	},
 +	.probe = sf_pdm_probe,
-+	.remove = sf_pdm_dev_remove,
++	.remove = sf_pdm_dev:remove,
 +};
 +module_platform_driver(sf_pdm_driver);
 +
@@ -60824,7 +60824,7 @@ index 000000000000..63b7d8b0d51c
 +}
 +
 +
-+static int sf_pwmdac_remove(struct platform_device *pdev)
++static int sf_pwmdac:remove(struct platform_device *pdev)
 +{
 +	return 0;
 +}
@@ -60841,7 +60841,7 @@ index 000000000000..63b7d8b0d51c
 +
 +static struct platform_driver sf_pwmdac_driver = {
 +	.probe		= sf_pwmdac_probe,
-+	.remove		= sf_pwmdac_remove,
++	.remove		= sf_pwmdac:remove,
 +	.driver		= {
 +		.name	= "starfive-pwmdac",
 +		.of_match_table = of_match_ptr(sf_pwmdac_of_match),
@@ -63073,7 +63073,7 @@ index 000000000000..3ee1b13bd079
 +	return 0;
 +}
 +
-+static int sf_tdm_dev_remove(struct platform_device *pdev)
++static int sf_tdm_dev:remove(struct platform_device *pdev)
 +{
 +	pm_runtime_disable(&pdev->dev);
 +	return 0;
@@ -63097,7 +63097,7 @@ index 000000000000..3ee1b13bd079
 +		.pm = &sf_tdm_pm_ops,
 +	},
 +	.probe = sf_tdm_probe,
-+	.remove = sf_tdm_dev_remove,
++	.remove = sf_tdm_dev:remove,
 +};
 +module_platform_driver(sf_tdm_driver);
 +

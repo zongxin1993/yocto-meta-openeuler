@@ -7,7 +7,7 @@ OPENEULER_SRC_URI_REMOVE = "https http git"
 PV = "2.5.17"
 
 # file can't apply form oe
-SRC_URI:remove += " \
+SRC_URI:remove = " \
         ${SOURCEFORGE_MIRROR}/gphoto/gphoto2-${PV}.tar.bz2;name=gphoto2 \
         "
 

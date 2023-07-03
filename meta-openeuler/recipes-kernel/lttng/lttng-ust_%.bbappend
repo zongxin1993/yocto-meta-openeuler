@@ -1,6 +1,6 @@
 # main bbfile: yocto-poky/meta/recipes-kernel/lttng/lttng-ust_2.12.1.bb
 
-FILESEXTRAPATHS_append := "${THISDIR}/${BPN}/:"
+FILESEXTRAPATHS:append := "${THISDIR}/${BPN}/:"
 
 # version in openEuler
 PV = "2.13.5"
@@ -9,7 +9,7 @@ PV = "2.13.5"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=a46577a38ad0c36ff6ff43ccf40c480f"
 
 # apply new poky patches
-SRC_URI_append = " \
+SRC_URI:append = " \
            file://0001-lttng-ust-common-link-with-liburcu-explicitly.patch \
            file://0001-Makefile.am-update-rpath-link.patch \
            "

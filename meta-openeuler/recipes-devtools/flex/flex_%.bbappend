@@ -1,7 +1,7 @@
 # main bb file: yocto-poky/meta/recipes-devtools/flex/flex_2.6.4.bb
 
 # apply patches in openEuler
-SRC_URI_prepend = "file://build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch \
+SRC_URI:prepend = "file://build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch \
            file://filter-memory-leak-free-scanner-postprocessing.patch \
            file://scanner-c-i-j-should-preserve-case.patch \
            file://filter-Output-correct-line-value-for-current-file.patch \
@@ -12,5 +12,5 @@ SRC_URI_prepend = "file://build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch \
 "
 
 # remove this patch as it already exists in openEuler
-SRC_URI_remove = "file://0001-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch \
+SRC_URI:remove = "file://0001-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch \
 "

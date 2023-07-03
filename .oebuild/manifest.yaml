@@ -716,7 +716,7 @@ manifest_list:
     version: fbe5a7627b629a9400c2d7e7099c1934b592e355
   yocto-meta-openembedded:
     remote_url: https://gitee.com/openeuler/yocto-meta-openembedded.git
-    version: 54204353f2953d0cd36a8d5ed35ce9a560852ff7
+    version: a82d92c8a6525da01524bf8f4a60bf6b35dcbb3d
   yocto-meta-qt5:
     remote_url: https://gitee.com/openeuler/yocto-meta-qt5.git
     version: 43f8f539d40070a70fe89136db89bf5bb1dfe7ed
@@ -728,7 +728,7 @@ manifest_list:
     version: 1d04472046d0225e013dd7e18c62dddf82025969
   yocto-poky:
     remote_url: https://gitee.com/openeuler/yocto-poky.git
-    version: 230e29ee70a751dea2bbba1d69b6fa803db51353
+    version: f53ab3a2ff206a130cdc843839dd0ea5ec4ad02f
   yocto-pseudo:
     remote_url: https://gitee.com/src-openeuler/yocto-pseudo.git
     version: 3c4978a07fbb5a0c6288e77ae5b24ee33ddf34f9

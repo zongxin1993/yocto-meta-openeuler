@@ -9,10 +9,10 @@ PV = "3.3.8"
 S = "${WORKDIR}/eigen-${PV}"
 
 # files, patches can't be applied in openeuler or conflict with openeuler
-SRC_URI_remove = " \
+SRC_URI:remove = " \
 "
 # files, patches that come from openeuler
-SRC_URI_prepend = " \
+SRC_URI:prepend = " \
     file://eigen-${PV}.tar.bz2 \
     file://0001-rebuild-and-modify-exception-error.patch \
 "

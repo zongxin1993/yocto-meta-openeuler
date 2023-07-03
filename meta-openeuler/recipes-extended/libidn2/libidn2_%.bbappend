@@ -4,13 +4,13 @@
 PV = "2.3.3"
 
 # solve lic check failed
-LIC_FILES_CHKSUM_remove = " \
+LIC_FILES_CHKSUM:remove = " \
         file://src/idn2.c;endline=16;md5=426b74d6deb620ab6d39c8a6efd4c13a \
         file://lib/idn2.h.in;endline=27;md5=c2cd28d3f87260f157f022eabb83714f \
 "
 
 # files, patches can't be applied in openeuler or conflict with openeuler
-SRC_URI_remove = " \
+SRC_URI:remove = " \
         ${GNU_MIRROR}/libidn/${BPN}-${PV}.tar.gz \
 "
 

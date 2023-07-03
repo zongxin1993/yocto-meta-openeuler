@@ -9,7 +9,7 @@ repos:
     refspec: dev_hardknott
 
 local_conf: |
-  DISTRO_FEATURES_append = " opengl wayland"
+  DISTRO_FEATURES:append = " opengl wayland"
 
 layers:
 - yocto-meta-openembedded/meta-oe

@@ -9,11 +9,11 @@ PV = "2.0.0"
 S = "${WORKDIR}/ceres-solver-${PV}"
 
 # files, patches that come from openeuler
-SRC_URI_prepend = " \
+SRC_URI:prepend = " \
     file://ceres-solver-${PV}.tar.gz \
 "
 
 # bb need .git to do_configure
-do_configure_prepend() {
+do_configure:prepend() {
     mkdir -p ${S}/.git/hooks/
 }

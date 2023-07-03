@@ -2,7 +2,7 @@ OPENEULER_SRC_URI_REMOVE = "https git http"
 
 PV = "4.7.0"
 
-SRC_URI_prepend = "file://${BPN}-${BP}.tar.gz \
+SRC_URI:prepend = "file://${BPN}-${BP}.tar.gz \
 "
 
 S = "${WORKDIR}/${BPN}-${BP}"

@@ -10,7 +10,7 @@ INHIBIT_DEFAULT_DEPS = "1"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 # we need update-rc.d to set up links between init.d and rcX.d
-DEPENDS_append = " update-rc.d-native"
+DEPENDS:append = " update-rc.d-native"
 
 SRC_URI = " \
 	file://rc.functions \
@@ -45,4 +45,4 @@ do_install() {
 	install -m 0644 ${WORKDIR}/ethertypes ${D}${sysconfdir}/ethertypes
 }
 
-FILES_${PN} = "/"
+FILES:${PN} = "/"

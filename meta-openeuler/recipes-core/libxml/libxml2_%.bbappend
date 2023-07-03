@@ -3,7 +3,7 @@ PV = "2.9.14"
 
 # remove patches can't apply
 # fix-execution-of-ptests.patch, patch-fuzz warning
-SRC_URI_remove = "http://www.xmlsoft.org/sources/libxml2-${PV}.tar.gz;name=libtar \
+SRC_URI:remove = "http://www.xmlsoft.org/sources/libxml2-${PV}.tar.gz;name=libtar \
             http://www.w3.org/XML/Test/xmlts20080827.tar.gz;subdir=${BP};name=testtar \
             file://libxml-m4-use-pkgconfig.patch \
             file://0001-Make-ptest-run-the-python-tests-if-python-is-enabled.patch \
@@ -23,7 +23,7 @@ SRC_URI_remove = "http://www.xmlsoft.org/sources/libxml2-${PV}.tar.gz;name=libta
 "
 
 # apply openEuler source package
-SRC_URI_prepend = "file://${BP}.tar.xz \
+SRC_URI:prepend = "file://${BP}.tar.xz \
 "
 
 # add patches in openEuler
@@ -58,6 +58,6 @@ PACKAGECONFIG = "${@bb.utils.contains('DISTRO_FEATURES', 'python', 'python3', ''
 "
 
 # remove test configuration, because test package not in openEuler
-do_configure_remove() {
+do_configure:remove() {
 	find ${S}/xmlconf/ -type f -exec chmod -x {} \+
 }

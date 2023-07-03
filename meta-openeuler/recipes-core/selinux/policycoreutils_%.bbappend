@@ -1,7 +1,7 @@
 PV = "3.4"
 
 OPENEULER_SRC_URI_REMOVE = "https git http"
-SRC_URI_prepend = "file://${BP}.tar.gz \
+SRC_URI:prepend = "file://${BP}.tar.gz \
         file://fix-fixfiles-N-date-function.patch;patchdir=.. \
         file://fix-fixfiles-N-date-function-two.patch;patchdir=.. \
         file://backport-python-Split-semanage-import-into-two-transactions.patch;patchdir=.. \

@@ -6,15 +6,15 @@ OPENEULER_REPO_NAME = "boost"
 PV = "1.81.0"
 
 # modify 0001-Don-t-set-up-arch-instruction-set-flags-we-do-that-o.patch
-FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${BPN}:"
 
 # remove conflict files
-SRC_URI_remove = "https://boostorg.jfrog.io/artifactory/main/release/${PV}/source/${BOOST_P}.tar.bz2 \
+SRC_URI:remove = "https://boostorg.jfrog.io/artifactory/main/release/${PV}/source/${BOOST_P}.tar.bz2 \
         file://boost-CVE-2012-2677.patch \
         file://0001-fiber-libs-Define-SYS_futex-if-it-does-not-exist.patch \
 "
 
-SRC_URI_prepend = " \
+SRC_URI:prepend = " \
         file://${BOOST_P}.tar.gz \
         file://boost-1.80-outcome-Stop-Boost-regression-tests-complaining-about-no-test-tree.patch \
         file://boost-1.81-graph-Dont-run-performance-test-in-CI.patch \

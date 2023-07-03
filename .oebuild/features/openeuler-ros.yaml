@@ -16,4 +16,4 @@ layers:
 - yocto-meta-ros/meta-ros2-humble
 
 local_conf: |
-  DISTRO_FEATURES_append = " ros "
+  DISTRO_FEATURES:append = " ros "

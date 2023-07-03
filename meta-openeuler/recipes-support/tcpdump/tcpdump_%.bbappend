@@ -4,14 +4,14 @@
 PV = "4.99.3"
 
 # files, patches can't be applied in openeuler or conflict with openeuler
-SRC_URI_remove = " \
+SRC_URI:remove = " \
     http://www.tcpdump.org/release/${BP}.tar.gz \
     file://add-ptest.patch \
     file://run-ptest \
 "
 # files, patches that come from openeuler
 # the backport-0003-Drop-root-priviledges-before-opening-first-savefile-.patch will result in error
-SRC_URI_prepend = " \
+SRC_URI:prepend = " \
     file://${BP}.tar.gz \
     file://backport-0002-Use-getnameinfo-instead-of-gethostbyaddr.patch \
     file://backport-0007-Introduce-nn-option.patch \

@@ -8,7 +8,7 @@ PV = "2.0.0"
 S = "${WORKDIR}/libnsl-${PV}"
 
 # files, patches can't be applied in openeuler or conflict with openeuler
-SRC_URI_remove = " \
+SRC_URI:remove = " \
         "
 # files, patches that come from openeuler
 SRC_URI += " \

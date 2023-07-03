@@ -2,7 +2,7 @@ LIC_FILES_CHKSUM = "file://${WORKDIR}/systemd-${PV}/LICENSE.GPL2;md5=751419260aa
                     file://${WORKDIR}/systemd-${PV}/LICENSE.LGPL2.1;md5=4fbd65380cdd255951079008b364516c"
 
 # files, patches can't be applied in openeuler or conflict with openeuler
-SRC_URI_remove = " \
+SRC_URI:remove = " \
             git://github.com/systemd/systemd-stable.git;protocol=https;branch=${SRCBRANCH} \
             file://0001-binfmt-Don-t-install-dependency-links-at-install-tim.patch \
             file://0003-implment-systemd-sysv-install-for-OE.patch \
@@ -44,7 +44,7 @@ SRC_URI =+ " \
            file://backport-mkosi-openSUSE-update-bootable-no-dependencies.patch \
            file://backport-mkosi-Fix-openSUSE-Jinja2-package-name.patch \
            file://backport-sd-netlink-always-append-new-bridge-FDB-entries.patch \
-           file://backport-core-cgroup-fix-error-handling-of-cg_remove_xattr.patch \
+           file://backport-core-cgroup-fix-error-handling-of-cg:remove:xattr.patch \
            file://backport-core-wrap-cgroup-path-with-empty_to_root-in-log-mess.patch \
            file://backport-network-add-comments.patch \
            file://backport-network-ignore-errors-on-setting-bridge-config.patch \
@@ -212,7 +212,7 @@ SRC_URI =+ " \
            file://backport-virt-Fix-the-detection-for-Hyper-V-VMs.patch \
            file://backport-homework-fix-a-bad-error-propagation.patch \
            file://backport-journal-Remove-entry-seqnum-revert-logic.patch \
-           file://backport-mmap-cache-LIST_REMOVE-after-w-unused_prev.patch \
+           file://backport-mmap-cache-LIST:remove-after-w-unused_prev.patch \
            file://backport-journal-Deduplicate-entry-items-before-they-are-stor.patch \
            file://backport-test-journal-flush-allow-testing-against-specific-fi.patch \
            file://backport-test-journal-flush-do-not-croak-on-corrupted-input-f.patch \

@@ -7,5 +7,5 @@ SRC_URI[sha256sum] = "6caad9786055cb1fa22b4a365c1775816b876f91966481765d7d50e9f0
 OPENEULER_BRANCH = "master"
 OPENEULER_REPO_NAME = "python-sphinx"
 
-SRC_URI_remove += "${PYPI_SRC_URI} "
-SRC_URI_prepend += "file://${PYPI_PACKAGE}-${PV}.tar.gz "
+SRC_URI:remove = "${PYPI_SRC_URI} "
+SRC_URI:prepend = "file://${PYPI_PACKAGE}-${PV}.tar.gz "

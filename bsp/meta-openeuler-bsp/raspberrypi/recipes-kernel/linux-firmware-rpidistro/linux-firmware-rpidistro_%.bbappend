@@ -24,7 +24,7 @@ NO_GENERIC_LICENSE[Firmware-broadcom_bcm43xx-rpidistro] = "License/LICENCE.broad
 # cp ./LICENCE.broadcom_bcm43xx ${D}${nonarch_base_libdir}/firmware/LICENCE.broadcom_bcm43xx-rpidistro
 # but this license file is at ${S}/License in openeuler source package
 # so copy it to ${S} in do_compile function
-do_compile_append() {
+do_compile:append() {
     cp ./License/LICENCE.broadcom_brcm80211 ./LICENCE.broadcom_bcm43xx
 }
 
@@ -71,7 +71,7 @@ PACKAGES += "\
     ${PN}-bcm43436s \
 "
 
-FILES_${PN}-bcm43455 += " \
+FILES:${PN}-bcm43455 += " \
     ${nonarch_base_libdir}/firmware/regulatory* \
     ${nonarch_base_libdir}/firmware/cypress/cyfmac43455-sdio* \
 "

@@ -13,10 +13,10 @@ PV = "3.2.4"
 S = "${WORKDIR}/xerces-c-${PV}"
 
 # files, patches can't be applied in openeuler or conflict with openeuler
-SRC_URI_remove = " \
+SRC_URI:remove = " \
 "
 # files, patches that come from openeuler
-SRC_URI_prepend = " \
+SRC_URI:prepend = " \
     file://xerces-c-${PV}.tar.gz \
     file://CVE-2018-1311.patch \
 "

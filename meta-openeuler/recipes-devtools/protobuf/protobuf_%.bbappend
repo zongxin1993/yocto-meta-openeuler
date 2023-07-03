@@ -9,11 +9,11 @@ PV = "3.14.0"
 S = "${WORKDIR}/protobuf-${PV}"
 
 # files, patches can't be applied in openeuler or conflict with openeuler
-SRC_URI_remove = " \
+SRC_URI:remove = " \
         file://0001-Lower-init-prio-for-extension-attributes.patch \
 "
 # files, patches that come from openeuler
-SRC_URI_prepend = " \
+SRC_URI:prepend = " \
     file://protobuf-all-${PV}.tar.gz \
     file://0001-add-secure-compile-option-in-Makefile.patch \
     file://0002-add-secure-compile-fs-check-in-Makefile.patch \

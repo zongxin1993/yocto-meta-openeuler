@@ -15,7 +15,7 @@ RUST_BASE_URI := "https://static.rust-lang.org"
 
 # Many crates rely on pkg-config to find native versions of their libraries for
 # linking - do the simple thing and make it generally available.
-DEPENDS_append = "\
+DEPENDS:append = "\
     cargo-bin-cross-${TARGET_ARCH} \
     pkgconfig-native \
 "
@@ -53,8 +53,8 @@ WRAPPER_DIR = "${WORKDIR}/wrappers"
 # Set the Cargo manifest path to the typical location
 CARGO_MANIFEST_PATH ?= "${S}/Cargo.toml"
 
-FILES_${PN}-dev += "${libdir}/*.rlib"
-FILES_${PN}-dev += "${libdir}/*.rlib.*"
+FILES:${PN}-dev += "${libdir}/*.rlib"
+FILES:${PN}-dev += "${libdir}/*.rlib.*"
 
 CARGO_BUILD_FLAGS = "\
     --verbose \

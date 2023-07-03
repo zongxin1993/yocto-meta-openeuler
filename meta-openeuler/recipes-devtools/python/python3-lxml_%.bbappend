@@ -4,6 +4,6 @@ SRC_URI[sha256sum] = "fe749b052bb7233fe5d072fcb549221a8cb1a16725c47c37e42b0b9cb3
 require pypi-src-openeuler.inc
 
 # apply openeuler's patches
-SRC_URI_append += " \
+SRC_URI:append = " \
         file://backport-Work-around-libxml2-bug-in-affected-versions.patch \
         "
