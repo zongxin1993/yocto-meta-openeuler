@@ -1,4 +1,4 @@
-FILESEXTRAPATHS:prepend_rpi := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS:prepend:rpi := "${THISDIR}/${PN}:"
 
 SRC_URI:append:rpi = " \
     file://0001-Don-t-try-to-acquire-buffer-when-src-pad-isn-t-activ.patch \
@@ -7,6 +7,6 @@ SRC_URI:append:rpi = " \
     file://0005-Don-t-abort-gst_omx_video_dec_set_format-if-there-s-.patch \
 "
 
-GSTREAMER_1_0_OMX_TARGET_rpi = "rpi"
-GSTREAMER_1_0_OMX_CORE_NAME_rpi = "${libdir}/libopenmaxil.so"
+GSTREAMER_1_0_OMX_TARGET:rpi = "rpi"
+GSTREAMER_1_0_OMX_CORE_NAME:rpi = "${libdir}/libopenmaxil.so"
 EXTRA_OEMESON:append:rpi = " -Dheader_path=${STAGING_DIR_TARGET}/usr/include/IL"

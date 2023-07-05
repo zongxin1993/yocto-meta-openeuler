@@ -1,4 +1,4 @@
-FILESEXTRAPATHS:prepend_rpi := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS:prepend:rpi := "${THISDIR}/${PN}:"
 
 SRC_URI:append:rpi = "\
     file://0001-bcm43xx-Add-bcm43xx-3wire-variant.patch \
