@@ -7,7 +7,7 @@ OPENEULER_SRC_URI_REMOVE = "https http git"
 PV = "2.5.18"
 
 # file can't apply form oe
-SRC_URI:remove += " \
+SRC_URI:remove = " \
         "
 
 # source change to openEuler

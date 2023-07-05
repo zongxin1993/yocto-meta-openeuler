@@ -7,7 +7,7 @@ OPENEULER_SRC_URI_REMOVE = "https http git"
 PV = "1.14.2"
 
 # file can't apply form oe
-SRC_URI:remove += " \
+SRC_URI:remove = " \
         file://0001-Revert-media-ctl-Don-t-install-libmediactl-and-libv4.patch \
         file://mediactl-pkgconfig.patch \
         file://export-mediactl-headers.patch \
@@ -27,10 +27,10 @@ SRC_URI += " \
 # we don't want feature of udev and keymaps for out embedded OS, if use, delete those code.
 DEPENDS:remove:class-target += "udev"
 EXTRA_OECONF = "--disable-qv4l2 --enable-shared"
-PACKAGES:remove += " ir-keytable rc-keymaps "
+PACKAGES:remove = " ir-keytable rc-keymaps "
 FILES_ir-keytable = ""
-RDEPENDS_ir-keytable = ""
+RDEPENDS:ir-keytable = ""
 FILES_rc-keymaps = ""
 # udev and keymaps files still generated, so we put in a package and may not pack in rootfs
-PACKAGES:append += " udev-keymaps "
+PACKAGES:append = " udev-keymaps "
 FILES_udev-keymaps = "${sysconfdir}/rc* ${base_libdir}/udev* ${libdir}/udev* /lib/udev"

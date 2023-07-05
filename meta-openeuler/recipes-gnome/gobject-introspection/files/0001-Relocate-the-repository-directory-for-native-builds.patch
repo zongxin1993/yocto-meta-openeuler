@@ -59,7 +59,7 @@ index 7d03485..20f4813 100644
 +        typelib_dir = g_build_filename (libdir, "girepository-1.0", NULL);
 +      }
  
-       typelib_search_path = g_slist_prepend (typelib_search_path, typelib_dir);
+       typelib_search_path = g_slist:prepend (typelib_search_path, typelib_dir);
  
 diff --git a/girepository/meson.build b/girepository/meson.build
 index 786749a..15cf2a9 100644

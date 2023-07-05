@@ -19,16 +19,16 @@ LICENSE = "MIT"
 inherit core-image
 
 # delete useless sdk depends
-FEATURE_PACKAGES_tools-sdk_remove = " packagegroup-core-sdk packagegroup-core-standalone-sdk-target"
-TOOLCHAIN_TARGET_TASK_remove = "${@multilib_pkg_extend(d, 'packagegroup-core-standalone-sdk-target')}"
+FEATURE_PACKAGES_tools-sdk:remove = " packagegroup-core-sdk packagegroup-core-standalone-sdk-target"
+TOOLCHAIN_TARGET_TASK:remove = "${@multilib_pkg_extend(d, 'packagegroup-core-standalone-sdk-target')}"
 
 # do_rootfs not depends to ldconfig-native as nativesdk has provided it
 # learn more about LDCONFIGDEPEND in image.bbclass
 LDCONFIGDEPEND = ""
 
 # no depends on some native tools: cross-localdef-native
-DEPENDS_remove = "${@' '.join(["%s-qemuwrapper-cross" % m for m in d.getVar("MULTILIB_VARIANTS").split()])} cross-localedef-native"
-SDK_DEPENDS_remove = "${@' '.join(["%s-qemuwrapper-cross" % m for m in d.getVar("MULTILIB_VARIANTS").split()])}"
+DEPENDS:remove = "${@' '.join(["%s-qemuwrapper-cross" % m for m in d.getVar("MULTILIB_VARIANTS").split()])} cross-localedef-native"
+SDK_DEPENDS:remove = "${@' '.join(["%s-qemuwrapper-cross" % m for m in d.getVar("MULTILIB_VARIANTS").split()])}"
 RPMROOTFSDEPENDS = ""
 
 

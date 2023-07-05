@@ -234,14 +234,14 @@ BB_DISKMON_DIRS ??= "\
 #
 # By default native qemu will build with a builtin VNC server where graphical output can be
 # seen. The line below enables the SDL UI frontend too.
-#PACKAGECONFIG_append:pn-qemu-system-native = " sdl"
+#PACKAGECONFIG:append:pn-qemu-system-native = " sdl"
 # By default libsdl2-native will be built, if you want to use your host's libSDL instead of
 # the minimal libsdl built by libsdl2-native then uncomment the ASSUME_PROVIDED line below.
 #ASSUME_PROVIDED += "libsdl2-native"
 
 # You can also enable the Gtk UI frontend, which takes somewhat longer to build, but adds
 # a handy set of menus for controlling the emulator.
-#PACKAGECONFIG_append:pn-qemu-system-native = " gtk+"
+#PACKAGECONFIG:append:pn-qemu-system-native = " gtk+"
 
 #
 # Hash Equivalence
@@ -276,8 +276,8 @@ require conf/distro/include/openeuler_hosttools.inc
 
 PATCHTOOL = "patch"
 TCMODE = "external-openeuler"
-INHERIT_remove = "uninative"
-PATCHDEPENDENCY_remove = "patch-replacement-native:do_populate_sysroot"
+INHERIT:remove = "uninative"
+PATCHDEPENDENCY:remove = "patch-replacement-native:do_populate_sysroot"
 
 # openEuler software package dir
 # all openeEuler software packages will be downloaded by specific tool
@@ -301,14 +301,14 @@ OPENEULER_NATIVESDK_SYSROOT = "/opt/buildtools/nativesdk/sysroots/x86_64-pokysdk
 # <EXTERNAL_TOOLCHAIN>
 #   openeuler_gcc_arm64le  <the toolchain of aarch64 provided by openEuler>
 #   openeuler_gcc_arm32le" <the toolchain of arm32 provided by openEuler>
-EXTERNAL_TOOLCHAIN_arm = "/usr1/openeuler/gcc/openeuler_gcc_arm32le"
-EXTERNAL_TOOLCHAIN_aarch64 = "/usr1/openeuler/gcc/openeuler_gcc_arm64le"
-EXTERNAL_TOOLCHAIN_x86-64 = "/usr1/openeuler/gcc/openeuler_gcc_x86_64"
-EXTERNAL_TOOLCHAIN_riscv64 = "/usr1/openeuler/gcc/openeuler_gcc_riscv64"
-EXTERNAL_TARGET_SYS_arm = "arm-openeuler-linux-gnueabi"
-EXTERNAL_TARGET_SYS_aarch64 = "aarch64-openeuler-linux-gnu"
-EXTERNAL_TARGET_SYS_x86-64 = "x86_64-openeuler-linux-gnu"
-EXTERNAL_TARGET_SYS_riscv64 = "riscv64-openeuler-linux-gnu"
+EXTERNAL_TOOLCHAIN:arm = "/usr1/openeuler/gcc/openeuler_gcc_arm32le"
+EXTERNAL_TOOLCHAIN:aarch64 = "/usr1/openeuler/gcc/openeuler_gcc_arm64le"
+EXTERNAL_TOOLCHAIN:x86-64 = "/usr1/openeuler/gcc/openeuler_gcc_x86_64"
+EXTERNAL_TOOLCHAIN:riscv64 = "/usr1/openeuler/gcc/openeuler_gcc_riscv64"
+EXTERNAL_TARGET_SYS:arm = "arm-openeuler-linux-gnueabi"
+EXTERNAL_TARGET_SYS:aarch64 = "aarch64-openeuler-linux-gnu"
+EXTERNAL_TARGET_SYS:x86-64 = "x86_64-openeuler-linux-gnu"
+EXTERNAL_TARGET_SYS:riscv64 = "riscv64-openeuler-linux-gnu"
 
 # default openeuler platform
 OPENEULER_PLATFORM = "aarch64-std"

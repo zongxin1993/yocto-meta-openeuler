@@ -16,7 +16,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504 \
                     "
 
 # delete conflict patches from poky
-SRC_URI_remove += " \
+SRC_URI:remove = " \
            file://0001-add-support-for-ipkg-to-debuginfod.cxx.patch \
            https://sourceware.org/elfutils/ftp/${PV}/${BP}.tar.bz2 \
 "

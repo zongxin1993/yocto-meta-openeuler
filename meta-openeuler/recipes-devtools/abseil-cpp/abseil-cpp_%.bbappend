@@ -19,6 +19,6 @@ SRC_URI += " \
 S = "${WORKDIR}/abseil-cpp-${PV}"
 
 # contains symbol link
-INSANE_SKIP_${PN} += "dev-so"
+INSANE_SKIP:${PN} += "dev-so"
 FILES:${PN} += "${libdir}/libabsl_*.so*"
 FILES:${PN}-dev += "${libdir}/pkgconfig"

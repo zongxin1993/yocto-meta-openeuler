@@ -3,7 +3,7 @@
 PV = "1.1"
 
 # files, patches can't be applied in openeuler or conflict with openeuler
-SRC_URI_remove = " \
+SRC_URI:remove = " \
         ${GNU_MIRROR}/libunistring/libunistring-${PV}.tar.gz \
         file://0001-Unset-need_charset_alias-when-building-for-musl.patch \
 "

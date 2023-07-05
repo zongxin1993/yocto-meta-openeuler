@@ -1,6 +1,6 @@
 include timezone-append.inc
 
-FILES_tzdata-core_append += " \
+FILES_tzdata-core:append = " \
         ${datadir}/zoneinfo/Asia/Beijing        \
         ${datadir}/zoneinfo/Asia/Shanghai       \
 "

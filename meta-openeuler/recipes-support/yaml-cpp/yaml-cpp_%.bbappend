@@ -9,10 +9,10 @@ PV = "0.6.3"
 S = "${WORKDIR}/yaml-cpp-yaml-cpp-${PV}"
 
 # files, patches can't be applied in openeuler or conflict with openeuler
-SRC_URI_remove = " \
+SRC_URI:remove = " \
 "
 # files, patches that come from openeuler
-SRC_URI_prepend = " \
+SRC_URI:prepend = " \
     file://yaml-cpp-${PV}.tar.gz \
     file://CVE-2017-5950.patch \
 "

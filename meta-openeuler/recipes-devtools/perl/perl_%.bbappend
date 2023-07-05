@@ -4,7 +4,7 @@ PV = "5.34.0"
 
 #patches from openeuler
 #perl-5.34.0-Destroy-GDBM-NDBM-ODBM-SDBM-_File-objects-only-from-.patch fail
-SRC_URI_prepend =+ " \
+SRC_URI:prepend =+ " \
     file://perl-5.34.0.tar.xz \
     file://perl-5.22.1-Provide-ExtUtils-MM-methods-as-standalone-ExtUtils-M.patch \
     file://perl-5.16.3-create_libperl_soname.patch \
@@ -17,7 +17,7 @@ SRC_URI_prepend =+ " \
     file://backport-CVE-2021-36770.patch \
 "
 
-SRC_URI_remove += "https://www.cpan.org/src/5.0/perl-${PV}.tar.gz;name=perl \
+SRC_URI:remove = "https://www.cpan.org/src/5.0/perl-${PV}.tar.gz;name=perl \
            https://github.com/arsv/perl-cross/releases/download/1.3.5/perl-cross-1.3.5.tar.gz;name=perl-cross \
            file://0001-configure_tool.sh-do-not-quote-the-argument-to-comma.patch \
            file://0001-perl-cross-add-LDFLAGS-when-linking-libperl.patch \
@@ -25,7 +25,7 @@ SRC_URI_remove += "https://www.cpan.org/src/5.0/perl-${PV}.tar.gz;name=perl \
            file://determinism.patch  \
 "
 # get cross compile script from perlcross-native, and before configure
-do_configure_prepend() {
+do_configure:prepend() {
     cp -rfp ${STAGING_DATADIR_NATIVE}/perl-cross/* ${S}
 }
 do_copy_perlcross() {

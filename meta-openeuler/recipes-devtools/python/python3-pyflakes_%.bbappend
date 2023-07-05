@@ -5,6 +5,6 @@ SRC_URI[sha256sum] = "f5bc8ecabc05bb9d291eb5203d6810b49040f6ff446a756326104746cc
 require pypi-src-openeuler.inc
 OPENEULER_REPO_NAME = "pyflakes"
 
-SRC_URI_append += " \
+SRC_URI:append = " \
         file://fix-syntax-error-offsets-for-python-3.10-635.patch \
 "

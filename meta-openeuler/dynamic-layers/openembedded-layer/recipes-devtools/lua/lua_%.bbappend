@@ -4,7 +4,7 @@ PV_testsuites = "5.4.3"
 MINOR_VERSION = "5.4"
 
 # remove patches out of date
-SRC_URI_remove = "file://0001-Allow-building-lua-without-readline-on-Linux.patch  \
+SRC_URI:remove = "file://0001-Allow-building-lua-without-readline-on-Linux.patch  \
            file://CVE-2020-15888.patch \
            file://CVE-2020-15945.patch \
            file://0001-Fixed-bug-barriers-cannot-be-active-during-sweep.patch \

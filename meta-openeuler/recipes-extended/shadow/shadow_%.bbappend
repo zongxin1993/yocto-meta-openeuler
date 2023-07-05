@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=c9a450b7be84eac23e6353efecb60b5b \
                     "
 
 # get extra config files from openeuler
-FILESEXTRAPATHS_prepend := "${THISDIR}/files/:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files/:"
 
 SRC_URI = "file://${BP}.tar.xz \
            ${@bb.utils.contains('PACKAGECONFIG', 'pam', '${PAM_SRC_URI}', '', d)} \
@@ -28,14 +28,14 @@ PAM_SRC_URI += " \
 "
 
 # delete native patches from poky, patch failed, as it's for 4.8.1
-SRC_URI_remove_class-native = " \
+SRC_URI:remove:class-native = " \
            file://0001-Disable-use-of-syslog-for-sysroot.patch \
            file://0002-Allow-for-setting-password-in-clear-text.patch \
            file://commonio.c-fix-unexpected-open-failure-in-chroot-env.patch \
 "
 
 # apply 4.13 specific patches, remove these when poky's shadow upgrade to 4.13
-SRC_URI_append_class-native = " \
+SRC_URI:append:class-native = " \
            file://413-0001-Disable-use-of-syslog-for-sysroot.patch \
            file://413-commonio.c-fix-unexpected-open-failure-in-chroot-env.patch \
            file://login.defs \
@@ -44,9 +44,9 @@ SRC_URI_append_class-native = " \
 SRC_URI[sha256sum] = "813057047499c7fe81108adcf0cffa3ad4ec75e19a80151f9cbaa458ff2e86cd"
 
 # no ${mandir} installed in openeuler
-ALTERNATIVE_${PN}-doc = ""
+ALTERNATIVE:${PN}-doc = ""
 
-do_install_prepend () {
+do_install:prepend () {
     # we use a higher version useradd config from poky honister, these functions have applied:
     # * Disable mail creation: "CREATE_MAIL_SPOOL=no"
     # * Use users group by default: "GROUP=100"
@@ -55,7 +55,7 @@ do_install_prepend () {
     install -m 0644 ${WORKDIR}/useradd ${D}${sysconfdir}/default
 }
 
-do_install_append () {
+do_install:append () {
     # use login.defs from openeuler, we have applied these functions as poky:
     # * Enable CREATE_HOME by default: "CREATE_HOME     yes"
     # * Make the users mailbox in ~/ not /var/spool/mail by default on an embedded system: "MAIL_FILE  .mail"  and "#MAIL_DIR    /var/spool/mail"

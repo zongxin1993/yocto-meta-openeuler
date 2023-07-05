@@ -1,10 +1,10 @@
 PV = "3.9.9"
 
-FILESEXTRAPATHS_append := "${THISDIR}/files/:"
+FILESEXTRAPATHS:append := "${THISDIR}/files/:"
 
 SRC_URI[sha256sum] = "06828c04a573c073a4e51c4292a27c1be4ae26621c3edc7cf9318418ce3b6d27"
 
-SRC_URI_remove += " \
+SRC_URI:remove = " \
            file://0001-Makefile-fix-Issue36464-parallel-build-race-problem.patch \
 "
 
@@ -30,9 +30,9 @@ SRC_URI =+ " \
 # meta-openeuler layer does not need to build python3-native dependency packages,
 # but gets them directly from the nativesdk tool
 # Find header from nativesdk
-CPPFLAGS_append_class-native = " -I${OPENEULER_NATIVESDK_SYSROOT}/usr/include \
+CPPFLAGS:append:class-native = " -I${OPENEULER_NATIVESDK_SYSROOT}/usr/include \
     -I${OPENEULER_NATIVESDK_SYSROOT}/usr/include/ncursesw -I${OPENEULER_NATIVESDK_SYSROOT}/usr/include/uuid \
 "
 
 # Find library from nativesdk
-LDFLAGS_append_class-native = " -L${OPENEULER_NATIVESDK_SYSROOT}/usr/lib"
+LDFLAGS:append:class-native = " -L${OPENEULER_NATIVESDK_SYSROOT}/usr/lib"

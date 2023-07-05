@@ -9,11 +9,11 @@ PV = "2.2.2"
 S = "${WORKDIR}/gflags-${PV}"
 
 # files, patches can't be applied in openeuler or conflict with openeuler
-SRC_URI_remove = " \
+SRC_URI:remove = " \
 "
 
 # files, patches that come from openeuler
-SRC_URI_prepend = " \
+SRC_URI:prepend = " \
     file://gflags-${PV}.tar.gz \
 "
 

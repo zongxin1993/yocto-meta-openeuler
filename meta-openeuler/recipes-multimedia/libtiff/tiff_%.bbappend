@@ -18,7 +18,7 @@ SRC_URI += " \
         "
 
 # no need in 4.5.0
-CVE_CHECK_WHITELIST:remove += "CVE-2015-7313"
+CVE_CHECK_IGNORE:remove = "CVE-2015-7313"
 
 # sync from 4.5.0 bb:
 CVE_CHECK_IGNORE += "CVE-2015-7313"                                 
