@@ -13,14 +13,15 @@ COMPATIBLE_MACHINE = "^rpi$"
 
 SRCBRANCH = "master"
 SRCFORK = "raspberrypi"
-SRCREV = "3fd8527eefd8790b4e8393458efc5f94eb21a615"
+SRCREV = "c4fd1b8986c6d6d4ae5cd51e65a8bbeb495dfa4e"
 
 # Use the date of the above commit as the package version. Update this when
 # SRCREV is changed.
-PV = "20210319"
+PV = "20220323"
 
 SRC_URI = "\
     git://github.com/${SRCFORK}/userland.git;protocol=https;branch=${SRCBRANCH} \
+    file://0001-mmal-Do-not-use-Werror.patch \
     file://0001-Allow-applications-to-set-next-resource-handle.patch \
     file://0002-wayland-Add-support-for-the-Wayland-winsys.patch \
     file://0003-wayland-Add-Wayland-example.patch \
@@ -67,7 +68,7 @@ PACKAGECONFIG ?= "${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'wayland', 
 PACKAGECONFIG[wayland] = "-DBUILD_WAYLAND=TRUE -DWAYLAND_SCANNER_EXECUTABLE:FILEPATH=${STAGING_BINDIR_NATIVE}/wayland-scanner,,wayland-native wayland"
 PACKAGECONFIG[allapps] = "-DALL_APPS=true,,,"
 
-CFLAGS:append = " -fPIC"
+CFLAGS:append = " -fPIC -Wno-unused-but-set-variable"
 
 do_install:append () {
 	for f in `find ${D}${includedir}/interface/vcos/ -name "*.h"`; do
@@ -88,6 +89,10 @@ do_install:append () {
                 ln -sf brcmegl.pc ${D}${libdir}/pkgconfig/egl.pc
                 ln -sf brcmvg.pc ${D}${libdir}/pkgconfig/vg.pc
 	fi
+	# Currently man files are installed in /usr/man instead of /usr/share/man, see comments in:
+	# https://github.com/raspberrypi/userland/commit/45a0022ac64b4d0788def3c5230c972430f6fc23
+	mkdir -pv ${D}${datadir}
+	mv -v ${D}${prefix}/man ${D}${mandir}
 }
 
 # Shared libs from userland package  build aren't versioned, so we need
