@@ -719,10 +719,10 @@ manifest_list:
     version: a82d92c8a6525da01524bf8f4a60bf6b35dcbb3d
   yocto-meta-qt5:
     remote_url: https://gitee.com/openeuler/yocto-meta-qt5.git
-    version: 43f8f539d40070a70fe89136db89bf5bb1dfe7ed
+    version: bff5bd937f0776166e81a63f3dd39ede348ef758
   yocto-meta-ros:
     remote_url: https://gitee.com/openeuler/yocto-meta-ros.git
-    version: 5e89706808f08397dda040395acfe9fc294b229f
+    version: 6e559558c8c7ddf1b828a5f82d33eb0274bc2fc3
   yocto-opkg-utils:
     remote_url: https://gitee.com/src-openeuler/yocto-opkg-utils.git
     version: 1d04472046d0225e013dd7e18c62dddf82025969
