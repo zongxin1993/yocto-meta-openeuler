@@ -6,7 +6,7 @@ PV = "0.8.3"
 # determinism.patch no need for 0.8.3
 SRC_URI:remove = "file://determinism.patch"
 
-SRC_URI += " \
+SRC_URI:append = " \
         file://libcap-ng-${PV}.tar.gz \
         file://backport-Make-Python-test-script-compatible-with-Python2-and-Python3.patch \
         "

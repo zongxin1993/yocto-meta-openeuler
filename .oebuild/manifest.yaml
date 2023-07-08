@@ -293,7 +293,7 @@ manifest_list:
     version: 1fdb406ad64c058565318a1d378406c848c82bd4
   libffi:
     remote_url: https://gitee.com/src-openeuler/libffi.git
-    version: efed57920ddaa573f7c17e3a5c6c7c279478cb38
+    version: e2da93464db46f7fb4e676b2aa4350301e2968e2
   libgcrypt:
     remote_url: https://gitee.com/src-openeuler/libgcrypt.git
     version: 6c7dc4542be4cd481e0a7fe0352839ee64e88b0b
