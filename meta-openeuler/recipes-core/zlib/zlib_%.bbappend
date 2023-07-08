@@ -3,17 +3,17 @@
 #version in openEuler
 PV = "1.2.13"
 
-OPENEULER_SRC_URI_REMOVE = "https git http"
-
 # files, patches can't be applied in openeuler or conflict with openeuler
 SRC_URI:remove = " \
+        ${SOURCEFORGE_MIRROR}/libpng/${BPN}/${PV}/${BPN}-${PV}.tar.xz \
         file://CVE-2018-25032.patch \
         file://ldflags-tests.patch \
         file://CVE-2022-37434.patch \
         "
+
 # files, patches that come from openeuler
 SRC_URI:append = " \
-        file://${BP}.tar.xz \
+        file://zlib-${PV}.tar.xz \
         file://backport-zlib-1.2.5-minizip-fixuncrypt.patch \
         file://backport-fix-undefined-buffer-detected-by-oss-fuzz.patch \
         "

@@ -1,3 +1,4 @@
+# the main bb file: yocto-poky/meta/recipes-graphics/wayland/libinput_1.19.4.bb
 
 PV="1.22.1"
 
