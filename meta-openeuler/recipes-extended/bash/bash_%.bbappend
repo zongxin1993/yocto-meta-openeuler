@@ -4,7 +4,7 @@
 PV = "5.1.8"
 
 # These patches have been merged in this version
-SRC_URI:remove = " \
+SRC_URI:remove = " file://CVE-2022-3715.patch \
            ${GNU_MIRROR}/bash/bash-${PV}-patches/bash51-001;apply=yes;striplevel=0;name=patch001 \
            ${GNU_MIRROR}/bash/bash-${PV}-patches/bash51-002;apply=yes;striplevel=0;name=patch002 \
            ${GNU_MIRROR}/bash/bash-${PV}-patches/bash51-003;apply=yes;striplevel=0;name=patch003 \
@@ -12,7 +12,7 @@ SRC_URI:remove = " \
            "
 
 # patches in openeuler
-SRC_URI:append = " \
+SRC_URI:prepend = " \
            file://bash-2.05a-interpreter.patch \
            file://bash-2.05b-pgrp_sync.patch \
            file://bash-4.0-nobits.patch \
