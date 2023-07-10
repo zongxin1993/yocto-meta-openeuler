@@ -578,7 +578,7 @@ manifest_list:
     version: 8ac8a08e26e79790a02fb647378e305f7d848a6c
   python3:
     remote_url: https://gitee.com/src-openeuler/python3.git
-    version: a4c17510088534a5ac3e7a7302aaf88b96814798
+    version: 5f848e0a95c52a971c1d11e6a4910905320ae73e
   qt5-qtbase:
     remote_url: https://gitee.com/src-openeuler/qt5-qtbase.git
     version: c41d3f406aa9fa6ae271dabea1f706cc23bc1951
