@@ -29,9 +29,9 @@ PAM_SRC_URI += " \
 
 # delete native patches from poky, patch failed, as it's for 4.8.1
 SRC_URI:remove:class-native = " \
-           file://0001-Disable-use-of-syslog-for-sysroot.patch \
-           file://0002-Allow-for-setting-password-in-clear-text.patch \
-           file://commonio.c-fix-unexpected-open-failure-in-chroot-env.patch \
+            file://0001-Disable-use-of-syslog-for-sysroot.patch \
+            file://commonio.c-fix-unexpected-open-failure-in-chroot-env.patch \
+            file://0001-Drop-nsswitch.conf-message-when-not-in-place-eg.-musl.patch \
 "
 
 # apply 4.13 specific patches, remove these when poky's shadow upgrade to 4.13

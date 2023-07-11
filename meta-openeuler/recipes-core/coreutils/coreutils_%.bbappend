@@ -18,6 +18,7 @@ SRC_URI:remove = " \
         file://fix-selinux-flask.patch \
         file://0001-uname-report-processor-and-hardware-correctly.patch \
         file://disable-ls-output-quoting.patch \
+        file://e8b56ebd536e82b15542a00c888109471936bfda.patch \
         file://0001-ls-restore-8.31-behavior-on-removed-directories.patch \
 "
 
