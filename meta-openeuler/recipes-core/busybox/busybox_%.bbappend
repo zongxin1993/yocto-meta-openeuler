@@ -5,11 +5,18 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files/:"
 
 # files, patches can't be applied in openeuler or conflict with openeuler
 SRC_URI:remove = " \
+            file://0001-depmod-Ignore-.debug-directories.patch \
+            file://longopts.cfg \
+            file://0001-libbb-sockaddr2str-ensure-only-printable-characters-.patch \
+            file://0002-nslookup-sanitize-all-printed-strings-with-printable.patch \
+            file://CVE-2022-30065.patch \
+            file://0001-devmem-add-128-bit-width.patch \
             file://busybox-udhcpc-no_deconfig.patch \
             file://0001-testsuite-check-uudecode-before-using-it.patch \
             file://0001-gen_build_files-Use-C-locale-when-calling-sed-on-glo.patch \
             file://0001-awk-fix-CVEs.patch \
             file://0002-man-fix-segfault-in-man-1.patch \
+            file://fail_on_no_media.patch \
             "
 
 #we always want busybox with mdev\init packages to support multi init manager
