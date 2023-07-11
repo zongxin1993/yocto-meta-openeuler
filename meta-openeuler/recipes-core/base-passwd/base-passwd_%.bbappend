@@ -4,6 +4,7 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files/:"
 # remove nobash.patch, because we use /bin/bash as default SHELL
 SRC_URI:remove = "https://launchpad.net/debian/+archive/primary/+files/${BPN}_${PV}.tar.gz \
            file://nobash.patch \
+           file://disable-shell.patch \
 "
 
 # as it's small, base-passwd's tar.gz is integrated in openEuler Embedded
