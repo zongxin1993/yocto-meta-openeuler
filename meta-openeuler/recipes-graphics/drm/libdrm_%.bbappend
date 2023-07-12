@@ -13,3 +13,4 @@ SRC_URI:remove = "file://0001-meson-Also-search-for-rst2man.py.patch \
 "
 
 SRC_URI[sha256sum] = "629352e08c1fe84862ca046598d8a08ce14d26ab25ee1f4704f993d074cb7f26"
+

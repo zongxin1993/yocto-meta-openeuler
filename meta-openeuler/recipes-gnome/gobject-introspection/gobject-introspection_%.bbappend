@@ -1,18 +1,16 @@
-PV = "1.72.0"
+# the main bb file: yocto-poky/meta/recipes-gnome/gobject-introspection/gobject-introspection_1.72.0.bb
 
 # openEuler-23.03 version is 1.74.0, but gobject-introspection-native depends glib2 at least 2.74 version.
 # nativesdk provides glib2 is too old to compile, so do not update package version now.
-OPENEULER_BRANCH = "openEuler-22.09"
 
-DEPENDS:remove:class-target = "prelink-native"
+# DEPENDS:remove:class-target = "prelink-native"
 
-# apply new patch for 1.72.0 from poky
-FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
-SRC_URI = "${GNOME_MIRROR}/${BPN}/${@oe.utils.trim_version("${PV}", 2)}/${BPN}-${PV}.tar.xz \
-           file://0001-g-ir-tool-template.in-fix-girdir-path.patch \
-           "
+SRC_URI:remove = "${GNOME_MIRROR}/${BPN}/${@oe.utils.trim_version("${PV}", 2)}/${BPN}-${PV}.tar.xz \
+"
 
-SRC_URI[sha256sum] = "02fe8e590861d88f83060dd39cda5ccaa60b2da1d21d0f95499301b186beaabc"
+SRC_URI:append = " \
+        file://${BP}.tar.xz \
+"
 
 do_configure:append:class-target() {
         # delete prelink-rtld
@@ -22,4 +20,4 @@ do_configure:append:class-target() {
 EOF
 }
 
-RDEPENDS:${PN}:remove:class-native = "python3-pickle python3-xml"
+# RDEPENDS:${PN}:remove:class-native = "python3-pickle python3-xml"
