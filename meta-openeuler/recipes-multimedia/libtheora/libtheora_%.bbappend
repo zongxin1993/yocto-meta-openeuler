@@ -1,6 +1,6 @@
-OPENEULER_SRC_URI_REMOVE = "https git http"
+# the main bb file: yocto-poky/meta/recipes-multimedia/libtheora/libtheora_1.1.1.bb
 
-PV = "1.1.1"
+OPENEULER_SRC_URI_REMOVE = "https git http"
 
 SRC_URI:prepend = "file://${BP}.tar.xz \
            file://Fix-pp_sharp_mod-calculation.patch \

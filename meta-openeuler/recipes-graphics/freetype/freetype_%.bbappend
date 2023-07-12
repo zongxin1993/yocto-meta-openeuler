@@ -3,7 +3,8 @@
 
 PV = "2.12.1"
 
-SRC_URI:remove = "\
+SRC_URI:remove = " \
+    ${SAVANNAH_GNU_MIRROR}/${BPN}/${BP}.tar.xz \
     file://CVE-2022-27404.patch \
     file://CVE-2022-27405.patch \
     file://CVE-2022-27406.patch \
@@ -11,7 +12,7 @@ SRC_URI:remove = "\
 "
 # apply src-openEuler patches
 # backport-freetype-2.5.2-more-demos.patch for ft2demos
-SRC_URI:prepend = "\
+SRC_URI:prepend = " \
     file://freetype-${PV}.tar.xz \
     file://backport-freetype-2.3.0-enable-spr.patch \
     file://backport-freetype-2.2.1-enable-valid.patch \
@@ -25,4 +26,12 @@ LIC_FILES_CHKSUM = "file://LICENSE.TXT;md5=a5927784d823d443c6cae55701d01553 \
 "
 
 # new checksum
-SRC_URI[sha256sum] = "4766f20157cc4cf0cd292f80bf917f92d1c439b243ac3018debf6b9140c41a7f"
+SRC_URI[sha256sum] = "ce729d97f166a919a6a3037c949af01d5d6e1783614024d72683153f0bc5ef05"
+
+# when running compile task, it will put libtool can not be find, but we can find libtool with arch
+# so make a software link from arch libtool to libtool
+do_configure:append() {
+    if [ ! -f "libtool" ];then
+        ln -s $(ls | grep *libtool) libtool
+    fi
+}

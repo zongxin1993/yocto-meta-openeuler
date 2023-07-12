@@ -1,3 +1,5 @@
+# the main bb file: yocto-meta-openeuler/meta-openeuler/recipes-core/selinux/libsepol_3.4.bb
+
 PV = "3.4"
 
 OPENEULER_SRC_URI_REMOVE = "https git http"
