@@ -9,7 +9,10 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=1ebbd3e34237af26da5dc08a4e440464 \
 
 # Use the source packages and patches from openEuler
 # less-475-fsync.patch can't apply: cannot run test program while cross compiling
-SRC_URI:remove = "file://less-475-fsync.patch"
+SRC_URI:remove = " \
+    file://less-475-fsync.patch \
+    file://CVE-2022-46663.patch \
+"
 
 SRC_URI:prepend = "file://less-394-time.patch \
             file://less-475-fsync.patch \

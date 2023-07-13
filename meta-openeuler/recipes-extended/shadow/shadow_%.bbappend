@@ -1,4 +1,4 @@
-#main bbfile: yocto-poky/meta/recipes-extended/shadow/shadow_4.8.1.bb
+#main bbfile: yocto-poky/meta/recipes-extended/shadow/shadow_4.11.1.bb
 #ref: https://git.yoctoproject.org/poky/tree/meta/recipes-extended/shadow/shadow_4.13.bb
 
 OPENEULER_SRC_URI_REMOVE = "https git http"
@@ -12,12 +12,16 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=c9a450b7be84eac23e6353efecb60b5b \
 # get extra config files from openeuler
 FILESEXTRAPATHS:prepend := "${THISDIR}/files/:"
 
-SRC_URI = "file://${BP}.tar.xz \
-           ${@bb.utils.contains('PACKAGECONFIG', 'pam', '${PAM_SRC_URI}', '', d)} \
+SRC_URI:remove = " \
+            https://github.com/shadow-maint/shadow/releases/download/v${PV}/${BP}.tar.gz \
+            file://shadow-4.1.3-dots-in-usernames.patch \
+            file://shadow-relaxed-usernames.patch \
+"
+
+SRC_URI:prepend = "file://${BP}.tar.xz \
            file://usermod-unlock.patch \
            file://backport-useradd-check-if-subid-range-exists-for-user.patch \
            file://shadow-add-sm3-crypt-support.patch \
-           file://useradd \
 "
 
 # add extra pam files for openeuler
