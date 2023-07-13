@@ -15,6 +15,7 @@ SRC_URI:remove = " \
         file://0007-Do-not-use-getsubopt.patch \
         file://0008-configure.ac-autodetect-availability-of-systemd.patch \
         file://0009-keytable-restrict-installation-of-50-rc_keymap.conf.patch \
+        file://0003-original-patch-export-mediactl-headers.patch \
         "
 
 # source change to openEuler
@@ -25,12 +26,12 @@ SRC_URI += " \
         "
 
 # we don't want feature of udev and keymaps for out embedded OS, if use, delete those code.
-DEPENDS:remove:class-target += "udev"
+DEPENDS:remove:class-target = "udev"
 EXTRA_OECONF = "--disable-qv4l2 --enable-shared"
 PACKAGES:remove = " ir-keytable rc-keymaps "
-FILES_ir-keytable = ""
+FILES:ir-keytable = ""
 RDEPENDS:ir-keytable = ""
-FILES_rc-keymaps = ""
+FILES:rc-keymaps = ""
 # udev and keymaps files still generated, so we put in a package and may not pack in rootfs
 PACKAGES:append = " udev-keymaps "
-FILES_udev-keymaps = "${sysconfdir}/rc* ${base_libdir}/udev* ${libdir}/udev* /lib/udev"
+FILES:udev-keymaps = "${sysconfdir}/rc* ${base_libdir}/udev* ${libdir}/udev* /lib/udev"

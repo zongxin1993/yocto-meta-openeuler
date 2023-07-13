@@ -1,3 +1,5 @@
+# the main bb file: yocto-poky/meta/recipes-bsp/pciutils/pciutils_3.7.0.bb
+
 PV = "3.9.0"
 
 # update configure.patch of poky
