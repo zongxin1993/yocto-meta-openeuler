@@ -531,6 +531,9 @@ manifest_list:
   python-docutils:
     remote_url: https://gitee.com/src-openeuler/python-docutils.git
     version: 257be78ad8bbc4d29d03baef211f14d850d59734
+  python-docopt:
+    remote_url: https://gitee.com/src-openeuler/python-docopt.git
+    version: 6de180c379485aa23cdb01054e27c0852ad0ec43
   python-humanfriendly:
     remote_url: https://gitee.com/src-openeuler/python-humanfriendly.git
     version: 08a6f88833ba4f41057974c8fb7221ce2b1973bc
@@ -555,6 +558,9 @@ manifest_list:
   python-packaging:
     remote_url: https://gitee.com/src-openeuler/python-packaging.git
     version: fbc94756803f39c61adde2931c5fe32a104f1d6b
+  python-pathlib2:
+    remote_url: https://gitee.com/src-openeuler/python-pathlib2.git
+    version: 678955fa7a0433bd52acb1b5f85c4d625ef6e453
   python-pep8:
     remote_url: https://gitee.com/src-openeuler/python-pep8.git
     version: a3ae17fd37d420597e4ddbb28d9e92ef47a5036a

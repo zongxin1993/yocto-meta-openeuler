@@ -1,3 +1,5 @@
+# the main bb file: yocto-poky/meta/recipes-extended/psmisc/psmisc_23.4.bb
+
 # package and patches from openeuler
 PV = "23.6"
 

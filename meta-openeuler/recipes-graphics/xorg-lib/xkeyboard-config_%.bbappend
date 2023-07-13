@@ -3,6 +3,9 @@
 # version in src-openEuler
 PV = "2.33"
 
+SRC_URI = "file://${BP}.tar.bz2 \
+"
+
 # use nativesdk's python3 tool
 DEPENDS:remove = "python3-native"
 PYTHON:remove = "${STAGING_BINDIR_NATIVE}/python3-native/python3"
