@@ -59,7 +59,7 @@ EXTRA_OECONF = " ${ENABLE_IPV6} --with-libtool --enable-threads \
 inherit ${@bb.utils.contains('PACKAGECONFIG', 'python3', 'python3native setuptools3-base', '', d)}
 
 # dhcp needs .la so keep them
-remove:LIBTOOL_LA = "0"
+REMOVE_LIBTOOL_LA = "0"
 
 USERADD_PACKAGES = "${PN}"
 USERADD_PARAM:${PN} = "--system --home ${localstatedir}/cache/bind --no-create-home \
@@ -141,7 +141,7 @@ FILES:${PN}-libs = "${libdir}/*.so*"
 FILES:${PN}-staticdev += "${libdir}/*.la"
 
 PACKAGE_BEFORE_PN += "${@bb.utils.contains('PACKAGECONFIG', 'python3', 'python3-bind', '', d)}"
-FILES_python3-bind = "${sbindir}/dnssec-coverage ${sbindir}/dnssec-checkds \
+FILES:python3-bind = "${sbindir}/dnssec-coverage ${sbindir}/dnssec-checkds \
                 ${sbindir}/dnssec-keymgr ${PYTHON_SITEPACKAGES_DIR}"
 
 RDEPENDS:${PN}-dev = ""

@@ -120,17 +120,17 @@ FILES:${PN}-client = "${base_sbindir}/dhclient \
 
 FILES:${PN}-omshell = "${bindir}/omshell"
 
-pkg_postinst_dhcp-server() {
+pkg_postinst:dhcp-server() {
     mkdir -p $D/${localstatedir}/lib/dhcp
     touch $D/${localstatedir}/lib/dhcp/dhcpd.leases
     touch $D/${localstatedir}/lib/dhcp/dhcpd6.leases
 }
 
-pkg_postinst_dhcp-client() {
+pkg_postinst:dhcp-client() {
     mkdir -p $D/${localstatedir}/lib/dhcp
 }
 
-pkg_postrm_dhcp-server() {
+pkg_postrm:dhcp-server() {
     rm -f $D/${localstatedir}/lib/dhcp/dhcpd.leases
     rm -f $D/${localstatedir}/lib/dhcp/dhcpd6.leases
 
@@ -139,7 +139,7 @@ pkg_postrm_dhcp-server() {
     fi
 }
 
-pkg_postrm_dhcp-client() {
+pkg_postrm:dhcp-client() {
     rm -f $D/${localstatedir}/lib/dhcp/dhclient.leases
     rm -f $D/${localstatedir}/lib/dhcp/dhclient6.leases
 
