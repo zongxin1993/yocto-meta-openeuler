@@ -149,8 +149,11 @@ ACLOCALEXTRAPATH:class-target = " -I ${NATIVESDK_DATADIR}/aclocal/"
 ACLOCALEXTRAPATH:class-nativesdk = " -I ${NATIVESDK_DATADIR}/aclocal/"
 
 python autotools_aclocals () {
-    d.setVar("CONFIG_SITE", siteinfo_get_files(d, sysrootcache=True))
+    sitefiles, searched = siteinfo_get_files(d, sysrootcache=True)
+    d.setVar("CONFIG_SITE", " ".join(sitefiles))
 }
+
+do_configure[file-checksums] += "${@' '.join(siteinfo_get_files(d, sysrootcache=False)[1])}"
 
 CONFIGURE_FILES = "${S}/configure.in ${S}/configure.ac ${S}/config.h.in ${S}/acinclude.m4 Makefile.am"
 
