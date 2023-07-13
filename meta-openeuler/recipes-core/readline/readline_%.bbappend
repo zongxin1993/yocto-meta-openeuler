@@ -1,4 +1,4 @@
-# main bb file: yocto-poky/meta/recipes-core/readline/readline_8.1.bb
+# main bb file: yocto-poky/meta/recipes-core/readline/readline_8.1.2.bb
 #
 OPENEULER_SRC_URI_REMOVE = "https git http"
 
