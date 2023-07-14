@@ -19,7 +19,7 @@ LICENSE = "MIT"
 inherit core-image
 
 # delete useless sdk depends
-FEATURE_PACKAGES_tools-sdk:remove = " packagegroup-core-sdk packagegroup-core-standalone-sdk-target"
+FEATURE_PACKAGES:tools-sdk:remove = " packagegroup-core-sdk packagegroup-core-standalone-sdk-target"
 TOOLCHAIN_TARGET_TASK:remove = "${@multilib_pkg_extend(d, 'packagegroup-core-standalone-sdk-target')}"
 
 # do_rootfs not depends to ldconfig-native as nativesdk has provided it
