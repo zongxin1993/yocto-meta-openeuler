@@ -668,7 +668,7 @@ manifest_list:
     version: 9fd2e6f9b698396a887208d2426a8c479d5d8771
   tinyxml2:
     remote_url: https://gitee.com/src-openeuler/tinyxml2.git
-    version: e0e993959c2d780e6a7e2b01a5bd0866971324e5
+    version: 29d8318f8837dccf7205d0a72ec6823d6d5aa09f
   tslib:
     remote_url: https://gitee.com/src-openeuler/tslib.git
     version: 1370aeba6969b893018bd157b49aa2c64e7fe2da
