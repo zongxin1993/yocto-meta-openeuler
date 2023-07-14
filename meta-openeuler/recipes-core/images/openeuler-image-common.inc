@@ -30,7 +30,7 @@ FEATURE_PACKAGES_tools-debug = ""
 IMAGE_INSTALL_append = "${@bb.utils.contains_any("IMAGE_FEATURES", [ 'debug-tweaks', 'tools_debug' ], "packagegroup-core-tools-debug", "",d)}"
 
 # delete useless sdk depends
-FEATURE_PACKAGES_tools-sdk:remove = " packagegroup-core-sdk packagegroup-core-standalone-sdk-target"
+FEATURE_PACKAGES:tools-sdk:remove = " packagegroup-core-sdk packagegroup-core-standalone-sdk-target"
 TOOLCHAIN_TARGET_TASK:remove = "${@multilib_pkg_extend(d, 'packagegroup-core-standalone-sdk-target')}"
 
 # do_rootfs not depends to ldconfig-native as nativesdk has provided it
