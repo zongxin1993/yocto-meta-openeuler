@@ -5,3 +5,5 @@ do_install:append () {
         echo ${BUILDTIME} > ${D}${sysconfdir}/os-revision
     fi
 }
+
+FILES:${PN} += "${sysconfdir}/os-revision"
