@@ -1,5 +1,6 @@
 PV = "2.37"
 S = "${WORKDIR}/${BPN}-${PV}"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files/:"
 
 # apply package source and patches from openeuler
 SRC_URI = " \
@@ -57,9 +58,9 @@ SRC_URI = " \
 "
 
 # apply used patches from poky
-#SRC_URI += " \
-#    file://0005-Point-scripts-location-to-libdir.patch \
-#"
+SRC_URI += " \
+    file://0005-Point-scripts-location-to-libdir.patch \
+"
 
 SRC_URI[sha256sum] = "820d9724f020a3e69cb337893a0b63c2db161dadcb0e06fc11dc29eb1e84a32c"
 
