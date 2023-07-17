@@ -6,7 +6,7 @@ OPENEULER_SRC_URI_REMOVE = "https git"
 OPENEULER_REPO_NAME = "glog"
 
 # version in openEuler
-PV = "0.3.5"
+PV = "0.6.0"
 S = "${WORKDIR}/glog-${PV}"
 
 # files, patches can't be applied in openeuler or conflict with openeuler
