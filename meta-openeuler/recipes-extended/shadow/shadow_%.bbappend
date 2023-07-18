@@ -1,28 +1,32 @@
-#main bbfile: yocto-poky/meta/recipes-extended/shadow/shadow_4.11.1.bb
-#ref: https://git.yoctoproject.org/poky/tree/meta/recipes-extended/shadow/shadow_4.13.bb
+# main bbfile: yocto-poky/meta/recipes-extended/shadow/shadow_4.11.bb
 
 OPENEULER_SRC_URI_REMOVE = "https git http"
 
 PV = "4.13"
 
-LIC_FILES_CHKSUM = "file://COPYING;md5=c9a450b7be84eac23e6353efecb60b5b \
-                    file://src/passwd.c;beginline=2;endline=30;md5=758c26751513b6795395275969dd3be1 \
-                    "
-
-# get extra config files from openeuler
+# get extra config files from openeuler(pam.d directory)
 FILESEXTRAPATHS:prepend := "${THISDIR}/files/:"
 
+# outdated patch
 SRC_URI:remove = " \
-            https://github.com/shadow-maint/shadow/releases/download/v${PV}/${BP}.tar.gz \
-            file://shadow-4.1.3-dots-in-usernames.patch \
-            file://shadow-relaxed-usernames.patch \
-"
+           file://shadow-4.1.3-dots-in-usernames.patch \
+           file://shadow-relaxed-usernames.patch \
+           "
 
+# delete native patches from poky, patch failed, as it's for 4.11
+SRC_URI:remove:class-native = "file://0001-Drop-nsswitch.conf-message-when-not-in-place-eg.-musl.patch"
+
+# use openeuler patches
 SRC_URI:prepend = "file://${BP}.tar.xz \
            file://usermod-unlock.patch \
            file://backport-useradd-check-if-subid-range-exists-for-user.patch \
            file://shadow-add-sm3-crypt-support.patch \
-"
+           file://backport-Fix-off-by-one-mistakes.patch \
+           file://backport-Fix-typos-in-length-calculations.patch \
+           file://backport-Correctly-handle-illegal-system-file-in-tz.patch \
+           file://backport-Explicitly-override-only-newlines.patch \
+           file://backport-Prevent-out-of-boundary-access.patch \
+           "
 
 # add extra pam files for openeuler
 # poky shadow.inc have added: chfn chpasswd chsh login newusers passwd su
@@ -31,33 +35,10 @@ PAM_SRC_URI += " \
         file://login.defs \
 "
 
-# delete native patches from poky, patch failed, as it's for 4.8.1
-SRC_URI:remove:class-native = " \
-            file://0001-Disable-use-of-syslog-for-sysroot.patch \
-            file://commonio.c-fix-unexpected-open-failure-in-chroot-env.patch \
-            file://0001-Drop-nsswitch.conf-message-when-not-in-place-eg.-musl.patch \
-"
-
-# apply 4.13 specific patches, remove these when poky's shadow upgrade to 4.13
-SRC_URI:append:class-native = " \
-           file://413-0001-Disable-use-of-syslog-for-sysroot.patch \
-           file://413-commonio.c-fix-unexpected-open-failure-in-chroot-env.patch \
-           file://login.defs \
-"
-
 SRC_URI[sha256sum] = "813057047499c7fe81108adcf0cffa3ad4ec75e19a80151f9cbaa458ff2e86cd"
 
 # no ${mandir} installed in openeuler
 ALTERNATIVE:${PN}-doc = ""
-
-do_install:prepend () {
-    # we use a higher version useradd config from poky honister, these functions have applied:
-    # * Disable mail creation: "CREATE_MAIL_SPOOL=no"
-    # * Use users group by default: "GROUP=100"
-    # see: https://git.yoctoproject.org/poky/tree/meta/recipes-extended/shadow?h=honister
-    mkdir -p ${D}${sysconfdir}/default/
-    install -m 0644 ${WORKDIR}/useradd ${D}${sysconfdir}/default
-}
 
 do_install:append () {
     # use login.defs from openeuler, we have applied these functions as poky:
@@ -99,3 +80,6 @@ do_install:append () {
     # use /bin/bash as default SHELL
     sed -i 's:/bin/sh:/bin/bash:g' ${D}${sysconfdir}/default/useradd
 }
+
+# keep as 4.13 recipe
+PAM_PLUGINS:remove = "pam-plugin-lastlog"
