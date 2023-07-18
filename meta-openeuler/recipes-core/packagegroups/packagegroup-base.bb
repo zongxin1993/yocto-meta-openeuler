@@ -89,6 +89,6 @@ packagegroup-base-utils \
 packagegroup-base-libs \
 "
 
-RDEPENDS:packagegroup-base-utils:remove:riscv64 += " \
+RDEPENDS:packagegroup-base-utils:remove:riscv64 = " \
 ethercat \
 "
