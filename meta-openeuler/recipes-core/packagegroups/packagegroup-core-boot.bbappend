@@ -10,7 +10,7 @@ RDEPENDS:${PN} += " \
     os-release \
 "
 # No rule to make target "Image" for x86-64, remove it
-RDEPENDS:${PN}:remove:x86-64 += "kernel-img"
+RDEPENDS:${PN}:remove:x86-64 = "kernel-img"
 
 # * netbase's configuration files are included in os-base
 #   to avoid extra download
