@@ -12,11 +12,11 @@ SRC_URI:remove = " \
 
 S = "${WORKDIR}/${BPN}-${PV}"
 # files, patches that come from openeuler
-SRC_URI += "file://ncurses/${BP}.tar.gz \
-           file://ncurses/ncurses-config.patch \
-           file://ncurses/ncurses-libs.patch \
-           file://ncurses/ncurses-urxvt.patch \
-           file://ncurses/ncurses-kbs.patch \
+SRC_URI += "file://${BP}.tar.gz \
+           file://ncurses-config.patch \
+           file://ncurses-libs.patch \
+           file://ncurses-urxvt.patch \
+           file://ncurses-kbs.patch \
 "
 
 SRC_URI[md5sum] = "a2736befde5fee7d2b7eb45eb281cdbe"

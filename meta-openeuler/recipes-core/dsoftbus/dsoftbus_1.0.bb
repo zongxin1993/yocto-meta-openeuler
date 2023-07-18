@@ -55,8 +55,7 @@ SRC_URI = " \
 RDEPENDS:${PN} = "libboundscheck"
 
 # bluetooth only support for raspberrypi, qemu don't compile it
-FILESEXTRAPATHS:prepend := "${THISDIR}/files/:"
-DEPENDS:append:raspberrypi4-64 = " bluez5 "
+DEPENDS:append:raspberrypi4-64 = " bluez5"
 SRC_URI:append:raspberrypi4-64 = " \
         file://add-bluez-adapter-for-dsoftbus.patch;patchdir=${dsoftbus-depend} \
         file://apply-ble-discovery-support.patch;patchdir=${dsoftbus-src}/dsoftbus \
