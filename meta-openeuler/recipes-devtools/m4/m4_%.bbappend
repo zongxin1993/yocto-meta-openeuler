@@ -23,6 +23,6 @@ SRC_URI:remove = " \
 
 # append files and patches from openeuler
 SRC_URI:append = " \
-    file://m4/m4-${PV}.tar.xz \
+    file://m4-${PV}.tar.xz \
     file://0001-Delete-test-execute_sh.patch \
 "
