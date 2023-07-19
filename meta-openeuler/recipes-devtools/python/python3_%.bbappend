@@ -19,7 +19,3 @@ CPPFLAGS:append:class-native = " -I${OPENEULER_NATIVESDK_SYSROOT}/usr/include \
 
 # Find library from nativesdk
 LDFLAGS:append:class-native = " -L${OPENEULER_NATIVESDK_SYSROOT}/usr/lib"
-
-# this is a workaround:
-# Fatal: You must get working getaddrinfo() function or you can specify "--disable-ipv6".
-EXTRA_OECONF:append:class-target = " --enable-ipv6"
