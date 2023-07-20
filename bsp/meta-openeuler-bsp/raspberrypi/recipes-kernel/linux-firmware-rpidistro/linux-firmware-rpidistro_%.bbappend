@@ -34,7 +34,7 @@ do_compile:append() {
 do_install() {
     install -d ${D}${nonarch_base_libdir}/firmware/brcm ${D}${nonarch_base_libdir}/firmware/cypress
 
-    cp ./LICENCE.broadcom_bcm43xx ${D}${nonarch_base_libdir}/firmware/LICENCE.broadcom_bcm43xx-rpidistro
+    cp ./LICENCE.broadcom_bcm43xx ${D}${nonarch_base_libdir}/firmware/LICENSE.broadcom_bcm43xx-rpidistro
 
     for fw in \
             brcmfmac43430-sdio \
@@ -65,11 +65,6 @@ do_install() {
 
     cp ./regulatory* ${D}${nonarch_base_libdir}/firmware
 }
-
-PACKAGES += "\
-    ${PN}-bcm43436 \
-    ${PN}-bcm43436s \
-"
 
 FILES:${PN}-bcm43455 += " \
     ${nonarch_base_libdir}/firmware/regulatory* \
