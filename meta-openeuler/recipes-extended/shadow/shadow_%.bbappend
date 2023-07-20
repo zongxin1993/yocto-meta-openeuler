@@ -40,7 +40,7 @@ SRC_URI[sha256sum] = "813057047499c7fe81108adcf0cffa3ad4ec75e19a80151f9cbaa458ff
 # no ${mandir} installed in openeuler
 ALTERNATIVE:${PN}-doc = ""
 
-do_install:append () {
+do_install:append:class-target () {
     # use login.defs from openeuler, we have applied these functions as poky:
     # * Enable CREATE_HOME by default: "CREATE_HOME     yes"
     # * Make the users mailbox in ~/ not /var/spool/mail by default on an embedded system: "MAIL_FILE  .mail"  and "#MAIL_DIR    /var/spool/mail"
