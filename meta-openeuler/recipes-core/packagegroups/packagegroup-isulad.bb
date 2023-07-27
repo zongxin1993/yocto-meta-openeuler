@@ -1,4 +1,7 @@
 SUMMARY = "packages for iSulad"
+
+PACKAGE_ARCH = "${MACHINE_ARCH}"
+
 inherit packagegroup
 
 PR = "r1"
