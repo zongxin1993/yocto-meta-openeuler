@@ -1083,9 +1083,6 @@ manifest_list:
   python-importlib-metadata:
     remote_url: https://gitee.com/src-openeuler/python-importlib-metadata.git
     version: 23459166b1eb538ddbdef034502db91b9d227c8b
-  python-pathlib2:
-    remote_url: https://gitee.com/src-openeuler/python-pathlib2.git
-    version: 192f4c408e560f3b3af5423b34c6983fc1a743c5
   pybind11:
     remote_url: https://gitee.com/src-openeuler/pybind11.git
     version: 7c290bcfa00902ac5d07752b24a87a970a5cb481

@@ -37,11 +37,12 @@ def get_external_libc_license(d):
    License as published by the Free Software Foundation; either
    version 2.1 of the License, or (at your option) any later version."""
                 if lictext in text:
-                    return 'LGPL-2.1+'
+                    return 'LGPL-2.1-or-later'
 
     return 'UNKNOWN'
 
 LICENSE:tcmode-external := "${@get_external_libc_license(d)}"
+COMMON_LIC_CHKSUM_LGPL-2.1-or-later = "file://${COREBASE}/meta/files/common-licenses/LGPL-2.1-or-later;md5=2a4f4fd2128ea2f65047ee63fbca9f68"
 
 require recipes-external/glibc/glibc-sysroot-setup.inc
 require recipes-external/glibc/glibc-package-adjusted.inc

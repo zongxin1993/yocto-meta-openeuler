@@ -12,7 +12,7 @@ BUGTRACKER = "https://gitee.com/openeuler/yocto-meta-openeuler"
 SECTION = "libs"
 
 ### License metadata
-LICENSE = "BSD"
+LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE.md;md5=fe0b8a4beea8f0813b606d15a3df3d3c"
 
 ### Inheritance and includes if needed
