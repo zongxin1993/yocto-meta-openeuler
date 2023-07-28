@@ -792,6 +792,9 @@ manifest_list:
   cyclonedds:
     remote_url: https://gitee.com/src-openeuler/cyclonedds.git
     version: f27e645561d9f09569cc06be645b99f5d60a476c
+  file:
+    remote_url: https://gitee.com/src-openeuler/file.git
+    version: c7ccd582bee9d30c11e7e32ec99910d88314b9e1
   foonathan-memory-vendor:
     remote_url: https://gitee.com/src-openeuler/foonathan_memory_vendor.git
     version: 32fda3aed4aa6a9e76e876d452cb6c330a658360
