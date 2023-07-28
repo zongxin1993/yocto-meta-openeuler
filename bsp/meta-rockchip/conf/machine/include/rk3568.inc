@@ -1,4 +1,4 @@
-include conf/machine/include/tune-cortexa55.inc
+require conf/machine/include/arm/armv8-2a/tune-cortexa55.inc
 MACHINE_FEATURES += "efi pci vc4graphics"
 MACHINEOVERRIDES =. "rk3568:march64le:"
 DEFAULTTUNE = "aarch64"

@@ -42,4 +42,4 @@ do_install:append(){
     cp ${B}/boot.img ${D}/boot
 }
 PACKAGES += "bootfile"
-FILES_bootfile="/boot/boot.img"
+FILES:bootfile="/boot/boot.img"
