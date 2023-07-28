@@ -20,6 +20,6 @@ do_install:append(){
     cp ../dtbs/hi3093*.dtb ${D}/boot
 }
 PACKAGES += "bootfile"
-FILES_bootfile="/boot/uImage \
+FILES:bootfile="/boot/uImage \
 ${@bb.utils.contains('MCS_FEATURES', 'openamp', '/boot/hi3093-mcs.dtb', '/boot/hi3093.dtb', d)} \
 "
