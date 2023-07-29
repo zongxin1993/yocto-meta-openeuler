@@ -27,7 +27,7 @@ FEATURE_PACKAGES_tools-debug = ""
 # remove debug-tweaks and tool_debug from IMAGE_FEATURES
 # FEATURE_PACKAGES_tools-debug in image.bbclass may do similar work, but her override it to
 # meet openeuler embedded's need.
-IMAGE_INSTALL:append = "${@bb.utils.contains_any("IMAGE_FEATURES", [ 'debug-tweaks', 'tools_debug' ], "packagegroup-core-tools-debug", "",d)}"
+IMAGE_INSTALL:append = " ${@bb.utils.contains_any("IMAGE_FEATURES", [ 'debug-tweaks', 'tools_debug' ], "packagegroup-core-tools-debug", "",d)}"
 
 # delete useless sdk depends
 FEATURE_PACKAGES:tools-sdk:remove = " packagegroup-core-sdk packagegroup-core-standalone-sdk-target"
