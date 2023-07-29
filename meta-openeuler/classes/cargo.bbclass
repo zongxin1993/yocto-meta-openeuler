@@ -316,5 +316,5 @@ rust_target[vardepsexclude] += "rust_target[vardeps]"
 EXPORT_FUNCTIONS do_configure do_compile do_install
 
 # skip riscv as they are not well supported by rust now
-COMPATIBLE_HOST_riscv64 = "null"
-COMPATIBLE_HOST_riscv32 = "null"
+COMPATIBLE_HOST:riscv64 = "null"
+COMPATIBLE_HOST:riscv32 = "null"

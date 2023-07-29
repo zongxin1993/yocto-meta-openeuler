@@ -93,4 +93,4 @@ SRC_URI += " \
 #gdb-6.6-buildid-locate-rpm-librpm-workaround.patch
 #gdb-6.6-buildid-locate-rpm-scl.patch
 
-FILES:${PN}-dev_riscv64 += "/usr/lib64"
+FILES:${PN}-dev:riscv64 += "/usr/lib64"
