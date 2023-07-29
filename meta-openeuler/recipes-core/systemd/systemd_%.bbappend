@@ -11,7 +11,7 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files/:"
 
 # feature sync with systemd_249.7.bb from poky honister
 # see https://git.yoctoproject.org/poky/tree/meta/recipes-core/systemd/systemd_249.7.bb?h=honister
-PACKAGECONFIG:append = "wheel-group"
+PACKAGECONFIG:append = " wheel-group"
 # we don't wan zstd PACKAGECONFIG += "zstd"
 PACKAGECONFIG:remove = "xz"
 PACKAGECONFIG[tpm2] = "-Dtpm2=true,-Dtpm2=false,tpm2-tss,tpm2-tss libtss2 libtss2-tcti-device"
@@ -47,8 +47,8 @@ FILES_udev += " \
 
 # depmodwrapper is not valid to do depmod in buildtime, add a service to do it in runtime as a workaround.
 # as modutils.sh is not run under systemd
-PACKAGE_BEFORE_PN:append = "${PN}-depmod "
-SRC_URI:append = "file://systemd-depmod.service"
+PACKAGE_BEFORE_PN:append = " ${PN}-depmod "
+SRC_URI:append = " file://systemd-depmod.service"
 FILES:${PN}-depmod = "${systemd_unitdir}/system/systemd-depmod.service"
 SYSTEMD_SERVICE:${PN}-depmod = "systemd-depmod.service"
 do_install:append () {
