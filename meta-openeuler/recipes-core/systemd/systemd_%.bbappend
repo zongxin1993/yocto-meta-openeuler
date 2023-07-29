@@ -22,7 +22,7 @@ PACKAGECONFIG[zstd] = "-Dzstd=true,-Dzstd=false,zstd"
 FILES:${PN}-container += "${exec_prefix}/lib/tmpfiles.d/README "
 FILES:${PN}-extra-utils += "${bindir}/systemd-sysext "
 FILES:${PN} += "${rootlibexecdir}/modprobe.d/README ${datadir}/dbus-1/system.d/org.freedesktop.home1.conf "
-FILES_udev += "${rootlibexecdir}/udev/dmi_memory_id \
+FILES:udev += "${rootlibexecdir}/udev/dmi_memory_id \
         ${rootlibexecdir}/udev/rules.d/40-elevator.rules \
         ${rootlibexecdir}/udev/rules.d/70-memory.rules \
         ${rootlibexecdir}/udev/rules.d/73-idrac.rules \
@@ -39,11 +39,6 @@ python __anonymous() {
     if bb.utils.contains('PACKAGECONFIG', 'homed', True, False, d) and not bb.utils.contains('PACKAGECONFIG', 'userdb openssl cryptsetup', True, False, d):
         bb.error("PACKAGECONFIG[homed] requires PACKAGECONFIG[userdb], PACKAGECONFIG[openssl] and PACKAGECONFIG[cryptsetup]")
 }
-# rules.d come from openeuler patches: /lib/udev/rules.d/73-idrac.rules   /lib/udev/rules.d/40-elevator.rules
-FILES_udev += " \
-        ${rootlibexecdir}/udev/rules.d/40-elevator.rules \
-        ${rootlibexecdir}/udev/rules.d/73-idrac.rules \
-        "
 
 # depmodwrapper is not valid to do depmod in buildtime, add a service to do it in runtime as a workaround.
 # as modutils.sh is not run under systemd
