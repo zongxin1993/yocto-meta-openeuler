@@ -1089,3 +1089,6 @@ manifest_list:
   pybind11:
     remote_url: https://gitee.com/src-openeuler/pybind11.git
     version: 7c290bcfa00902ac5d07752b24a87a970a5cb481
+  meson:
+    remote_url: https://gitee.com/src-openeuler/meson.git
+    version: d76179822e845ae6bc24bc434757bc032f94bb43

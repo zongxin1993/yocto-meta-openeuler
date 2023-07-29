@@ -25,7 +25,7 @@ HOSTTOOLS_NONFATAL += "automake autoreconf aclocal libtoolize m4 autoconf autohe
 ASSUME_PROVIDED += "automake-native autoconf-native libtool-native m4-native"
 
 # source file build tools
-HOSTTOOLS_NONFATAL += "cmake ninja meson"
+HOSTTOOLS_NONFATAL += "cmake ninja"
 ASSUME_PROVIDED += "cmake-native ninja-native make-native"
 
 # used by cracklib, built from cracklib-native
@@ -106,7 +106,7 @@ HOSTTOOLS_NONFATAL += "dtc"
 ASSUME_PROVIDED += "dtc-native intltool-native"
 
 # used by wayland
-ASSUME_PROVIDED += "xorgproto-native python3-mako-native expat-native"
+ASSUME_PROVIDED += "xorgproto-native expat-native"
 
 # used by tcl
 ASSUME_PROVIDED += "tcl-native"
