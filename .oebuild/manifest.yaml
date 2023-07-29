@@ -431,7 +431,7 @@ manifest_list:
     version: 6d99588db478ab56965bd2d8eba574e607353596
   mcs:
     remote_url: https://gitee.com/openeuler/mcs.git
-    version: 40903907fd8ae7cdd9c650e151dc1bc4880ea35b
+    version: 5715904d0535eafceea8aee2d3431cd91faccf8c
   mcs-x86:
     remote_url: https://gitee.com/openeuler/mcs.git
     version: 6767a54c585da6cfd55d18f65dcbf875fcbd6c8d

@@ -3,7 +3,7 @@ DESCRIPTION = "iSulad is a lightweight container runtime daemon which is designe
                 Cloud infrastructure.iSulad has the characteristics of light, fast and not limited \
                 by hardware specifications and architecture, and can be applied more widely"
 HOMEPAGE = "https://gitee.com/openeuler/iSulad"
-LICENSE = "MulanPSLv2"
+LICENSE = "MulanPSL-2.0"
 
 LIC_FILES_CHKSUM = "file://LICENSES/LICENSE;md5=1acb172ffd3d252285dd1b8b8459941e"
 

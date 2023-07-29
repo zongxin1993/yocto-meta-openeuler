@@ -8,8 +8,8 @@ BUGTRACKER = "https://gitee.com/openeuler/yocto-meta-openeuler"
 SECTION = "libs"
 
 ### License metadata
-LICENSE = "MulanPSLv2"
-LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/MulanPSL-2.0;md5=74b1b7a7ee537a16390ed514498bf23c"
+LICENSE = "MulanPSL-2.0"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=74b1b7a7ee537a16390ed514498bf23c"
 
 
 ### Inheritance and includes if needed
