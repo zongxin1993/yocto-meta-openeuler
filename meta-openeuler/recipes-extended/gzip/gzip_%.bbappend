@@ -8,9 +8,6 @@ PV = "1.12"
 # Use the source packages from openEuler
 SRC_URI:remove = "${GNU_MIRROR}/gzip/${BP}.tar.gz"
 
-# the patch must apply, else occurs error about compile faild
-# SRC_URI:remove:class-target = "file://wrong-patch-fix.patch"
-
 SRC_URI:prepend = "file://${BP}.tar.xz \
            file://backport-gzip-detect-invalid-input.patch \
            file://backport-gzip-test-invalid-input-bug.patch \
