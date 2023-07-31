@@ -15,6 +15,7 @@ DEPENDS:remove = "makedepend-native"
 SRC_URI:remove = " \
         file://0002-meson.build-make-TLS-ELF-optional.patch \
         file://0001-gallium-dri-Make-YUV-formats-we-re-going-to-emulate-.patch \
+        file://0001-Revert-egl-wayland-deprecate-drm_handle_format-and-d.patch \
 "
 
 # files, patches that come from openeuler

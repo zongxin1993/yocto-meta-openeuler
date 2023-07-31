@@ -273,9 +273,6 @@ manifest_list:
   libdrm:
     remote_url: https://gitee.com/src-openeuler/libdrm.git
     version: e99a6dcd1733e76cfd850a4ab9b442b07602689b
-  liberation-fonts:
-    remote_url: https://gitee.com/src-openeuler/liberation-fonts.git
-    version: 43f18be3006ebae150aaff775097f571e70684a2
   libestr:
     remote_url: https://gitee.com/src-openeuler/libestr.git
     version: 57a0491cddae78af79c93af543153d2e147a8b08
