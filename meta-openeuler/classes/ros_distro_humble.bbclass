@@ -20,7 +20,7 @@ addhandler ros_libdir_set
 ros_libdir_set[eventmask] = "bb.event.RecipePreFinalise"
 
 # some depend pkgs may not inherit this class, it may under lib64 of oldroslibdir.
-PKG_CONFIG_PATH:append:class-target += ":${PKG_CONFIG_SYSROOT_DIR}/${oldroslibdir}/pkgconfig"
+PKG_CONFIG_PATH:append:class-target = " :${PKG_CONFIG_SYSROOT_DIR}/${oldroslibdir}/pkgconfig"
 
 # fix _sysconfigdata not found error, after inherit setuptools3, see yocto-poky/meta/classes/python3targetconfig.bbclass
 do_install:remove:class-target() {
