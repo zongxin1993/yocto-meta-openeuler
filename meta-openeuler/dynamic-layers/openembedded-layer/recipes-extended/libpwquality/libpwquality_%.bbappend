@@ -25,3 +25,13 @@ EXTRA_OECONF:remove = "--with-python-rev=${PYTHON_BASEVERSION} \
 "
 EXTRA_OECONF += "--enable-python-bindings=no \
 "
+
+# Set pam plugin directory to ${base_libdir}/security as this is the
+# default setting in pam recipe. 
+# Reference: http://cgit.openembedded.org/meta-openembedded/commit/meta-oe/recipes-extended/libpwquality?id=ac988457c8dc30e1cc1600c27af308b9d802b5f5
+EXTRA_OECONF += "--with-securedir=${base_libdir}/security \
+"
+FILES:${PN} += "${base_libdir}/security/pam_pwquality.so"
+FILES:${PN}-dbg += "${base_libdir}/security/.debug"
+FILES:${PN}-staticdev += "${base_libdir}/security/pam_pwquality.a"
+FILES:${PN}-dev += "${base_libdir}/security/pam_pwquality.la"
