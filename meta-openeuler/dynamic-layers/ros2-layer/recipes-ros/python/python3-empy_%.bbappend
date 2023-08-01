@@ -2,6 +2,8 @@
 
 OPENEULER_LOCAL_NAME = "python3-empy"
 
+inherit alter_setup
+
 PV = "3.3.4"
 
 LIC_FILES_CHKSUM = "file://README;md5=10d1c4f6d15ab0aa52e80cc7d6ca0959"
