@@ -25,3 +25,11 @@ EXTRA_OECONF:remove = "--with-python-rev=${PYTHON_BASEVERSION} \
 "
 EXTRA_OECONF += "--enable-python-bindings=no \
 "
+
+EXTRA_OECONF += "--with-securedir=${base_libdir}/security \
+"
+# we use lib64 instead of /usr/lib64 about pam path
+FILES:${PN} += "${base_libdir}/security/pam_pwquality.so"
+FILES:${PN}-dbg += "${base_libdir}/security/.debug"
+FILES:${PN}-staticdev += "${base_libdir}/security/pam_pwquality.a"
+FILES:${PN}-dev += "${base_libdir}/security/pam_pwquality.la"
