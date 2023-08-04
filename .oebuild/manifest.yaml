@@ -569,7 +569,7 @@ manifest_list:
     version: cb041fe487585defd152683ca01d5cbc4823b3b1
   python-setuptools:
     remote_url: https://gitee.com/src-openeuler/python-setuptools.git
-    version: d0e1389b0c06f3697d292475fd9a873590fe592c
+    version: 7993277c2e89f65524566a6eb246e3235b1126ff
   python-setuptools_scm:
     remote_url: https://gitee.com/src-openeuler/python-setuptools_scm.git
     version: a0a7f860f9a33c31a0ec8e4f7990e7afce043d9a
@@ -1079,10 +1079,10 @@ manifest_list:
     version: 5ffa7fbab36e9c446a7633e360776767b9886c0e
   python-zipp:
     remote_url: https://gitee.com/src-openeuler/python-zipp.git
-    version: 588865be5c5c1aa4668076310a620e761160a626
+    version: 4be6d4259e53aa6c4e897e61f3ccf60e231a7c0d
   python-importlib-metadata:
     remote_url: https://gitee.com/src-openeuler/python-importlib-metadata.git
-    version: 23459166b1eb538ddbdef034502db91b9d227c8b
+    version: 91f1918eb91a78ee142eb2d9b4aca436614b0426
   pybind11:
     remote_url: https://gitee.com/src-openeuler/pybind11.git
     version: 7c290bcfa00902ac5d07752b24a87a970a5cb481
