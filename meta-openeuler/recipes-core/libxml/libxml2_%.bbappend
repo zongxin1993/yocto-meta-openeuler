@@ -26,12 +26,6 @@ SRC_URI:prepend = "file://${BP}.tar.xz \
            file://backport-parser-Fix-potential-memory-leak-in-xmlParseAttValue.patch \
            "
 
-
-# remove python config, because openEuler not support python yet.
-PACKAGECONFIG = "${@bb.utils.contains('DISTRO_FEATURES', 'python', 'python3', '', d)} \
-		 ${@bb.utils.filter('DISTRO_FEATURES', 'ipv6', d)} \
-"
-
 # remove test configuration, because test package not in openEuler
 do_configure:remove() {
 	find ${S}/xmlconf/ -type f -exec chmod -x {} \+
