@@ -1,45 +1,59 @@
-# add recipes-kernel path to find patch and defconfig
-FILESEXTRAPATHS:append := "${THISDIR}/files/:"
-# add patch prebuild tools and logo
-SRC_URI:append = " \
-    file://config/ \
-    file://patches/0000-rk3568-kernel.patch.gz;name=rk3568-kernel-patch \
-    file://tools \
-    file://logo \
-"
+# Copyright (C) 2019, Fuzhou Rockchip Electronics Co., Ltd
+# Released under the MIT license (see COPYING.MIT for the terms)
 
-# patches for ryd-3568
-SRC_URI:append:ryd-3568 = " \
-    file://patches/0001-rk3568-8897-dts.patch \
-    file://patches/0002-ryd-gpio-control.patch \
-    "
-# mcs patch for ok3568 devicetree
-SRC_URI:append = " \
-    ${@bb.utils.contains('MCS_FEATURES', 'openamp', 'file://patches/0003-ok3568-support-mcs.patch', '', d)} \
-"
+inherit python3-dir
 
-# more support of device is comming. so we documented this patch md5sum.
-SRC_URI[rk3568-kernel-patch.md5sum] = "7643792b2483b3156dbc349d6fd41ef9"
+DEPENDS:append = " openssl-native lz4-native ${PYTHON_PN}-native"
 
-# add patch tool to solve patch apply
-PATCHTOOL = "git"
+LINUX_VERSION_EXTENSION ?= "-rockchip-${LINUX_KERNEL_TYPE}"
 
-OPENEULER_KERNEL_CONFIG = "../config/${MACHINE}/defconfig-kernel"
+PATCHPATH = "${THISDIR}/${BPN}_${LINUX_VERSION}"
+inherit auto-patch
 
-# add method to do_compile task to produce bootable Image
-do_compile:append:rk3568(){
-    cp ../logo/* ./
-    scripts/mkkrnlimg ${KERNEL_OUTPUT_DIR}/Image kernel.img
-    ../tools/mkimg --dtb ${RK3568_KERNEL_DTB_NAME}
-    sed -e "s:path_to_kernel:${WORKDIR}\/build:g" -e "s:dtb_name:${RK3568_KERNEL_DTB_NAME}:g" \
-        ${WORKDIR}/tools/its_config > .tmp_its_config
-    ../tools/mkimage -f .tmp_its_config -E -p 0x800 boot.img
-    rm -rf .tmp_its_config
+KCONFIG_MODE ?= "--alldefconfig"
+
+# Make sure we use /usr/bin/env ${PYTHON_PN} for scripts
+do_patch:append() {
+	for s in `grep -rIl python ${S}/scripts`; do
+		sed -i -e '1s|^#!.*python[23]*|#!/usr/bin/env ${PYTHON_PN}|' $s
+	done
 }
 
-# add boot.img to $D
-do_install:append(){
-    cp ${B}/boot.img ${D}/boot
+do_compile:prepend() {
+	export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${STAGING_LIBDIR_NATIVE}
 }
-PACKAGES += "bootfile"
-FILES:bootfile="/boot/boot.img"
+
+do_compile_kernelmodules:prepend() {
+        export PKG_CONFIG_DIR="${STAGING_DIR_NATIVE}${libdir_native}/pkgconfig"
+        export PKG_CONFIG_PATH="$PKG_CONFIG_DIR:${STAGING_DATADIR_NATIVE}/pkgconfig"
+        export PKG_CONFIG_LIBDIR="$PKG_CONFIG_DIR"
+        export PKG_CONFIG_SYSROOT_DIR=""
+	export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${STAGING_LIBDIR_NATIVE}
+}
+
+# Hack for rockchip style images
+ROCKCHIP_KERNEL_IMAGES = "boot.img zboot.img"
+KERNEL_IMAGETYPES:append = " ${ROCKCHIP_KERNEL_IMAGES}"
+python () {
+    if not d.getVar('KERNEL_DEVICETREE'):
+        raise bb.parse.SkipPackage('KERNEL_DEVICETREE is not specified!')
+
+    # Use rockchip stype target, which is '<dts(w/o suffix)>.img'
+    d.setVar('KERNEL_IMAGETYPE_FOR_MAKE', ' ' + d.getVar('KERNEL_DEVICETREE').replace('rockchip/', '').replace('.dtb', '.img'));
+}
+
+# Force regenerating defconfig
+do_kernel_metadata:prepend() {
+	rm -f ${WORKDIR}/defconfig
+}
+
+# Link rockchip style images
+do_install:prepend() {
+	for image in ${ROCKCHIP_KERNEL_IMAGES};do
+		ln -sf ${B}/${image} ${B}/arch/${ARCH}/boot/
+	done
+
+	if [ "x${RK_USE_COMPRESSED_KERNEL}" = "x1" ]; then
+		ln -sf zboot.img ${B}/arch/${ARCH}/boot/boot.img
+	fi
+}
