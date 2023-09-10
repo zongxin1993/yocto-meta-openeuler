@@ -1,5 +1,43 @@
 # this class contains global method and variables for openeuler embedded
 
+## openeuler.bbclass is inherited after base.bbclass,
+## some definitions in it can be overridden here
+
+# for openeuler embedded no need to create DL_DIR, here is
+# ${OPENEULER_SP_DIR}/${OPENEULER_REPO_NAME}, OPENEULER_SP_DIR
+# is already created, and OPENEULER_REPO_NAME will be created
+# in openeuler fetch or fetch
+# overrides the definition in base.bbclass
+do_fetch[dirs] = "${OPENEULER_SP_DIR}"
+
+# we can't user poky's original get_checksum_file_list in base.bbclass
+# because of the src repo organization and special handling of DL_DIR
+# here we override it with openeuler's implementation.
+def openeuler_get_checksum_file_list(d):
+    """ Get a list of files checksum in SRC_URI
+
+    Returns the resolved local paths of all local file entries in
+    SRC_URI (files in src repo will not be included) as a space-separated
+    string
+    """
+
+    fetch = bb.fetch2.Fetch([], d, cache = False, localonly = True)
+
+    dl_dir = d.getVar('DL_DIR')
+    filelist = []
+    for u in fetch.urls:
+        if u.startswith("file://"):
+            ud = fetch.ud[u]
+            if ud:
+                paths = ud.method.localpaths(ud, d)
+                for f in paths:
+                    if os.path.exists(f) and not f.startswith(dl_dir):
+                        filelist.append(f + ":True")
+
+    return " ".join(filelist)
+
+do_fetch[file-checksums] += "${@openeuler_get_checksum_file_list(d)}"
+
 # set_rpmdpes is used to set RPMDEPS which comes from nativesdk/host
 python set_rpmdeps() {
     import subprocess
@@ -120,8 +158,6 @@ python do_openeuler_fetch() {
         return
 
     repo_dir = os.path.join(srcDir, localName)
-    if not os.path.exists(repo_dir):
-        os.mkdir(repo_dir)
     repo_url = os.path.join(gitUrl, repoName)
     except_str = None
 
