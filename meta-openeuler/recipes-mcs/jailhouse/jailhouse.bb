@@ -10,6 +10,7 @@ PV = "0.12"
 SRC_URI = " \
 	file://${BP}.tar.gz \
 	file://cells/ \
+	file://0001-driver-Add-support-for-remote-proc.patch \
 	"
 
 DEPENDS = " \
@@ -68,6 +69,12 @@ do_install() {
 		install -d ${D}${DTS_DIR}
 		install -m 0644 ${B}/configs/${ARCH}/dts/*${JH_CELLS}.dtb ${D}${DTS_DIR}
 	fi
+}
+
+# export symbol for mcs
+SYSROOT_PREPROCESS_FUNCS += "additional_populate_sysroot"
+additional_populate_sysroot() {
+    install ${B}/Module.symvers ${SYSROOT_DESTDIR}
 }
 
 PACKAGE_BEFORE_PN = "kernel-module-jailhouse pyjailhouse ${PN}-tools ${PN}-demos"
