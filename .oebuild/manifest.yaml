@@ -1166,7 +1166,7 @@ manifest_list:
     version: 4fdd67497ed96fc717426b1be46fda564edd80f9
   glibc:
     remote_url: https://gitee.com/src-openeuler/glibc.git
-    version: 55046a0afb74d71655cbb4120c6221ee03640717
+    version: 10ebd73eb9a410787c84020a95862cb22160345f
   libXau:
     remote_url: https://gitee.com/src-openeuler/libXau.git
     version: 0dec19ac9813c179b6aa446e1dbfbd3864141a0f
