@@ -158,7 +158,7 @@ python do_openeuler_fetch() {
         return
 
     repo_dir = os.path.join(srcDir, localName)
-    repo_url = os.path.join(gitUrl, repoName)
+    repo_url = os.path.join(gitUrl, repoName + ".git")
     except_str = None
 
     try:
@@ -167,7 +167,9 @@ python do_openeuler_fetch() {
             manifest_list = get_manifest(d.getVar("MANIFEST_DIR"))
             if localName in manifest_list:
                 repo_item = manifest_list[localName]
-                download_repo(repo_dir = repo_dir, repo_url = repo_item['remote_url'], version = repo_item['version'])
+                download_repo(repo_dir = repo_dir, repo_url = repo_item['remote_url'], repo_branch = repoBranch, version = repo_item['version'])
+            else:
+                download_repo(repo_dir = repo_dir, repo_url = repo_url, repo_branch = repoBranch)
         else:
             bb.fatal("openEuler Embedded build need manifest.yaml")
     except GitError:
@@ -204,8 +206,8 @@ def init_repo_dir(repo_dir):
         wr.set_value('http', 'sslverify', 'false').release()
     return repo
 
-# init repo in repo_dir from manifest file
-def download_repo(repo_dir, repo_url ,version = None):
+# init repo in repo_dir
+def download_repo(repo_dir, repo_url , repo_branch, version = None):
     import git
     from git import GitCommandError
 
@@ -223,11 +225,19 @@ def download_repo(repo_dir, repo_url ,version = None):
         remote_name = "upstream"
         remote = git.Remote.add(repo = repo, name = remote_name, url = repo_url)
     
-    remote.fetch(version, depth=1)
-    # if repo is modified, restore it
-    if repo.is_dirty():
-        repo.git.checkout(".")
-    repo.git.checkout(version)
+    # determine whether the variable version is None
+    if version is not None: 
+        remote.fetch(version, depth=1)
+        # if repo is modified, restore it
+        if repo.is_dirty():
+            repo.git.checkout(".")
+        repo.git.checkout(version)
+    else:
+        remote.fetch()
+        # if repo is modified, restore it
+        if repo.is_dirty():
+            repo.git.checkout(".")
+        repo.git.checkout(repo_branch)
 
     bb.utils.unlockfile(lf)
 
