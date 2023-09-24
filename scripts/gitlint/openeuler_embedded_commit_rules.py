@@ -106,11 +106,20 @@ class TitleLength(LineRule):
 
     def validate(self, line, _commit):
         result = []
-        if line.startswith("revert"):
-            max_length = self.options['line-max-length-revert'].value
-        else:
-            max_length = self.options['line-max-length-no-revert'].value
-            self.message = "Title exceeds max length ({0}>{1}) when revert"
+        try：
+            if line.startswith("revert"):
+                max_length = self.options['line-max-length-revert'].value
+            else:
+                max_length = self.options['line-max-length-no-revert'].value
+                self.message = "Title exceeds max length ({0}>{1}) when revert"
+        except KeyError as e:
+            result.append(RuleViolation(self.id, f"Error: {e}", line))
+            return result
+            
+        except Exception as ex:
+            result.append(RuleViolation(self.id, f"An unexpected error occurred: {ex}", line))
+            return result 
+
         if len(line) > max_length:
             result.append(RuleViolation(self.id, self.message.format(len(line), max_length), line))
 
