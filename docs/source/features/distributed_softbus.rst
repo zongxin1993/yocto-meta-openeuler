@@ -33,7 +33,7 @@ OpenHarmony主要面向强交互等需求的智能终端、物联网终端和工
 
 软总线依赖于设备认证、IPC、日志和系统参数（SN号）等周边模块，嵌入式系统中将这些依赖模块进行了样板性质的替换，以实现软总线基本功能。实际的周边模块功能实现，还需要用户根据实际业务场景进行丰富和替换，以拓展软总线能力。
 
-应用指南
+嵌入式软总线应用指南
 **************
 
 **部署示意**
@@ -588,10 +588,7 @@ softbus客户端API头文件在嵌入式版本提供的sdk中对外开放，可�
 
     测试结束后，输入字符's'退出双端程序
 
-可信设备添加
-**************
-
-**背景**
+**可信设备添加**
 
 软总线在创建连接的过程中，会调用hichain模块的认证接口，与对端的设备进行认证操作。hichain模块为OpenHarmony提供设备认证能力，支持通过点对点认证方式创建可信群组。
 
@@ -1021,8 +1018,7 @@ hichain的客户端API头文件在嵌入式版本提供的sdk中对外开放，�
 2.与OpenHarmony互联时，可通过上述方式创建双方信任的可信群组和成员，也可使用分布式硬件中的device manger模块进行更便捷的可信群组创建，该模块兼容OpenHarmony的pin码弹窗等功能，但需要openEuler额外支持。
 
 
-全量编译指导
-**************
+**全量编译指导**
 
 当用户有需求自定义修改软总线功能模块时，可使用全量编译方式构建软总线的各个子模块。
 
@@ -1146,10 +1142,126 @@ hichain的客户端API头文件在嵌入式版本提供的sdk中对外开放，�
 
 6.在另一台设备中重复以上操作，若在看到对端client收到了hello world字符串，便说明设备间软总线通信OK
 
+基于isula的软总线应用指南
+*************************
+
+在嵌入式23.09版本中，利用isula，制作了预装3.2版本软总线容器镜像，可以在嵌入式环境中通过几行命令就可以完成软总线复杂依赖的安装部署，以及与嵌入式、服务器设备的通信测试。此版本软总线使用binder作为IPC底层驱动，在树莓派静默无业务场景下，资源占用由原来的CPU单核80%降低到1%，并且为支持上层的分布式数据模块的拓展打下了基础。
+
+.. note::
+
+    * 由于底层通信机制不同，只支持3.2版本软总线相互通信，暂不支持跨版本通信。
+
+    * 本次使用的容器基于openEuler-22.03-LTS-SP2边缘服务器版本镜像制作。
+
+    * 当前版本只支持使用树莓派设备。
+    
+	* 不支持在宿主机和容器同时运行软总线服务端，会导致通信冲突。
+
+**宿主机环境准备**
+
+以下操作均在宿主机执行
+
+1.使用对isula支持较完善的systemd嵌入式镜像烧录树莓派
+
+.. code-block:: console
+
+  http://repo.openeuler.org/openEuler-23.09/embedded_img/aarch64/raspberrypi4-64-systemd/openeuler-image-raspberrypi4-64-20230921165629.rootfs.rpi-sdimg
+
+参考:
+
+ `嵌入式设备网络配置 <https://openeuler.gitee.io/yocto-meta-openeuler/master/linux/network/network_config.html>`_
+
+ `树莓派SD卡烧录指导 <https://gitee.com/openeuler/raspberrypi/blob/master/documents/%E5%88%B7%E5%86%99%E9%95%9C%E5%83%8F.md#%E5%88%B7%E5%86%99-sd-%E5%8D%A1>`_
+
+
+2.挂载树莓派嵌入式镜像自带的binder驱动
+
+.. code-block:: console
+
+  mkdir /dev/binderfs
+  mount -t binder binder /dev/binderfs
+
+
+3.由于需要使用binder能力，关闭selinux
+
+.. code-block:: console
+
+  setenforce 0
+
+4.后台运行isulad服务
+
+.. code-block:: console
+
+  isulad &
+
+5.下载软总线镜像
+
+.. code-block:: console
+
+  cd /home; wget http://repo.openeuler.org/openEuler-23.09/embedded_img/dsoftbus_isula_image/softbus.xz
+
+6.使用isula加载软总线镜像
+
+.. code-block:: console
+
+  isula import /home/softbus.xz softbus
+
+7.查看加载的镜像ID
+
+.. code-block:: console
+
+  isula images
+
+8.参考查询到的IMAGE ID，以host网络、特权模式启动并进入软总线容器，映射binder路径及软总线端口
+
+.. code-block:: console
+
+  isula run  -it  --privileged --net=host --name=softbus  -v /dev/binderfs/binder:/dev/binder  -p 5684:5684/udp 2edfcbc18543  bash
+
+**容器中启动并测试软总线**
+
+以下操作均在宿主机执行
+
+1.在容器中写SN号，注意此SN号是本设备标识，需要与其他设备不一致，建议使用本机IP
+
+.. code-block:: console
+
+  echo  192.168.8.115  > /etc/SN
+
+2.启动软总线
+
+.. code-block:: console
+
+  /system/bin/start_services.sh all
+
+3.启动容器内预制的客户端demo用于测试，客户端也可以参考上文应用示例章节编写
+
+.. code-block:: console
+
+  /system/bin/softbus_client
+
+4.在另一台设备中重复以上操作
+
+5.在某一台设备中打开所有session连接
+
+.. code-block:: console
+
+  openA
+
+6.发送消息给所有session
+
+.. code-block:: console
+
+  sendA "hello world"
+
+7.若在看到对端client收到了"hello world"字符串，便说明设备间软总线通信OK
+
+
 限制约束
 **************
 
 1.支持wifi和有限的标准以太局域网下的coap设备发现和传输。蓝牙目前仅支持ble发现，ble发现需要开启蓝牙，参照 :ref:`bluetooth_config` ，br连接和通信功能在后续版本中持续支持。
+2.目前基于容器的3.2版本软总线目前暂不支持蓝牙发现能力。
 
 FAQ
 ****
