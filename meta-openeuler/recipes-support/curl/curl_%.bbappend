@@ -15,3 +15,10 @@ SRC_URI = " \
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=db8448a1e43eb2125f7740fc397db1f6"
 
+# It is not safe to pack crt files in rootfs by default, if you sure what you want, comment these lines:
+EXTRA_OECONF:remove = " \
+        --with-ca-bundle=${sysconfdir}/ssl/certs/ca-certificates.crt \
+        --without-libmetalink \
+"
+RRECOMMENDS:lib${BPN}:remove = "ca-certificates"
+
