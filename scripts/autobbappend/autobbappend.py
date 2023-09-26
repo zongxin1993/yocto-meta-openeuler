@@ -67,7 +67,7 @@ def search_specfile(spec):
 
 def search_package(spec_dir):
     repo_path = os.path.dirname(spec_dir)
-    f = open(secure_filename(repo_path))
+    f = open(secure_filename(repo_path),'r')
     count = -1
     for count, line in enumerate(f.readlines()):
         count += 1
@@ -80,6 +80,7 @@ def search_package(spec_dir):
             if package.find("%{name}") != -1: package = package.replace("%{name}", name)
             if package.find("%{reldate}") != -1: package = package.replace("%{reldate}", reldate)
             package_dir = os.path.abspath(repo_path+"/"+package)
+    f.close()
     if os.path.exists(package_dir) == False:
         print("The following packages were found:")
         package_dir = search_files(repo_path,[name,version],[".tar",".gz",".bz2",".xz"])
@@ -137,11 +138,12 @@ def notes_bb_dir(bb_dir):
 
 
 def read_name(spec_dir):
-    f = open(secure_filename(spec_dir))
+    f = open(secure_filename(spec_dir),'r')
     count = -1
     for count, line in enumerate(f.readlines()):
         count += 1
         if line.find('Name:') != -1: name = line.split(":")[1].strip()
+    f.close()
     return name
 
 
@@ -154,7 +156,7 @@ def read_repo_name(spec_dir):
 
 
 def read_packageversion(spec_dir,package_dir):
-    f = open(secure_filename(spec_dir))
+    f = open(secure_filename(spec_dir),'r')
     count = -1
     for count, line in enumerate(f.readlines()):
         count += 1
@@ -162,6 +164,7 @@ def read_packageversion(spec_dir,package_dir):
     package = os.path.splitext(os.path.basename(package_dir))
     package = package[0].split('.tar')[0]
     parts = package.split('-')
+    f.close()
     if len(parts) == 2:
         package_version = parts[1]
         if version != package_version:
@@ -172,12 +175,12 @@ def read_packageversion(spec_dir,package_dir):
 
 def read_oldPV(pv,bb_dir):
     if pv == "git":
-        bb_dir = secure_filename(bb_dir)
-        f = open(bb_dir)
+        f = open(secure_filename(bb_dir),'r')
         count = -1
         for count, line in enumerate(f.readlines()):
             count += 1
             if line.find('PV = ') != -1: pv = line.split('"')[1].strip()
+        f.close()
     return pv
 
 
@@ -187,7 +190,7 @@ def update_PV(packageversion,bbversion):
 
 
 def read_patch(spec_dir):
-    file = open(secure_filename(spec_dir))
+    file = open(secure_filename(spec_dir),'r')
     lines = file.readlines()
     result = []
     for i in lines:
@@ -195,6 +198,7 @@ def read_patch(spec_dir):
             result.append(i)
     m = '                   file://'
     a = r"\one"
+    file.close()
     result2 = []
     for i in result:
         i = i.split()
@@ -212,7 +216,7 @@ def read_patch(spec_dir):
 def read_original_source(bb_dir):
     global remote_url
     remote_url = None
-    f = open(secure_filename(bb_dir))
+    f = open(secure_filename(bb_dir),'r')
     count = -1
     for count, line in enumerate(f.readlines()):
         count += 1
@@ -220,6 +224,7 @@ def read_original_source(bb_dir):
             remote_url = line.strip('SRC_URI = "')
             remote_url = remote_url.split('"')[0].strip()#Delete the '"' at the end
             remote_url = remote_url.split("\\")[0].strip()#Delete the ' \' at the end
+    f.close()
     return remote_url
 
 
@@ -293,6 +298,7 @@ def decompression_path(package_dir):
     if name.find(packageversion) != -1: name = name.replace(packageversion, '${PV}')
     if name.find(bpn) != -1: name = name.replace(bpn,'${BPN}')
     if name.find('${BPN}-${PV}') != -1: name = name.replace('${BPN}-${PV}','${BP}')
+    tar.close()
     return name
 
 #From:/yocto-poky/meta/lib/oe/utils.py
@@ -381,7 +387,7 @@ class BuildData:
             BP = '${BP}',
             BPN = '${BPN}',
             ))
- 
+        template_file.close()
         # Write code to file
         if not os.path.exists(bbappend:path):os.makedirs(bbappend:path)
         filePath = bbappend:path+'/'+bpn+'_%.bbappend'
