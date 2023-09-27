@@ -1,2 +1,2 @@
-# startup options for the server
+# startup options for the server ere
 OPTIONS="-u bind"
