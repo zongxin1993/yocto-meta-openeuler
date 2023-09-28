@@ -1,0 +1,2037 @@
+From b21dfa235654607b1eb619f5d56661ac385a4007 Mon Sep 17 00:00:00 2001
+From: Lihui Yan <roobtyan@qq.com>
+Date: Wed, 27 Sep 2023 17:58:14 +0800
+Subject: [PATCH] =?UTF-8?q?=E6=96=B0=E5=A2=9E=E8=93=9D=E7=89=99=E8=BF=9E?=
+ =?UTF-8?q?=E6=8E=A5=E5=92=8C=E4=BC=A0=E8=BE=93=E5=8A=9F=E8=83=BD?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ bluez_adapter/ble_gatt_characteristic.c       | 133 ++++
+ bluez_adapter/ble_gatt_descriptor.c           |  53 ++
+ .../include/ble_gatt_characteristic.h         |  56 ++
+ bluez_adapter/include/ble_gatt_descriptor.h   |  31 +
+ bluez_adapter/include/ble_gatt_service.h      |  35 +
+ bluez_adapter/include/ohos_bt_adapter_gatt.h  | 114 +++
+ bluez_adapter/include/ohos_bt_gatt_client.h   |  78 ++
+ bluez_adapter/include/ohos_bt_gatt_server.h   | 100 +++
+ bluez_adapter/include/uuid.h                  | 132 ++++
+ bluez_adapter/ohos_bt_gatt_client.c           | 466 +++++++++++
+ bluez_adapter/ohos_bt_gatt_server.c           | 730 ++++++++++++++++++
+ 11 files changed, 1928 insertions(+)
+ create mode 100644 bluez_adapter/ble_gatt_characteristic.c
+ create mode 100644 bluez_adapter/ble_gatt_descriptor.c
+ create mode 100644 bluez_adapter/include/ble_gatt_characteristic.h
+ create mode 100644 bluez_adapter/include/ble_gatt_descriptor.h
+ create mode 100644 bluez_adapter/include/ble_gatt_service.h
+ create mode 100644 bluez_adapter/include/ohos_bt_adapter_gatt.h
+ create mode 100644 bluez_adapter/include/ohos_bt_gatt_client.h
+ create mode 100644 bluez_adapter/include/ohos_bt_gatt_server.h
+ create mode 100644 bluez_adapter/include/uuid.h
+ create mode 100644 bluez_adapter/ohos_bt_gatt_client.c
+ create mode 100644 bluez_adapter/ohos_bt_gatt_server.c
+
+diff --git a/bluez_adapter/ble_gatt_characteristic.c b/bluez_adapter/ble_gatt_characteristic.c
+new file mode 100644
+index 0000000..4713f6e
+--- /dev/null
++++ b/bluez_adapter/ble_gatt_characteristic.c
+@@ -0,0 +1,133 @@
++#include "ble_gatt_characteristic.h"
++#include "ohos_bt_def.h"
++#include "ohos_bt_adapter_gatt.h"
++
++GattCharacteristic *GattCharacteristic_create(const UUID *uuid, int permissions, int properties)
++{
++    GattCharacteristic *characteristic = (GattCharacteristic *)malloc(sizeof(GattCharacteristic));
++    characteristic->writeType = 0;
++    characteristic->handle = 0;
++    characteristic->permissions = permissions;
++    characteristic->properties = properties;
++    characteristic->service = NULL;
++    characteristic->value = NULL;
++    characteristic->length = 0;
++    characteristic->numDescriptors = 0;
++    characteristic->uuid = *uuid;
++    return characteristic;
++}
++
++void GattCharacteristic_addDescriptor(GattCharacteristic *characteristic, GattDescriptor *descriptor)
++{
++    if (characteristic == NULL || descriptor == NULL) {
++        perror("GattCharacteristic_addDescriptor param is invalid");
++        return;
++    }
++
++    characteristic->descriptors[characteristic->numDescriptors] = *descriptor;
++    characteristic->numDescriptors++;
++}
++
++GattDescriptor *GattCharacteristic_getDescriptor(GattCharacteristic *characteristic, const UUID *uuid)
++{
++    if (uuid == NULL || characteristic == NULL) {
++        perror("invalid param");
++        return NULL;
++    }
++
++    for (size_t i = 0; i <= characteristic->numDescriptors; i++) {
++        if (UUID_Equals(&(characteristic->descriptors[i].uuid_), uuid)) {
++            return &characteristic->descriptors[i];
++        }
++    }
++
++    return NULL;
++}
++
++int GattCharacteristic_setWriteType(GattCharacteristic *characteristic, uint8_t type)
++{
++    if (characteristic == NULL || (type != DEFAULT && type != NO_RESPONSE && type != SIGNED)) {
++        perror("GattCharacteristic_addDescriptor param is invalid");
++        return GATT_FAILURE;
++    }
++    characteristic->writeType = type;
++    return GATT_SUCCESS;
++}
++
++int GattCharacteristic_setValue(GattCharacteristic *characteristic, const uint8_t *values, size_t length)
++{
++    if (characteristic == NULL || length == 0) {
++        perror("param is invalid");
++        return GATT_FAILURE;
++    }
++
++    characteristic->value = (uint8_t *)malloc(length);
++    if (characteristic->value == NULL) {
++        perror("Failed to allocate memory for characteristic value");
++        return GATT_FAILURE;
++    }
++    memcpy(characteristic->value, values, length);
++    characteristic->length = length;
++    return GATT_SUCCESS;
++}
++
++const uint8_t *GattCharacteristic_getValue(const GattCharacteristic *characteristic, size_t *size)
++{
++    if (characteristic == NULL) {
++        perror("param is invalid");
++        return NULL;
++    }
++    *size = characteristic->length;
++    return characteristic->value;
++}
++
++uint16_t GattCharacteristic_getHandle(const GattCharacteristic *characteristic)
++{
++    if (characteristic == NULL) {
++        perror("param is invalid");
++        return -1;
++    }
++    return characteristic->handle;
++}
++
++int GattCharacteristic_getPermissions(const GattCharacteristic *characteristic)
++{
++    if (characteristic == NULL) {
++        perror("param is invalid");
++        return -1;
++    }
++    return characteristic->permissions;
++}
++
++const UUID *GattCharacteristic_getUuid(const GattCharacteristic *characteristic)
++{
++    if (characteristic == NULL) {
++        perror("param is invalid");
++        return NULL;
++    }
++    return &characteristic->uuid;
++}
++GattService *GattCharacteristic_getService(const GattCharacteristic *characteristic)
++{
++    if (characteristic == NULL) {
++        perror("param is invalid");
++        return NULL;
++    }
++    return characteristic->service;
++}
++int GattCharacteristic_getProperties(const GattCharacteristic *characteristic)
++{
++    if (characteristic == NULL) {
++        perror("param is invalid");
++        return -1;
++    }
++    return characteristic->properties;
++}
++int GattCharacteristic_getWriteType(const GattCharacteristic *characteristic)
++{
++    if (characteristic == NULL) {
++        perror("param is invalid");
++        return -1;
++    }
++    return characteristic->writeType;
++}
+diff --git a/bluez_adapter/ble_gatt_descriptor.c b/bluez_adapter/ble_gatt_descriptor.c
+new file mode 100644
+index 0000000..ad6e01d
+--- /dev/null
++++ b/bluez_adapter/ble_gatt_descriptor.c
+@@ -0,0 +1,53 @@
++#include "ble_gatt_characteristic.h"
++
++GattDescriptor* GattDescriptor_Create(GattCharacteristic *gattCharacteristic, UUID *uuid, int descHandle, const int permissions) {
++    GattDescriptor *descriptor = (GattDescriptor*)malloc(sizeof(GattDescriptor));
++    if (descriptor) {
++        descriptor->handle_ = descHandle;
++        descriptor->permissions_ = permissions;
++        descriptor->characteristic_ = gattCharacteristic;
++        descriptor->value_ = NULL;
++        descriptor->length_ = 0;
++        memcpy(&(descriptor->uuid_), uuid, sizeof(UUID));
++    }
++    return descriptor;
++}
++
++void GattDescriptor_Destroy(GattDescriptor *descriptor) {
++    if (descriptor) {
++        free(descriptor->value_);
++        free(descriptor);
++    }
++}
++
++GattCharacteristic* GattDescriptor_GetCharacteristic(const GattDescriptor *descriptor) {
++    return descriptor->characteristic_;
++}
++
++uint16_t GattDescriptor_GetHandle(const GattDescriptor *descriptor) {
++    return descriptor->handle_;
++}
++
++int GattDescriptor_GetPermissions(const GattDescriptor *descriptor) {
++    return descriptor->permissions_;
++}
++
++const UUID* GattDescriptor_GetUuid(const GattDescriptor *descriptor) {
++    return &(descriptor->uuid_);
++}
++
++const uint8_t* GattDescriptor_GetValue(const GattDescriptor *descriptor, size_t *size) {
++    if (size) {
++        *size = descriptor->length_;
++    }
++    return descriptor->value_;
++}
++
++void GattDescriptor_SetValue(GattDescriptor *descriptor, const uint8_t *values, const size_t length) {
++    free(descriptor->value_);
++    descriptor->value_ = (uint8_t*)malloc(length);
++    if (descriptor->value_) {
++        memcpy(descriptor->value_, values, length);
++        descriptor->length_ = length;
++    }
++}
+\ No newline at end of file
+diff --git a/bluez_adapter/include/ble_gatt_characteristic.h b/bluez_adapter/include/ble_gatt_characteristic.h
+new file mode 100644
+index 0000000..330a267
+--- /dev/null
++++ b/bluez_adapter/include/ble_gatt_characteristic.h
+@@ -0,0 +1,56 @@
++#ifndef BLE_GATT_CHARACTERISTIC_H
++#define BLE_GATT_CHARACTERISTIC_H
++
++#include "ble_gatt_descriptor.h"
++#include "ble_gatt_service.h"
++#include "uuid.h"
++#include <stddef.h>
++#include <stdint.h>
++
++#define MAXIMUM_NUMBER_DESCRIPTOR 64
++
++// Define the GattCharacteristic structure
++typedef struct GattCharacteristic {
++    uint8_t writeType;
++    uint16_t handle;
++    int permissions;
++    int properties;
++    struct GattService *service;
++    uint8_t *value;
++    size_t length;
++    GattDescriptor descriptors[MAXIMUM_NUMBER_DESCRIPTOR];
++    size_t numDescriptors;
++    UUID uuid;
++} GattCharacteristic;
++
++enum GattCharacteristic_WriteType {
++    DEFAULT,
++    NO_RESPONSE,
++    SIGNED,
++};
++
++enum GattCharacteristic_Propertie {
++    BROADCAST = 0x01, /**< readable */
++    READ = 0x02,
++    WRITE_WITHOUT_RESPONSE = 0x04,
++    WRITE = 0x08,
++    NOTIFY = 0x10,
++    INDICATE = 0x20,
++    AUTHENTICATED_SIGNED_WRITES = 0x40,
++    EXTENDED_PROPERTIES = 0x80
++};
++
++GattCharacteristic *GattCharacteristic_create(const UUID *uuid, int permissions, int properties);
++void GattCharacteristic_addDescriptor(GattCharacteristic *characteristic, GattDescriptor *descriptor);
++GattDescriptor *GattCharacteristic_getDescriptor(GattCharacteristic *characteristic, const UUID *uuid);
++int GattCharacteristic_setWriteType(GattCharacteristic *characteristic, uint8_t type);
++int GattCharacteristic_setValue(GattCharacteristic *characteristic, const uint8_t *values, size_t length);
++const uint8_t *GattCharacteristic_getValue(const GattCharacteristic *characteristic, size_t *size);
++uint16_t GattCharacteristic_getHandle(const GattCharacteristic *characteristic);
++int GattCharacteristic_getPermissions(const GattCharacteristic *characteristic);
++const UUID *GattCharacteristic_getUuid(const GattCharacteristic *characteristic);
++GattService *GattCharacteristic_getService(const GattCharacteristic *characteristic);
++int GattCharacteristic_getProperties(const GattCharacteristic *characteristic);
++int GattCharacteristic_getWriteType(const GattCharacteristic *characteristic);
++
++#endif
+\ No newline at end of file
+diff --git a/bluez_adapter/include/ble_gatt_descriptor.h b/bluez_adapter/include/ble_gatt_descriptor.h
+new file mode 100644
+index 0000000..17b0402
+--- /dev/null
++++ b/bluez_adapter/include/ble_gatt_descriptor.h
+@@ -0,0 +1,31 @@
++#ifndef BLE_GATT_DESCRIPTOR_H
++#define BLE_GATT_DESCRIPTOR_H
++
++#include "ble_gatt_characteristic.h"
++#include "ble_gatt_descriptor.h"
++#include "uuid.h"
++#include <stdbool.h>
++#include <stddef.h>
++#include <stdint.h>
++#include <stdlib.h>
++#include <string.h>
++
++typedef struct GattDescriptor {
++    uint16_t handle_;
++    int permissions_;
++    struct GattCharacteristic *characteristic_;
++    uint8_t *value_;
++    size_t length_;
++    UUID uuid_;
++} GattDescriptor;
++
++GattDescriptor* GattDescriptor_Create(GattCharacteristic *gattCharacteristic, const UUID *uuid, int descHandle, int permissions);
++void GattDescriptor_Destroy(GattDescriptor *descriptor);
++struct GattCharacteristic* GattDescriptor_GetCharacteristic(const GattDescriptor *descriptor);
++uint16_t GattDescriptor_GetHandle(const GattDescriptor *descriptor);
++int GattDescriptor_GetPermissions(const GattDescriptor *descriptor);
++const UUID* GattDescriptor_GetUuid(const GattDescriptor *descriptor);
++const uint8_t* GattDescriptor_GetValue(const GattDescriptor *descriptor, size_t *size);
++void GattDescriptor_SetValue(GattDescriptor *descriptor, const uint8_t *values, size_t length);
++
++#endif
+\ No newline at end of file
+diff --git a/bluez_adapter/include/ble_gatt_service.h b/bluez_adapter/include/ble_gatt_service.h
+new file mode 100644
+index 0000000..45aa87e
+--- /dev/null
++++ b/bluez_adapter/include/ble_gatt_service.h
+@@ -0,0 +1,35 @@
++#ifndef BLE_GATT_SERVICE_H
++#define BLE_GATT_SERVICE_H
++
++#include "ble_gatt_characteristic.h"
++#include "stdint.h"
++#include "stdio.h"
++
++#define MAXIMUM_NUMBER_CHARACTERISTIC 64
++
++typedef enum GattServiceType {
++    PRIMARY,   /**< primary service */
++    SECONDARY, /**< secondary service */
++} GattServiceType;
++
++typedef struct GattService {
++    uint16_t handle;
++    uint16_t endHandle;
++    GattServiceType serviceType;
++    UUID uuid;
++    struct GattCharacteristic characteristics[MAXIMUM_NUMBER_CHARACTERISTIC];
++    size_t numCharacteristics;
++    struct GattService **includeServices;
++    size_t numIncludeServices;
++    bool isPrimary;
++} GattService;
++
++typedef struct GattServiceWrapper {
++    GattService *gattService;
++    int index;
++    int maxNum;
++    int handleOffset;
++    bool isAdding;
++} GattServiceWrapper;
++
++#endif
+\ No newline at end of file
+diff --git a/bluez_adapter/include/ohos_bt_adapter_gatt.h b/bluez_adapter/include/ohos_bt_adapter_gatt.h
+new file mode 100644
+index 0000000..1f54019
+--- /dev/null
++++ b/bluez_adapter/include/ohos_bt_adapter_gatt.h
+@@ -0,0 +1,114 @@
++#ifndef OHOS_BT_ADAPTER_GATT_H
++#define OHOS_BT_ADAPTER_GATT_H
++
++#include "ohos_bt_def.h"
++
++#define SDP_CHARACTERISTIC_UUID_ID 0x00
++#define SDP_CHARACTERISTIC_PERMISSIONS_ID 0x01
++#define SDP_CHARACTERISTIC_PROPERTIES_ID 0x02
++#define SDP_CHARACTERISTIC_WRITE_TYPE_ID 0x03
++#define SDP_CHARACTERISTIC_VALUE_ID 0x04
++#define SDP_CHARACTERISTIC_HANDLE_ID 0x05
++#define MAXIMUM_NUMBER_CONNECTED_DEVICE 64
++
++typedef enum {
++    OHOS_STATE_CONNECTING = 0x00,
++    OHOS_STATE_CONNECTED,
++    OHOS_STATE_DISCONNECTING,
++    OHOS_STATE_DISCONNECTED,
++} BtConnectState;
++
++
++enum GattStatus {
++    INVALID_REMOTE_DEVICE = -29,
++    INCLUDE_SERVICE_NOT_FOUND,
++    REFERENCED_BY_OTHER_SERVICE,
++    INVALID_CHARACTERISTIC,
++    INVALID_CHARACTERISTIC_DATA,
++    INVALID_CHARACTERISTIC_DESCRIPTOR,
++    INVALID_CHARACTERISTIC_DESCRIPTOR_DATA,
++    NOT_ENOUGH_HANDLES,
++    HANDLE_NOT_FOUND,
++    INVALID_PARAMETER,
++    INTERNAL_ERROR,
++    REQUEST_NOT_SUPPORT,
++    REMOTE_DEVICE_BUSY,
++    MAX_CONNECTIONS,
++    MAX_APPLICATIONS,
++    DEVICE_ALREADY_BIND,
++    INVALID_HANDLE,
++    INVALID_OFFSET,
++    READ_NOT_PERMITTED,
++    WRITE_NOT_PERMITTED,
++    INSUFFICIENT_ENCRYPTION,
++    INSUFFICIENT_AUTHENTICATION,
++    INSUFFICIENT_AUTHORIZATION,
++    INSUFFICIENT_ENCRYPTION_KEY_SIZE,
++    PREPARE_QUEUE_FULL,
++    ATTRIBUTE_NOT_LONG,
++    INVALID_ATTRIBUTE_VALUE_LENGTH,
++    WRITE_REQUEST_REJECTED,
++    GATT_FAILURE,
++    GATT_SUCCESS
++};
++
++typedef enum {
++    OHOS_UUID_TYPE_NULL = 0x00,
++    OHOS_UUID_TYPE_16_BIT,
++    OHOS_UUID_TYPE_32_BIT,
++    OHOS_UUID_TYPE_128_BIT,
++} UuidType;
++
++typedef enum {
++    OHOS_GATT_WRITE_NO_RSP = 0x01,
++    OHOS_GATT_WRITE_DEFAULT = 0x02,
++    OHOS_GATT_WRITE_PREPARE = 0x03,
++    OHOS_GATT_WRITE_SIGNED = 0x04
++} BtGattWriteType;
++
++typedef enum {
++    OHOS_BLE_ATTRIB_TYPE_SERVICE = 0x00,
++    OHOS_BLE_ATTRIB_TYPE_CHAR,
++    OHOS_BLE_ATTRIB_TYPE_CHAR_VALUE,
++    OHOS_BLE_ATTRIB_TYPE_CHAR_CLIENT_CONFIG,
++    OHOS_BLE_ATTRIB_TYPE_CHAR_USER_DESCR,
++} BleAttribType;
++
++typedef struct {
++    unsigned char uuidLen;
++    char *uuid;
++} BtUuid;
++
++typedef struct {
++    int connId;
++    int transId;
++    BdAddr *bdAddr;
++    int attrHandle;
++    int offset;
++    bool isLong;
++} BtReqReadCbPara;
++
++typedef struct {
++    int connId;
++    int transId;
++    BdAddr *bdAddr;
++    int attrHandle;
++    int offset;
++    int length;
++    unsigned char *value;
++    bool needRsp;
++    bool isPrep;
++    bool needAuth;
++} BtReqWriteCbPara;
++
++struct ConnectedDevice {
++    BdAddr bdAddr;
++    int serverId;
++    int connId;
++    bool isUsed;
++};
++
++int g_coonNums = 0;
++struct ConnectedDevice g_connDevices[MAXIMUM_NUMBER_CONNECTED_DEVICE];
++
++#endif // OHOS_BT_ADAPTER_GATT_H
+\ No newline at end of file
+diff --git a/bluez_adapter/include/ohos_bt_gatt_client.h b/bluez_adapter/include/ohos_bt_gatt_client.h
+new file mode 100644
+index 0000000..280e105
+--- /dev/null
++++ b/bluez_adapter/include/ohos_bt_gatt_client.h
+@@ -0,0 +1,78 @@
++#ifndef OHOS_BT_GATT_CLIENT_H
++#define OHOS_BT_GATT_CLIENT_H
++
++#include "ohos_bt_gatt.h"
++#include "softbus_adapter_ble_gatt_client.h"
++#include "ohos_bt_adapter_gatt.h"
++
++typedef struct {
++    BtUuid serviceUuid;
++    BtUuid characteristicUuid;
++} BtGattCharacteristic;
++
++typedef struct {
++    BtGattCharacteristic characteristic;
++    BtUuid descriptorUuid;
++} BtGattDescriptor;
++
++typedef struct {
++    union {
++        BtGattCharacteristic characteristic;
++        BtGattDescriptor descriptor;
++    } attribute;
++    unsigned short dataLen;
++    unsigned char *data;
++} BtGattReadData;
++
++typedef void (*ConnectionStateChangedCallback)(int clientId, int connectionState, int status);
++typedef void (*ConnectParaUpdateCallback)(int clientId, int interval, int latency, int timeout, int status);
++typedef void (*SearchServiceCompleteCallback)(int clientId, int status);
++typedef void (*ReadCharacteristicCallback)(int clientId, BtGattReadData *readData, int status);
++typedef void (*WriteCharacteristicCallback)(int clientId, BtGattCharacteristic *characteristic, int status);
++typedef void (*ReadDescriptorCallback)(int clientId, BtGattReadData *readData, int status);
++typedef void (*WriteDescriptorCallback)(int clientId, BtGattDescriptor *descriptor, int status);
++typedef void (*ConfigureMtuSizeCallback)(int clientId, int mtuSize, int status);
++typedef void (*RegisterNotificationCallback)(int clientId, int status);
++typedef void (*NotificationCallback)(int clientId, BtGattReadData *notifyData, int status);
++
++typedef struct {
++    ConnectionStateChangedCallback ConnectionStateCb;
++    ConnectParaUpdateCallback connectParaUpdateCb;
++    SearchServiceCompleteCallback searchServiceCompleteCb;
++    ReadCharacteristicCallback readCharacteristicCb;
++    WriteCharacteristicCallback writeCharacteristicCb;
++    ReadDescriptorCallback readDescriptorCb;
++    WriteDescriptorCallback writeDescriptorCb;
++    ConfigureMtuSizeCallback configureMtuSizeCb;
++    RegisterNotificationCallback registerNotificationCb;
++    NotificationCallback notificationCb;
++} BtGattClientCallbacks;
++
++typedef struct {
++    uint16_t handler;
++    int sock;
++    BtGattClientCallbacks *callbacks;
++    uint8_t remoteAddr[6];
++    bool fastestConnFlag;
++} GattClientWrapper;
++
++typedef struct {
++    int32_t clientId;
++    bool isRegistered;
++    GattClientWrapper g_gattClientWrapper;
++} GattClientEntry;
++
++int BleGattcRegister(BtUuid appUuid);
++int BleGattcUnRegister(int clientId);
++int BleGattcConnect(int32_t clientId, BtGattClientCallbacks *func, const BdAddr *bdAddr, bool isAutoConnect, BtTransportType transport);
++int BleGattcDisconnect(int clientId);
++int BleGattcSearchServices(int clientId);
++bool BleGattcGetService(int clientId, BtUuid serviceUuid);
++int BleGattcRegisterNotification(int clientId, BtGattCharacteristic characteristic, bool enable);
++int BleGattcConfigureMtuSize(int clientId, int mtuSize);
++int BleGattcWriteCharacteristic(
++    int clientId, BtGattCharacteristic characteristic, BtGattWriteType writeType, int len, const char *value);
++
++GattClientEntry *BleGattcFindClientById(int clientId);
++
++#endif
+diff --git a/bluez_adapter/include/ohos_bt_gatt_server.h b/bluez_adapter/include/ohos_bt_gatt_server.h
+new file mode 100644
+index 0000000..a234bcf
+--- /dev/null
++++ b/bluez_adapter/include/ohos_bt_gatt_server.h
+@@ -0,0 +1,100 @@
++#ifndef OHOS_BT_GATT_SERVICE_H
++#define OHOS_BT_GATT_SERVICE_H
++
++#include "ohos_bt_def.h"
++#include "softbus_adapter_ble_gatt_client.h"
++#include "softbus_adapter_ble_gatt_server.h"
++#include "ohos_bt_adapter_gatt.h"
++
++typedef int (*BleGattServiceRead)(unsigned char *buff, unsigned int *len);
++typedef int (*BleGattServiceWrite)(unsigned char *buff, unsigned int len);
++typedef int (*BleGattServiceIndicate)(unsigned char *buff, unsigned int len);
++
++typedef struct {
++    BleGattServiceRead read;
++    BleGattServiceWrite write;
++    BleGattServiceIndicate indicate;
++} BleGattOperateFunc;
++
++typedef struct {
++    BleAttribType attrType;
++    unsigned int permission;
++    UuidType uuidType;
++    unsigned char uuid[OHOS_BLE_UUID_MAX_LEN];
++    unsigned char *value;
++    unsigned char valLen;
++    unsigned char properties;
++    BleGattOperateFunc func;
++} BleGattAttr;
++
++typedef struct {
++    unsigned int attrNum;
++    BleGattAttr *attrList;
++} BleGattService;
++
++typedef struct {
++    int connectId;
++    int status;
++    int attrHandle;     // attrHandle is used as requestId now
++    int valueLen;
++    char *value;
++} GattsSendRspParam;
++
++typedef struct {
++    int connectId;
++    int attrHandle;
++    int confirm;
++    int valueLen;
++    char *value;
++} GattsSendIndParam;
++
++typedef void (*RegisterServerCallback)(int status, int serverId, BtUuid *appUuid);
++typedef void (*ConnectServerCallback)(int connId, int serverId, const BdAddr *bdAddr);
++typedef void (*DisconnectServerCallback)(int connId, int serverId, const BdAddr *bdAddr);
++typedef void (*ServiceAddCallback)(int status, int serverId, BtUuid *uuid, int srvcHandle);
++typedef void (*CharacteristicAddCallback)(int status, int serverId, BtUuid *uuid,
++                                          int srvcHandle, int characteristicHandle);
++typedef void (*IncludeServiceAddCallback)(int status, int serverId, int srvcHandle, int includeSrvcHandle);
++typedef void (*DescriptorAddCallback)(int status, int serverId, BtUuid *uuid,
++                                      int srvcHandle, int descriptorHandle);
++typedef void (*ServiceStartCallback)(int status, int serverId, int srvcHandle);
++typedef void (*ServiceStopCallback)(int status, int serverId, int srvcHandle);
++typedef void (*ServiceDeleteCallback)(int status, int serverId, int srvcHandle);
++typedef void (*RequestWriteCallback)(BtReqWriteCbPara writeCbPara);
++typedef void (*ResponseConfirmationCallback)(int status, int handle);
++typedef void (*RequestReadCallback)(BtReqReadCbPara readCbPara);
++typedef void (*IndicationSentCallback)(int connId, int status);
++typedef void (*MtuChangeCallback)(int connId, int mtu);
++
++typedef struct {
++    RegisterServerCallback registerServerCb;
++    ConnectServerCallback connectServerCb;
++    DisconnectServerCallback disconnectServerCb;
++    ServiceAddCallback serviceAddCb;
++    IncludeServiceAddCallback includeServiceAddCb;
++    CharacteristicAddCallback characteristicAddCb;
++    DescriptorAddCallback descriptorAddCb;
++    ServiceStartCallback serviceStartCb;
++    ServiceStopCallback serviceStopCb;
++    ServiceDeleteCallback serviceDeleteCb;
++    RequestReadCallback requestReadCb;
++    RequestWriteCallback requestWriteCb;
++    ResponseConfirmationCallback responseConfirmationCb;
++    IndicationSentCallback indicationSentCb;
++    MtuChangeCallback mtuChangeCb;
++} BtGattServerCallbacks;
++
++int BleGattsAddService(int serverId, BtUuid srvcUuid, bool isPrimary, int number);
++int BleGattsAddCharacteristic(int serverId, int srvcHandle, BtUuid characUuid, int properties, int permissions);
++int BleGattsAddDescriptor(int serverId, int srvcHandle, BtUuid descUuid, int permissions);
++int BleGattsStartService(int serverId, int srvcHandle);
++int BleGattsStopService(int serverId, int srvcHandle);
++int BleGattsDeleteService(int serverId, int srvcHandle);
++int BleGattsRegister(BtUuid appUuid);
++int BleGattsUnRegister(int serverId);
++int BleGattsDisconnect(int serverId, BdAddr bdAddr, int connId);
++int BleGattsSendResponse(int serverId, GattsSendRspParam *param);
++int BleGattsSendIndication(int serverId, GattsSendIndParam *param);
++int BleGattsRegisterCallbacks(BtGattServerCallbacks *func);
++
++#endif // DSOFTBUS_STANDARD_OHOS_BT_GATT_SERVICE_H
+diff --git a/bluez_adapter/include/uuid.h b/bluez_adapter/include/uuid.h
+new file mode 100644
+index 0000000..b258c61
+--- /dev/null
++++ b/bluez_adapter/include/uuid.h
+@@ -0,0 +1,132 @@
++#ifndef UUID_H
++#define UUID_H
++
++#include <stdint.h>
++#include <stddef.h>
++#include <string.h>
++#include <stdio.h>
++#include <sys/time.h>
++#include <stdlib.h>
++#include "time.h"
++#include <regex.h>
++
++const static int UUID128_BYTES_LEN = 16;
++const static char* uuidRegex = "^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$";
++
++
++typedef struct UUID {
++    uint8_t uuid_[UUID128_BYTES_LEN];
++} UUID;
++
++void createUUIDWithBits(uint64_t mostSigBits, uint64_t leastSigBits, uint8_t* uuid) {
++    uuid[15] = (uint8_t)(leastSigBits & 0x00000000000000FF);
++    uuid[14] = (uint8_t)((leastSigBits & 0x000000000000FF00) >> 8);
++    uuid[13] = (uint8_t)((leastSigBits & 0x0000000000FF0000) >> 16);
++    uuid[12] = (uint8_t)((leastSigBits & 0x00000000FF000000) >> 24);
++    uuid[11] = (uint8_t)((leastSigBits & 0x000000FF00000000) >> 32);
++    uuid[10] = (uint8_t)((leastSigBits & 0x0000FF0000000000) >> 40);
++    uuid[9]  = (uint8_t)((leastSigBits & 0x00FF000000000000) >> 48);
++    uuid[8]  = (uint8_t)((leastSigBits & 0xFF00000000000000) >> 56);
++    uuid[7]  = (uint8_t)(mostSigBits & 0x00000000000000FF);
++    uuid[6]  = (uint8_t)((mostSigBits & 0x000000000000FF00) >> 8);
++    uuid[5]  = (uint8_t)((mostSigBits & 0x0000000000FF0000) >> 16);
++    uuid[4]  = (uint8_t)((mostSigBits & 0x00000000FF000000) >> 24);
++    uuid[3]  = (uint8_t)((mostSigBits & 0x000000FF00000000) >> 32);
++    uuid[2]  = (uint8_t)((mostSigBits & 0x0000FF0000000000) >> 40);
++    uuid[1]  = (uint8_t)((mostSigBits & 0x00FF000000000000) >> 48);
++    uuid[0]  = (uint8_t)((mostSigBits & 0xFF00000000000000) >> 56);
++}
++
++UUID UUID_createUUIDFromString(const char* name) {
++    struct UUID ret;
++    char tmp[37];
++    size_t len = strlen(name);
++
++    size_t j = 0;
++    for (size_t i = 0; i < len; ++i) {
++        if (name[i] != '-') {
++            tmp[j++] = name[i];
++        }
++    }
++    tmp[j] = '\0';
++
++    for (size_t i = 0; i + 1 < j; i += 2) {
++        sscanf(tmp + i, "%2hhx", &ret.uuid_[i / 2]);
++    }
++
++    return ret;
++}
++
++void UUID_ToString(const UUID* uuid, char* output) {
++    sprintf(output, "%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X",
++        uuid->uuid_[0], uuid->uuid_[1], uuid->uuid_[2], uuid->uuid_[3],
++        uuid->uuid_[4], uuid->uuid_[5], uuid->uuid_[6], uuid->uuid_[7],
++        uuid->uuid_[8], uuid->uuid_[9], uuid->uuid_[10], uuid->uuid_[11],
++        uuid->uuid_[12], uuid->uuid_[13], uuid->uuid_[14], uuid->uuid_[15]);
++}
++
++int UUID_compareUUIDs(const UUID* uuid1, const UUID* uuid2) {
++    return memcmp(uuid1->uuid_, uuid2->uuid_, UUID128_BYTES_LEN);
++}
++
++bool UUID_Equals(const UUID *val1, const UUID *val2) {
++    for (int i = 0; i < UUID128_BYTES_LEN; i++) {
++        if (val1->uuid_[i] != val2->uuid_[i]) {
++            return false;
++        }
++    }
++    return true;
++}
++
++uint64_t UUID_GetLeastSignificantBits(const UUID *uuid) {
++    uint64_t leastSigBits = 0;
++    for (int i = UUID128_BYTES_LEN / 2; i < UUID128_BYTES_LEN; i++) {
++        leastSigBits = (leastSigBits << 8) | (uuid->uuid_[i] & 0xFF);
++    }
++    return leastSigBits;
++}
++
++uint64_t UUID_GetMostSignificantBits(const UUID *uuid) {
++    uint64_t mostSigBits = 0;
++    for (int i = 0 / 2; i < UUID128_BYTES_LEN / 2; i++) {
++        mostSigBits = (mostSigBits << 8) | (uuid->uuid_[i] & 0xFF);
++    }
++    return mostSigBits;
++}
++
++UUID UUID_ConvertFrom128Bits(const uint8_t name[UUID128_BYTES_LEN]) {
++    UUID tmp;
++    for (int i = 0; i < UUID128_BYTES_LEN; i++) {
++        tmp.uuid_[i] = name[i];
++    }
++    return tmp;
++}
++
++void UUID_ConvertTo128Bits(const UUID *uuid, uint8_t *output) {
++    for (int i = 0; i < UUID128_BYTES_LEN; i++) {
++        output[i] = uuid->uuid_[i];
++    }
++}
++
++bool UUID_isValid(const char* uuid) {
++    regex_t reg;
++    int cflags = REG_EXTENDED;
++    int ret = regcomp(&reg, uuidRegex, cflags);
++    if (ret != 0) {
++        perror("regcomp failed");
++        return false;
++    }
++
++    ret = regexec(&reg, uuid, 0, NULL, 0);
++    if (ret == REG_NOMATCH) {
++        perror("No match");
++        return false;
++    } else if (ret != 0) {
++        perror("regexec failed with");
++        return false;
++    }
++    return true;
++}
++
++
++#endif
+\ No newline at end of file
+diff --git a/bluez_adapter/ohos_bt_gatt_client.c b/bluez_adapter/ohos_bt_gatt_client.c
+new file mode 100644
+index 0000000..fb75f5d
+--- /dev/null
++++ b/bluez_adapter/ohos_bt_gatt_client.c
+@@ -0,0 +1,466 @@
++#include "ohos_bt_gatt_client.h"
++#include "nstackx_util.h"
++#include "uuid.h"
++#include <bluetooth/bluetooth.h>
++#include <bluetooth/hci.h>
++#include <bluetooth/hci_lib.h>
++#include <bluetooth/l2cap.h>
++#include <bluetooth/sdp.h>
++#include <bluetooth/sdp_lib.h>
++#include <sys/ioctl.h>
++#include <sys/socket.h>
++
++#define MAX_GATT_CLIENT_NUM 64
++
++static int g_clientIncrease = 0;
++static int g_clientCount = 0;
++static int g_dev_id = 0;
++
++static BtGattClientCallbacks *g_callback = NULL;
++static pthread_mutex_t g_MapGattClientMutex;
++static GattClientEntry g_MapGattClient[MAX_GATT_CLIENT_NUM];
++
++void AddDeviceToConnectedList(uint8_t* bdAddr, int clientId) {
++    for (int i = 0; i < MAXIMUM_NUMBER_CONNECTED_DEVICE; i++) {
++        if (!g_connDevices[i].isUsed) {
++            memcpy(&g_connDevices[i].bdAddr.addr, bdAddr, OHOS_BD_ADDR_LEN);
++            g_connDevices[i].connId = g_coonNums;
++            g_connDevices[i].isUsed = true;
++            g_coonNums++;
++            break;
++        }
++    }
++}
++
++void RemoveDeviceFromConnectedList(int connId) {
++    for (int i = 0; i < MAXIMUM_NUMBER_CONNECTED_DEVICE; i++) {
++        if (g_connDevices[i].connId == connId) {
++            memset(&g_connDevices[i].bdAddr.addr, 0, OHOS_BD_ADDR_LEN);
++            g_connDevices[i].connId = 0;
++            g_connDevices[i].isUsed = false;
++            g_coonNums--;
++            break;
++        }
++    }
++}
++
++int BleGattcConnect(
++    int32_t clientId, BtGattClientCallbacks *func, const BdAddr *bdAddr, bool isAutoConnect, BtTransportType transport)
++{
++    PthreadMutexInit(&g_MapGattClientMutex, NULL);
++    PthreadMutexLock(&g_MapGattClientMutex);
++
++    if (clientId < 1 || clientId > g_clientIncrease) {
++        perror("BleGattcConnect: Invalid param");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    struct hci_conn_info_req connInfo;
++    bdaddr_t targetAddr;
++    int status;
++
++    if (func == NULL || bdAddr == NULL) {
++        perror("func or bdAddr is null.");
++        return OHOS_BT_STATUS_PARM_INVALID;
++    }
++
++    g_callback = func;
++
++    bool clientFound = false;
++    for (int i = 0; i < MAX_GATT_CLIENT_NUM; i++) {
++        if (g_MapGattClient[i].clientId == clientId) {
++            clientFound = true;
++            break;
++        }
++    }
++
++    g_MapGattClient[clientId].g_gattClientWrapper.callbacks = func;
++
++    if (!clientFound) {
++        perror("Client ID not registered");
++        PthreadMutexUnlock(&g_MapGattClientMutex);
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    int hci_socket = hci_open_dev(g_dev_id);
++    if (hci_socket < 0) {
++        perror("HCI socket open failed");
++        return -1;
++    }
++
++    memcpy(&targetAddr, bdAddr->addr, OHOS_BD_ADDR_LEN);
++    status = ioctl(hci_socket, HCIGETCONNINFO, (unsigned long)&connInfo);
++    if (status == 0) {
++        perror("Already connected to the device");
++        close(hci_socket);
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    le_create_connection_cp connParams = {
++        .interval = 0x000C,
++        .window = 0x000C,
++        .initiator_filter = 0x00,
++        .peer_bdaddr_type = BDADDR_LE_PUBLIC,
++        .peer_bdaddr = targetAddr,
++        .own_bdaddr_type = BDADDR_LE_PUBLIC,
++        .min_interval = 0x0006,
++        .max_interval = 0x0018,
++        .latency = 0x01E,
++        .supervision_timeout = 0x1F4,
++        .min_ce_length = 0x0001,
++        .max_ce_length = 0x01F3,
++    };
++
++    uint16_t hci_handler;
++    status = hci_le_create_conn(hci_socket, connParams.interval, connParams.window, connParams.initiator_filter,
++        connParams.peer_bdaddr_type, connParams.peer_bdaddr, connParams.own_bdaddr_type, connParams.min_interval,
++        connParams.max_interval, connParams.latency, connParams.supervision_timeout, connParams.min_ce_length,
++        connParams.max_ce_length, &hci_handler, 1000);
++
++    g_MapGattClient[clientId].g_gattClientWrapper.handler = hci_handler;
++    g_MapGattClient[clientId].g_gattClientWrapper.sock = hci_socket;
++    memcpy(g_MapGattClient[clientId].g_gattClientWrapper.remoteAddr, bdAddr->addr, OHOS_BD_ADDR_LEN);
++
++    if (status < 0) {
++        perror("Connected failed");
++        close(hci_socket);
++        if (func->ConnectionStateCb != NULL) {
++            func->ConnectionStateCb(clientId, 0, 1);
++        }
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    AddDeviceToConnectedList(bdAddr->addr, clientId);
++
++    if (func->ConnectionStateCb != NULL) {
++        func->ConnectionStateCb(clientId, 1, 1);
++    }
++
++    PthreadMutexUnlock(&g_MapGattClientMutex);
++    return OHOS_BT_STATUS_SUCCESS;
++}
++
++int BleGattcRegister(BtUuid appUuid)
++{
++    PthreadMutexLock(&g_MapGattClientMutex);
++
++    int clientId = 0;
++    for (int i = 0; i < MAX_GATT_CLIENT_NUM; i++) {
++        if (!g_MapGattClient[i].isRegistered) {
++            g_MapGattClient[i].clientId = i;
++            g_MapGattClient[i].isRegistered = true;
++            clientId = i;
++            g_clientIncrease++;
++            break;
++        }
++    }
++
++    PthreadMutexUnlock(&g_MapGattClientMutex);
++    return clientId;
++}
++
++int BleGattcUnRegister(int clientId)
++{
++    PthreadMutexLock(&g_MapGattClientMutex);
++
++    if (clientId < 0 || clientId > g_clientIncrease) {
++        perror("BleGattcUnRegister: Invalid param");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    for (int i = 0; i < MAX_GATT_CLIENT_NUM; i++) {
++        if (clientId == g_MapGattClient[i].clientId) {
++            g_MapGattClient[i].isRegistered = false;
++            g_MapGattClient[i].clientId = 0;
++            g_clientIncrease--;
++            if (g_MapGattClient[i].g_gattClientWrapper.callbacks != NULL) {
++                g_MapGattClient[i].g_gattClientWrapper.callbacks = NULL;
++            }
++            break;
++        }
++    }
++
++    PthreadMutexUnlock(&g_MapGattClientMutex);
++    return OHOS_BT_STATUS_SUCCESS;
++}
++
++int BleGattcDisconnect(int clientId)
++{
++    PthreadMutexLock(&g_MapGattClientMutex);
++    if (clientId < 1 || clientId > g_clientIncrease) {
++        perror("BleGattcDisconnect: Invalid param");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    GattClientEntry *client = BleGattcFindClientById(clientId);
++    if (client == NULL) {
++        perror("BleGattcDisconnect: clientId is not register");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    if (hci_send_cmd(client->g_gattClientWrapper.sock, OGF_LINK_CTL, OCF_DISCONNECT, DISCONNECT_CP_SIZE, NULL) < 0) {
++        perror("HCI disconnect failed");
++        return OHOS_BT_STATUS_FAIL;
++    }
++    if (hci_disconnect(client->g_gattClientWrapper.sock, client->g_gattClientWrapper.handler, 0x13, 0) && 
++        hci_close_dev(client->g_gattClientWrapper.sock) < 0) {
++        perror("HCI dev close failed");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    // RemoveDeviceFromConnectedList(clientId);
++    if (client->g_gattClientWrapper.callbacks != NULL) {
++        client->g_gattClientWrapper.callbacks->ConnectionStateCb(clientId, OHOS_STATE_DISCONNECTED, 1);
++    }
++    PthreadMutexUnlock(&g_MapGattClientMutex);
++    return OHOS_BT_STATUS_SUCCESS;
++}
++
++int BleGattcSearchServices(int clientId)
++{
++    PthreadMutexLock(&g_MapGattClientMutex);
++    if (clientId < 0 || clientId > g_clientIncrease) {
++        perror("BleGattcSearchServices: Invalid param");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    GattClientEntry *client = BleGattcFindClientById(clientId);
++    if (client == NULL) {
++        perror("BleGattcSearchServices: clientId is not register");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    bdaddr_t remote_addr;
++    memcpy(&remote_addr, client->g_gattClientWrapper.remoteAddr, OHOS_BD_ADDR_LEN);
++    sdp_session_t *session = sdp_connect(BDADDR_ANY, &remote_addr, SDP_RETRY_IF_BUSY);
++    if (session == NULL) {
++        perror("BleGattcSearchServices: Failed to connect sdp");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    sdp_list_t *response_list = NULL, *search_list;
++    uint32_t range = 0x0000ffff;
++    sdp_list_append(&search_list, &range);
++    sdp_service_search_req(session, search_list, SDP_ATTR_REQ_RANGE, &response_list);
++
++    sdp_list_t *r = response_list;
++    sdp_record_t *rec;
++    while (r) {
++        rec = (sdp_record_t *)r->data;
++        printf("Service Record No: %d\n", rec->svclass.value);
++        r = r->next;
++    }
++
++    if (client->g_gattClientWrapper.callbacks != NULL) {
++        client->g_gattClientWrapper.callbacks->searchServiceCompleteCb(clientId, 1);
++    }
++    PthreadMutexUnlock(&g_MapGattClientMutex);
++    return OHOS_BT_STATUS_SUCCESS;
++}
++
++GattClientEntry *BleGattcFindClientById(int clientId)
++{
++    if (clientId < 1 || clientId > g_clientIncrease) {
++        perror("BleGattcFindClientById: Invalid param");
++        return NULL;
++    }
++    for (int i = 1; i <= g_clientCount; i++) {
++        if (clientId == g_MapGattClient[i].clientId) {
++            return &g_MapGattClient[i];
++        }
++    }
++    return NULL;
++}
++
++bool BleGattcGetService(int clientId, BtUuid serviceUuid)
++{
++    PthreadMutexLock(&g_MapGattClientMutex);
++
++    if (clientId < 0 || clientId > g_clientIncrease) {
++        perror("BleGattcSearchServices: Invalid param");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    GattClientEntry *client = BleGattcFindClientById(clientId);
++    if (client == NULL) {
++        perror("BleGattcSearchServices: clientId is not register");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    bdaddr_t remote_addr;
++    memcpy(&remote_addr, client->g_gattClientWrapper.remoteAddr, OHOS_BD_ADDR_LEN);
++
++    sdp_session_t *session = sdp_connect(BDADDR_ANY, &remote_addr, SDP_RETRY_IF_BUSY);
++    if (session == NULL) {
++        perror("BleGattcSearchServices: Failed to connect sdp");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    uuid_t svcUUID;
++    sdp_uuid128_create(&svcUUID, UUID_createUUIDFromString(serviceUuid.uuid).uuid_);
++    sdp_list_t *response_list = NULL, *search_list;
++    sdp_list_append(&search_list, &svcUUID);
++
++    sdp_service_search_req(session, search_list, SDP_ATTR_REQ_RANGE, &response_list);
++
++    sdp_list_t *r = response_list;
++    sdp_record_t *rec;
++    while (r) {
++        rec = (sdp_record_t *)r->data;
++        printf("Service Record No: %d\n", rec->svclass.value);
++        r = r->next;
++    }
++
++    if (client->g_gattClientWrapper.callbacks->searchServiceCompleteCb != NULL) {
++        client->g_gattClientWrapper.callbacks->searchServiceCompleteCb(clientId, 1);
++    }
++    PthreadMutexUnlock(&g_MapGattClientMutex);
++    return OHOS_BT_STATUS_SUCCESS;
++}
++
++int hci_gatt_register_notification(int dd, uint16_t handle, bool enable, int to)
++{
++    return OHOS_BT_STATUS_SUCCESS;
++}
++
++int BleGattcRegisterNotification(int clientId, BtGattCharacteristic characteristic, bool enable)
++{
++    if (clientId < 0 || clientId > g_clientIncrease) {
++        perror("BleGattcRegisterNotification: Invalid param");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    GattClientEntry *client = BleGattcFindClientById(clientId);
++    int err = OHOS_BT_STATUS_FAIL;
++
++    struct hci_filter eventFilter;
++    memset(&eventFilter, 0, sizeof(eventFilter));
++    hci_filter_set_ptype(HCI_EVENT_PKT, &eventFilter);
++    hci_filter_set_event(EVT_LE_META_EVENT, &eventFilter);
++
++    if (setsockopt(client->g_gattClientWrapper.sock, SOL_HCI, HCI_FILTER, &eventFilter, sizeof(eventFilter)) < 0) {
++        perror("BleGattcRegisterNotification: Invalid param");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    struct hci_request request;
++    memset(&request, 0, sizeof(request));
++    request.ocf = OCF_SET_EVENT_MASK;
++    request.ogf = OGF_HOST_CTL;
++    request.cparam = &client->g_gattClientWrapper.handler;
++    request.clen = sizeof(client->g_gattClientWrapper.handler);
++
++    if (enable) {
++        if (hci_gatt_register_notification(client->g_gattClientWrapper.sock, client->g_gattClientWrapper.handler, true, 1000) < 0) {
++            perror("BleGattcRegisterNotification: Failed to register notification");
++            return OHOS_BT_STATUS_FAIL;
++        }
++    } else {
++        if (hci_gatt_register_notification(client->g_gattClientWrapper.sock, client->g_gattClientWrapper.handler, false, 1000) < 0) {
++            perror("BleGattcRegisterNotification: Failed to unregister notification");
++            return OHOS_BT_STATUS_FAIL;
++        }
++    }
++}
++
++int BleGattcConfigureMtuSize(int clientId, int mtuSize)
++{
++    PthreadMutexLock(&g_MapGattClientMutex);
++
++    GattClientEntry *client = BleGattcFindClientById(clientId);
++    if (client == NULL) {
++        perror("BleGattcConfigureMtuSize: clientId is not register");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    int l2cap_sock;
++    struct sockaddr_l2 l2cap_addr;
++    l2cap_sock = socket(PF_BLUETOOTH, SOCK_SEQPACKET, BTPROTO_L2CAP);
++    if (l2cap_sock < 0) {
++        perror("BleGattcConfigureMtuSize: Failed to create socket");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    memset(&l2cap_addr, 0, sizeof(l2cap_addr));
++    l2cap_addr.l2_family = AF_BLUETOOTH;
++    memcpy(&l2cap_addr.l2_bdaddr, client->g_gattClientWrapper.remoteAddr, OHOS_BD_ADDR_LEN);
++    l2cap_addr.l2_psm = htobs(0x0001);
++    if (connect(l2cap_sock, (struct sockaddr *)&l2cap_addr, sizeof(l2cap_addr)) < 0) {
++        perror("BleGattcConfigureMtuSize: Failed to connect");
++        return OHOS_BT_STATUS_FAIL;
++    }
++    if (setsockopt(l2cap_sock, SOL_L2CAP, L2CAP_CONF_MTU, &mtuSize, sizeof(mtuSize)) < 0) {
++        perror("BleGattcConfigureMtuSize: Failed to set socket option");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    if (client->g_gattClientWrapper.callbacks->configureMtuSizeCb != NULL) {
++        client->g_gattClientWrapper.callbacks->configureMtuSizeCb(clientId, mtuSize, 1);
++    }
++
++    PthreadMutexUnlock(&g_MapGattClientMutex);
++    return OHOS_BT_STATUS_SUCCESS;
++}
++
++int BleGattcWriteCharacteristic(
++    int clientId, BtGattCharacteristic characteristic, BtGattWriteType writeType, int len, const char *value)
++{
++    PthreadMutexLock(&g_MapGattClientMutex);
++
++    GattClientEntry *client = BleGattcFindClientById(clientId);
++    if (client == NULL) {
++        perror("BleGattcWriteCharacteristic: clientId is not register");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    bdaddr_t remote_addr;
++    memcpy(&remote_addr, client->g_gattClientWrapper.remoteAddr, OHOS_BD_ADDR_LEN);
++
++    sdp_session_t *session = sdp_connect(BDADDR_ANY, &remote_addr, SDP_RETRY_IF_BUSY);
++    if (session == NULL) {
++        perror("BleGattcWriteCharacteristic: Failed to connect sdp");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    uuid_t svcUUID, charUUID;
++    sdp_uuid128_create(&svcUUID, UUID_createUUIDFromString(characteristic.serviceUuid.uuid).uuid_);
++    sdp_uuid128_create(&charUUID, UUID_createUUIDFromString(characteristic.characteristicUuid.uuid).uuid_);
++    sdp_list_t *response_list = NULL, *search_list;
++    sdp_list_append(&search_list, &svcUUID);
++
++    sdp_service_search_req(session, search_list, SDP_ATTR_REQ_RANGE, &response_list);
++
++    sdp_list_t *r = response_list;
++    sdp_record_t *rec;
++
++    while (r) {
++        rec = (sdp_record_t *)r->data;
++        sdp_list_t *char_list = rec->attrlist;
++
++        while (char_list) {
++            sdp_list_t *attr_list = (sdp_list_t *)char_list->data;
++            while (attr_list) {
++                sdp_data_t *attr = (sdp_data_t *)attr_list->data;
++                if (attr->attrId != SDP_CHARACTERISTIC_UUID_ID || !sdp_uuid128_cmp(&attr->val.uuid, &charUUID)) {
++                    continue;
++                }
++                if (attr->attrId == SDP_CHARACTERISTIC_WRITE_TYPE_ID) {
++                    attr->val.uint8 = writeType;
++                } else if (attr->attrId = SDP_CHARACTERISTIC_VALUE_ID) {
++                    memcpy(attr->val.str, value, len);
++                    sdp_record_update(session, rec);
++                    return OHOS_BT_STATUS_SUCCESS;
++                }
++                attr_list = attr_list->next;
++            }
++            char_list = char_list->next;
++        }
++        r = r->next;
++    }
++
++    if (client->g_gattClientWrapper.callbacks->writeCharacteristicCb != NULL) {
++        client->g_gattClientWrapper.callbacks->writeCharacteristicCb(clientId, &characteristic, 1);
++    }
++    PthreadMutexUnlock(&g_MapGattClientMutex);
++    return OHOS_BT_STATUS_SUCCESS;
++}
+diff --git a/bluez_adapter/ohos_bt_gatt_server.c b/bluez_adapter/ohos_bt_gatt_server.c
+new file mode 100644
+index 0000000..4b47690
+--- /dev/null
++++ b/bluez_adapter/ohos_bt_gatt_server.c
+@@ -0,0 +1,730 @@
++#include "ohos_bt_gatt_server.h"
++#include "ohos_bt_def.h"
++#include "ohos_bt_gatt.h"
++#include <bluetooth/bluetooth.h>
++#include <bluetooth/hci.h>
++#include <bluetooth/hci_lib.h>
++#include <bluetooth/l2cap.h>
++#include <bluetooth/sdp.h>
++#include <bluetooth/sdp_lib.h>
++#include <stdbool.h>
++#include <sys/socket.h>
++#include <unistd.h>
++
++#define MAXIMUM_NUMBER_APPLICATION      64
++#define MAXIMUM_NUMBER_GATTSERVICE      64
++
++const uint8_t GATT_TRANSPORT_TYPE_LE = 0x1;
++const uint8_t GATT_TRANSPORT_TYPE_CLASSIC = 0x2;
++
++const uint8_t REQUEST_TYPE_CHARACTERISTICS_READ = 0x00;
++const uint8_t REQUEST_TYPE_CHARACTERISTICS_WRITE = 0x01;
++const uint8_t REQUEST_TYPE_DESCRIPTOR_READ = 0x02;
++const uint8_t REQUEST_TYPE_DESCRIPTOR_WRITE = 0x03;
++
++static size_t CURRENT_NUMBER_APPLICATION = 0;
++
++static BtGattServerCallbacks *g_GattsCallback;
++
++struct GattServiceWapper {
++    GattService *gattService;
++    int index;
++    int maxNum;
++    int handleOffset;
++    bool isAdding;
++};
++
++struct GattServerWapper {
++    int serverId;
++    int serviceNum;
++    BtGattServerCallbacks *serverCallbacks;
++    struct GattServiceWapper gattServices[MAXIMUM_NUMBER_GATTSERVICE];
++};
++
++struct GattServerWapper g_gattServers[MAXIMUM_NUMBER_APPLICATION];
++
++#define GATTSERVER(x)      g_gattServers[x]
++#define GATTSERVICES(x, y) g_gattServers[x].gattServices[y]
++#define GATTSERVICE(x, y)  GATTSERVICES(x, y).gattService
++
++GattCharacteristic *BleFindCharacteristic(int serverId, int attrHandle);
++
++void AddDeviceRecord(BdAddr bdAddr, int serverId, int connId)
++{
++    for (int i = 0; i < MAXIMUM_NUMBER_CONNECTED_DEVICE; i++) {
++        if (!g_connDevices[i].isUsed) {
++            memcpy(&g_connDevices[i].bdAddr, &bdAddr, sizeof(bdAddr));
++            g_connDevices[i].serverId = serverId;
++            g_connDevices[i].connId = connId;
++            g_connDevices[i].isUsed = true;
++            g_coonNums++;
++            return;
++        }
++    }
++}
++
++void RemoveDeviceRecord(int serverId, int connId)
++{
++    for (int i = 0; i < MAXIMUM_NUMBER_CONNECTED_DEVICE; i++) {
++        if (g_connDevices[i].isUsed && g_connDevices[i].serverId == serverId && g_connDevices[i].connId == connId) {
++            memset(&g_connDevices[i], 0, sizeof(struct ConnectedDevice));
++            g_coonNums--;
++            return;
++        }
++    }
++}
++
++bool sdp_attr_read(unsigned char *addr, int serverId, int attrHandle, char *value, int *valueLen)
++{
++    if (serverId >= MAXIMUM_NUMBER_APPLICATION || serverId < 0) {
++        perror("serverId error");
++        return false;
++    }
++
++    if (serverId != 0 && GATTSERVER(serverId).serverId == 0) {
++        perror("serverId error");
++        return false;
++    }
++
++    GattCharacteristic *gattCharacteristic = BleFindCharacteristic(serverId, attrHandle);
++    uuid_t svcUUID;
++    sdp_uuid128_create(&svcUUID, gattCharacteristic->service->uuid.uuid_);
++    sdp_list_t *search_list, *attrid_list;
++    sdp_list_t *response_list = NULL;
++    search_list = sdp_list_append(NULL, &svcUUID);
++    uint32_t range = 0x0000ffff;
++    attrid_list = sdp_list_append(NULL, &range);
++
++    sdp_session_t *session = sdp_connect(BDADDR_ANY, BDADDR_LOCAL, SDP_RETRY_IF_BUSY);
++    if (!session) {
++        perror("sdp_connect error");
++        return false;
++    }
++
++    int err = sdp_service_search_attr_req(session, search_list, SDP_ATTR_REQ_RANGE, attrid_list, &response_list);
++    if (err < 0) {
++        perror("sdp_service_search_attr_req error");
++        return false;
++    }
++
++    sdp_list_t *res = response_list;
++    while (res) {
++        sdp_record_t *rec = (sdp_record_t *)res->data;
++        sdp_list_t *attr_list = rec->attrlist;
++        sdp_list_t *pattern_list = rec->pattern;
++        while (attr_list) {
++            if ((uint16_t)pattern_list->data == gattCharacteristic->handle) {
++                sdp_list_t *data_list = (sdp_list_t *)attr_list->data;
++                while (data_list) {
++                    sdp_data_t *attr = (sdp_data_t *)data_list->data;
++                    if (attr->attrId == SDP_CHARACTERISTIC_VALUE_ID) {
++                        *valueLen = sizeof(attr->val);
++                        memcpy(value, &attr->val, *valueLen);
++                        return true;
++                    }
++                    data_list = data_list->next;
++                }
++            }
++            attr_list = attr_list->next;
++            pattern_list = pattern_list->next;
++        }
++        res = res->next;
++    }
++
++    return false;
++}
++
++bool sdp_attr_write()
++{
++    return true;
++}
++
++bool sdp_attr_desc_read()
++{
++    return true;
++}
++
++bool sdp_attr_desc_write()
++{
++    return true;
++}
++
++GattCharacteristic *BleFindCharacteristic(int serverId, int attrHandle)
++{
++    if (serverId >= MAXIMUM_NUMBER_APPLICATION || serverId < 0) {
++        perror("serverId error");
++        return NULL;
++    }
++
++    for (int i = 0; i < MAXIMUM_NUMBER_GATTSERVICE; i++) {
++        if (GATTSERVICE(serverId, i) == NULL) {
++            continue;
++        }
++
++        for (int j = 0; j < GATTSERVICE(serverId, i)->numCharacteristics; j++) {
++            if (GATTSERVICE(serverId, i)->characteristics[j].handle == attrHandle) {
++                return &GATTSERVICE(serverId, i)->characteristics[j];
++            }
++        }
++    }
++
++    return NULL;
++}
++
++int BleGattsAddService(int serverId, BtUuid srvcUuid, bool isPrimary, int number)
++{
++    if (UUID_isValid(srvcUuid.uuid)) {
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    if (serverId >= MAXIMUM_NUMBER_APPLICATION || serverId < 0) {
++        perror("serverId error");
++        return OHOS_BT_STATUS_PARM_INVALID;
++    }
++
++    int i = 0;
++    for (i = 0; i < MAXIMUM_NUMBER_GATTSERVICE; i++) {
++        if (GATTSERVICE(serverId, i) == NULL) {
++            GATTSERVICE(serverId, i) = (GattService *)malloc(sizeof(GattService));
++            if (GATTSERVICES(serverId, i).gattService == NULL) {
++                perror("malloc error");
++                return OHOS_BT_STATUS_FAIL;
++            }
++            GATTSERVICE(serverId, i)->handle = i;
++            GATTSERVICE(serverId, i)->endHandle = number;
++            GATTSERVICE(serverId, i)->uuid = UUID_createUUIDFromString(srvcUuid.uuid);
++            GATTSERVICE(serverId, i)->isPrimary = isPrimary;
++            GATTSERVICE(serverId, i)->serviceType = isPrimary ? PRIMARY : SECONDARY;
++            GATTSERVICES(serverId, i).index = i + 1;
++            GATTSERVICES(serverId, i).maxNum = number;
++            GATTSERVICES(serverId, i).handleOffset = 0;
++            GATTSERVICES(serverId, i).isAdding = false;
++            GATTSERVER(serverId).serviceNum++;
++            return OHOS_BT_STATUS_SUCCESS;
++        }
++    }
++
++    if (GATTSERVER(serverId).serverCallbacks->serviceAddCb != NULL) {
++        GATTSERVER(serverId).serverCallbacks->serviceAddCb(OHOS_BT_STATUS_SUCCESS, serverId, &srvcUuid, i);
++    }
++    return OHOS_BT_STATUS_FAIL;
++}
++
++int BleGattsAddCharacteristic(int serverId, int srvcHandle, BtUuid characUuid, int properties, int permissions)
++{
++    if (serverId >= MAXIMUM_NUMBER_APPLICATION || serverId < 0 || srvcHandle >= MAXIMUM_NUMBER_GATTSERVICE ||
++        srvcHandle < 0) {
++        perror("srvcHandle error");
++        return OHOS_BT_STATUS_PARM_INVALID;
++    }
++
++    if (GATTSERVICE(serverId, srvcHandle) == NULL) {
++        perror("serverId or srvcHandle error");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    if (UUID_isValid(characUuid.uuid)) {
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    UUID charUUID = UUID_createUUIDFromString(characUuid.uuid);
++    int i = 0;
++    for (i = 0; i < MAXIMUM_NUMBER_CHARACTERISTIC; i++) {
++        if (UUID_Equals(&charUUID, &GATTSERVICE(serverId, srvcHandle)->characteristics[i].uuid)) {
++            perror("charUUID error");
++            return OHOS_BT_STATUS_FAIL;
++        }
++
++        if (GATTSERVICE(serverId, srvcHandle)->characteristics[i].service == NULL) {
++            GATTSERVICE(serverId, srvcHandle)->characteristics[i].uuid = UUID_createUUIDFromString(characUuid.uuid);
++            GATTSERVICE(serverId, srvcHandle)->characteristics[i].permissions = permissions;
++            GATTSERVICE(serverId, srvcHandle)->characteristics[i].properties = properties;
++            GATTSERVICE(serverId, srvcHandle)->characteristics[i].service = GATTSERVICE(serverId, srvcHandle);
++            GATTSERVICE(serverId, srvcHandle)->characteristics[i].writeType = DEFAULT;
++            GATTSERVICE(serverId, srvcHandle)->characteristics[i].value = NULL;
++            GATTSERVICE(serverId, srvcHandle)->characteristics[i].length = 0;
++            GATTSERVICE(serverId, srvcHandle)->characteristics[i].handle = i;
++            GATTSERVICE(serverId, srvcHandle)->characteristics[i].numDescriptors = 0;
++            GATTSERVICE(serverId, srvcHandle)->numCharacteristics++;
++            return OHOS_BT_STATUS_SUCCESS;
++        }
++    }
++
++    if (GATTSERVER(serverId).serverCallbacks->characteristicAddCb != NULL) {
++        GATTSERVER(serverId).serverCallbacks->characteristicAddCb(OHOS_BT_STATUS_SUCCESS, serverId, &characUuid, srvcHandle, i);
++    }
++    return OHOS_BT_STATUS_FAIL;
++}
++
++int BleGattsAddDescriptor(int serverId, int srvcHandle, BtUuid descUuid, int permissions)
++{
++    if (serverId >= MAXIMUM_NUMBER_APPLICATION || serverId < 0 || srvcHandle >= MAXIMUM_NUMBER_GATTSERVICE ||
++        srvcHandle < 0) {
++        perror("srvcHandle error");
++        return OHOS_BT_STATUS_PARM_INVALID;
++    }
++    if (UUID_isValid(descUuid.uuid)) {
++        return OHOS_BT_STATUS_FAIL;
++    }
++    if (GATTSERVICE(serverId, srvcHandle) == NULL) {
++        perror("serverId or srvcHandle error");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    UUID descUUID = UUID_createUUIDFromString(descUuid.uuid);
++    GattCharacteristic *gattCharacteristic =
++        &GATTSERVICE(serverId, srvcHandle)->characteristics[GATTSERVICE(serverId, srvcHandle)->numCharacteristics - 1];
++    int descHandle = GATTSERVICES(serverId, srvcHandle).index++;
++    GattDescriptor *gattDescriptor = GattDescriptor_Create(gattCharacteristic, &descUUID, descHandle, permissions);
++    GattCharacteristic_addDescriptor(gattCharacteristic, gattDescriptor);
++
++    if (GATTSERVER(serverId).serverCallbacks->descriptorAddCb != NULL) {
++        GATTSERVER(serverId).serverCallbacks->descriptorAddCb(OHOS_BT_STATUS_SUCCESS, serverId, &descUuid, srvcHandle, descHandle);
++    }
++    return OHOS_BT_STATUS_SUCCESS;
++}
++
++int BleGattsStartService(int serverId, int srvcHandle)
++{
++    if (serverId >= MAXIMUM_NUMBER_APPLICATION || serverId < 0 || srvcHandle >= MAXIMUM_NUMBER_GATTSERVICE ||
++        srvcHandle < 0) {
++        perror("srvcHandle error");
++        return OHOS_BT_STATUS_PARM_INVALID;
++    }
++
++    if (GATTSERVICE(serverId, srvcHandle) == NULL) {
++        perror("serverId or srvcHandle error");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    GATTSERVICES(serverId, srvcHandle).isAdding = true;
++
++    uint8_t rfcomm_channel = 11;
++    uuid_t rootUUID, l2capUUID, rfcommUUID, svcUUID, charUUID, descUUID;
++    sdp_list_t *l2capList, *rfcommList, *rootList, *protoList, *accessProtoList;
++    sdp_data_t *channel, *psm;
++
++    sdp_record_t *record = sdp_record_alloc();
++    sdp_uuid128_create(&rootUUID, &GATTSERVICE(serverId, srvcHandle)->uuid.uuid_);
++    sdp_set_service_id(record, rootUUID);
++
++    sdp_uuid16_create(&svcUUID, PUBLIC_BROWSE_GROUP);
++    rootList = sdp_list_append(NULL, &svcUUID);
++    sdp_set_browse_groups(record, rootList);
++
++    sdp_uuid16_create(&l2capUUID, L2CAP_UUID);
++    l2capList = sdp_list_append(NULL, &l2capUUID);
++    protoList = sdp_list_append(NULL, l2capList);
++
++    sdp_uuid16_create(&rfcommUUID, RFCOMM_UUID);
++    channel = sdp_data_alloc(SDP_UINT8, &rfcomm_channel);
++    rfcommList = sdp_list_append(NULL, &rfcommUUID);
++    sdp_list_append(rfcommList, channel);
++    sdp_list_append(protoList, rfcommList);
++
++    accessProtoList = sdp_list_append(NULL, protoList);
++    sdp_set_access_protos(record, accessProtoList);
++
++    GattService *gattService = &GATTSERVICE(serverId, srvcHandle);
++    sdp_list_t *char_uuid_list = sdp_list_append(0, NULL);
++    for (int i = 0; i < gattService->numCharacteristics; i++) {
++        if (gattService->characteristics[i].numDescriptors == 0) {
++            break;
++        }
++        GattCharacteristic *gattCharacteristic = &gattService->characteristics[i];
++        sdp_uuid128_create(&charUUID, gattCharacteristic->uuid.uuid_);
++
++        sdp_list_t *attr_list = 0;
++        sdp_data_t *attr = 0;
++
++        attr_list = sdp_list_append(0, NULL);
++
++        attr = sdp_data_alloc(SDP_UINT16, &gattCharacteristic->handle);
++        sdp_list_append(char_uuid_list, attr);
++
++        attr = sdp_data_alloc(SDP_UUID128, &charUUID);
++        sdp_set_attrid((sdp_buf_t *)attr, SDP_CHARACTERISTIC_UUID_ID);
++        sdp_list_append(attr_list, attr);
++
++        attr = sdp_data_alloc(SDP_UINT16, &gattCharacteristic->handle);
++        sdp_set_attrid((sdp_buf_t *)attr, SDP_CHARACTERISTIC_HANDLE_ID);
++        sdp_list_append(attr_list, attr);
++
++        attr = sdp_data_alloc(SDP_INT32, &gattCharacteristic->permissions);
++        sdp_set_attrid((sdp_buf_t *)attr, SDP_CHARACTERISTIC_PERMISSIONS_ID);
++        sdp_list_append(attr_list, attr);
++
++        attr = sdp_data_alloc(SDP_INT32, &gattCharacteristic->properties);
++        sdp_set_attrid((sdp_buf_t *)attr, SDP_CHARACTERISTIC_PROPERTIES_ID);
++        sdp_list_append(attr_list, attr);
++
++        attr = sdp_data_alloc(SDP_UINT8, &gattCharacteristic->writeType);
++        sdp_set_attrid((sdp_buf_t *)attr, SDP_CHARACTERISTIC_WRITE_TYPE_ID);
++        sdp_list_append(attr_list, attr);
++
++        attr = sdp_data_alloc(SDP_UINT8, gattCharacteristic->value);
++        sdp_set_attrid((sdp_buf_t *)attr, SDP_CHARACTERISTIC_VALUE_ID);
++        sdp_list_append(attr_list, attr);
++
++        sdp_list_t *descriptor_list = sdp_list_append(0, NULL);
++        sdp_list_append(attr_list, descriptor_list);
++
++        for (int j = 0; j < gattCharacteristic->numDescriptors; j++) {
++            GattDescriptor *gattDescriptor = &gattCharacteristic->descriptors[j];
++            sdp_uuid16_create(&descUUID, (uint16_t)gattDescriptor->uuid_.uuid_);
++            attr = sdp_data_alloc(SDP_UINT8, gattDescriptor->value_);
++            sdp_set_attrid((sdp_buf_t *)attr, descUUID.value.uuid16);
++            sdp_list_append(descriptor_list, attr);
++        }
++
++        sdp_list_append(record->attrlist, attr_list);
++    }
++
++    sdp_pattern_add_uuidseq(record, char_uuid_list);
++
++    sdp_session_t *session = sdp_connect(BDADDR_ANY, BDADDR_LOCAL, SDP_RETRY_IF_BUSY);
++    if (!session) {
++        perror("sdp_connect error");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    int err = sdp_record_register(session, record, 0);
++    if (err < 0) {
++        perror("sdp_record_register error");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    if (GATTSERVER(serverId).serverCallbacks->serviceStartCb != NULL) {
++        GATTSERVER(serverId).serverCallbacks->serviceStartCb(OHOS_BT_STATUS_SUCCESS, serverId, srvcHandle);
++    }
++
++    sdp_data_free(channel);
++    sdp_list_free(l2capList, NULL);
++    sdp_list_free(rfcommList, NULL);
++    sdp_list_free(rootList, NULL);
++    sdp_list_free(accessProtoList, NULL);
++    sdp_record_free(record);
++    sdp_close(session);
++    return OHOS_BT_STATUS_SUCCESS;
++}
++
++bool sdp_stop_service(int serverId, int srvcHandle)
++{
++    UUID uuid = GATTSERVICE(serverId, srvcHandle)->uuid;
++
++    uuid_t svcUUID;
++    sdp_list_t *search_list, *attrid_list;
++    sdp_list_t *response_list = NULL;
++    sdp_session_t *session = 0;
++    uint32_t start = 0; // 起始属性ID
++    uint32_t end = 0;   // 结束属性ID
++
++    sdp_uuid128_create(&svcUUID, uuid.uuid_);
++    search_list = sdp_list_append(NULL, &svcUUID);
++    attrid_list = sdp_list_append(NULL, &start);
++    sdp_list_append(attrid_list, &end);
++
++    session = sdp_connect(BDADDR_ANY, BDADDR_LOCAL, SDP_RETRY_IF_BUSY);
++    if (!session) {
++        perror("sdp_connect error");
++        return false;
++    }
++
++    int err = sdp_service_search_attr_req(session, search_list, SDP_ATTR_REQ_RANGE, attrid_list, &response_list);
++    if (err < 0) {
++        perror("sdp_service_search_attr_req error");
++        return false;
++    }
++
++    sdp_list_t *r = response_list;
++
++    while (r) {
++        sdp_record_t *rec = (sdp_record_t *)r->data;
++        uuid_t uid;
++        sdp_get_service_id(rec, &uid);
++        if (sdp_uuid128_cmp(&uid, &svcUUID)) {
++            sdp_record_unregister(session, rec);
++            sdp_record_free(rec);
++            return true;
++        }
++        r = r->next;
++    }
++
++    return false;
++}
++
++int BleGattsStopService(int serverId, int srvcHandle)
++{
++    if (serverId >= MAXIMUM_NUMBER_APPLICATION || serverId < 0 || srvcHandle >= MAXIMUM_NUMBER_GATTSERVICE ||
++        srvcHandle < 0) {
++        perror("srvcHandle error");
++        return OHOS_BT_STATUS_PARM_INVALID;
++    }
++
++    if (GATTSERVICE(serverId, srvcHandle) == NULL) {
++        perror("serverId or srvcHandle error");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    GATTSERVICES(serverId, srvcHandle).isAdding = false;
++    for (int i = 0; i < MAXIMUM_NUMBER_GATTSERVICE; i++) {
++        if (GATTSERVICE(serverId, i)->handle == srvcHandle) {
++            if (!sdp_stop_service(serverId, srvcHandle)) {
++                perror("sdp_stop_service error");
++                return OHOS_BT_STATUS_FAIL;
++            }
++            free(GATTSERVICE(serverId, i));
++            GATTSERVICE(serverId, i) = NULL;
++            GATTSERVER(serverId).serviceNum--;
++            GATTSERVICES(serverId, i).index = 0;
++            GATTSERVICES(serverId, i).maxNum = 0;
++            GATTSERVICES(serverId, i).handleOffset = 0;
++            GATTSERVICES(serverId, i).isAdding = false;
++            return OHOS_BT_STATUS_SUCCESS;
++        }
++    }
++
++    return OHOS_BT_STATUS_FAIL;
++}
++
++int BleGattsDeleteService(int serverId, int srvcHandle)
++{
++    if (serverId >= MAXIMUM_NUMBER_APPLICATION || serverId < 0 || srvcHandle >= MAXIMUM_NUMBER_GATTSERVICE ||
++        srvcHandle < 0) {
++        perror("srvcHandle error");
++        return OHOS_BT_STATUS_PARM_INVALID;
++    }
++
++    if (GATTSERVICE(serverId, srvcHandle) == NULL) {
++        perror("serverId or srvcHandle error");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    GATTSERVICES(serverId, srvcHandle).isAdding = false;
++    for (int i = 0; i < MAXIMUM_NUMBER_GATTSERVICE; i++) {
++        if (GATTSERVICE(serverId, i)->handle == srvcHandle) {
++            free(GATTSERVICE(serverId, i));
++            GATTSERVICE(serverId, i) = NULL;
++            GATTSERVER(serverId).serviceNum--;
++            GATTSERVICES(serverId, i).index = 0;
++            GATTSERVICES(serverId, i).maxNum = 0;
++            GATTSERVICES(serverId, i).handleOffset = 0;
++            GATTSERVICES(serverId, i).isAdding = false;
++            return OHOS_BT_STATUS_SUCCESS;
++        }
++    }
++
++    if (GATTSERVER(serverId).serverCallbacks->serviceDeleteCb != NULL) {
++        GATTSERVER(serverId).serverCallbacks->serviceDeleteCb(OHOS_BT_STATUS_SUCCESS, serverId, srvcHandle);
++    }
++    return OHOS_BT_STATUS_FAIL;
++}
++
++int BleGattsRegister(BtUuid appUuid)
++{
++    int serverId = 0;
++    int i = 0;
++    for (i = 0; i < MAXIMUM_NUMBER_APPLICATION; i++) {
++        if (CURRENT_NUMBER_APPLICATION == 0) {
++            serverId = i;
++            break;
++        }
++        if (GATTSERVER(i).serverId == 0) {
++            serverId = i;
++            break;
++        }
++    }
++
++    if (i == MAXIMUM_NUMBER_APPLICATION) {
++        perror("serverId error");
++        return OHOS_BT_STATUS_FAIL;
++        if (g_GattsCallback->registerServerCb != NULL) {
++            g_GattsCallback->registerServerCb(1, 0, &appUuid);
++        }
++    }
++    
++    GATTSERVER(serverId).serverId = serverId;
++    CURRENT_NUMBER_APPLICATION++;
++    GATTSERVER(serverId).serverCallbacks = g_GattsCallback;
++    if (g_GattsCallback->registerServerCb != NULL) {
++        g_GattsCallback->registerServerCb(0, i, &appUuid);
++    }
++
++    return OHOS_BT_STATUS_SUCCESS;
++}
++
++int BleGattsUnRegister(int serverId)
++{
++    if (serverId >= MAXIMUM_NUMBER_APPLICATION || serverId < 0) {
++        perror("serverId error");
++        return OHOS_BT_STATUS_PARM_INVALID;
++    }
++
++    GATTSERVER(serverId).serverId = 0;
++    GATTSERVER(serverId).serverCallbacks = NULL;
++    CURRENT_NUMBER_APPLICATION--;
++
++    return OHOS_BT_STATUS_SUCCESS;
++}
++
++int BleGattsDisconnect(int serverId, BdAddr bdAddr, int connId)
++{
++    if (serverId >= MAXIMUM_NUMBER_APPLICATION || serverId < 0) {
++        perror("serverId error");
++        return OHOS_BT_STATUS_PARM_INVALID;
++    }
++
++    if (serverId != 0 && GATTSERVER(serverId).serverId == 0) {
++        perror("serverId error");
++        return OHOS_BT_STATUS_PARM_INVALID;
++    }
++
++    bdaddr_t bdaddr;
++    str2ba(bdAddr.addr, &bdaddr);
++    int devId = hci_get_route(NULL);
++    int sock = hci_open_dev(devId);
++    if (sock < 0) {
++        perror("hci_open_dev error");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    struct hci_request request;
++    memset(&request, 0, sizeof(request));
++    request.ogf = OGF_LINK_CTL;
++    request.ocf = OCF_DISCONNECT;
++    request.cparam = &bdaddr;
++    request.clen = sizeof(bdaddr);
++
++    int ret = hci_send_req(sock, &request, 0);
++    if (ret < 0) {
++        perror("hci_send_req error");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    hci_close_dev(sock);
++    // RemoveDeviceRecord(serverId, connId);
++    if (GATTSERVER(serverId).serverCallbacks->disconnectServerCb != NULL) {
++        GATTSERVER(serverId).serverCallbacks->disconnectServerCb(connId, serverId, &bdAddr);
++    }
++    return OHOS_BT_STATUS_SUCCESS;
++}
++
++int BleGattsSendResponse(int serverId, GattsSendRspParam *param)
++{
++    if (serverId >= MAXIMUM_NUMBER_APPLICATION || serverId < 0) {
++        perror("serverId error");
++        return OHOS_BT_STATUS_PARM_INVALID;
++    }
++    if (serverId != 0 && GATTSERVER(serverId).serverId == 0) {
++        perror("serverId error");
++        return OHOS_BT_STATUS_PARM_INVALID;
++    }
++    if (param == NULL) {
++        perror("param error");
++        return OHOS_BT_STATUS_PARM_INVALID;
++    }
++
++    int i = 0;
++    for (i = 0; i < MAXIMUM_NUMBER_CONNECTED_DEVICE; i++) {
++        if (param->connectId == g_connDevices[i].connId) {
++            break;
++        }
++    }
++    if (i >= MAXIMUM_NUMBER_CONNECTED_DEVICE || !g_connDevices[i].isUsed) {
++        perror("connId error");
++        return OHOS_BT_STATUS_PARM_INVALID;
++    }
++
++    g_connDevices[i].serverId = serverId;
++    BdAddr bdAddr = g_connDevices[i].bdAddr;
++    int requestId = param->attrHandle;
++    uint8_t requestType = requestId >> 8;
++    uint8_t transPort = requestId & 0xff;
++    if (transPort != GATT_TRANSPORT_TYPE_CLASSIC && transPort != GATT_TRANSPORT_TYPE_LE) {
++        perror("transPort error");
++        return OHOS_BT_STATUS_PARM_INVALID;
++    }
++
++    bool ret = false;
++    switch (requestType) {
++        case REQUEST_TYPE_CHARACTERISTICS_READ:
++            ret = sdp_attr_read(bdAddr.addr, serverId, param->attrHandle, param->value, &param->valueLen);
++            break;
++        case REQUEST_TYPE_CHARACTERISTICS_WRITE:
++            ret = sdp_attr_write();
++            break;
++        case REQUEST_TYPE_DESCRIPTOR_READ:
++            ret = sdp_attr_desc_read();
++            break;
++        case REQUEST_TYPE_DESCRIPTOR_WRITE:
++            ret = sdp_attr_desc_write();
++            break;
++        default:
++            ret = false;
++    }
++
++    if (!ret) {
++        return OHOS_BT_STATUS_FAIL;
++    }  
++    if (GATTSERVER(serverId).serverCallbacks->responseConfirmationCb != NULL) {
++        GATTSERVER(serverId).serverCallbacks->responseConfirmationCb(OHOS_BT_STATUS_SUCCESS, param->attrHandle);
++    }
++    return OHOS_BT_STATUS_SUCCESS;
++}
++
++int BleGattsSendIndication(int serverId, GattsSendIndParam *param)
++{
++    GattCharacteristic *gattCharacteristic = BleFindCharacteristic(serverId, param->attrHandle);
++    gattCharacteristic->value = param->value;
++    gattCharacteristic->length = param->valueLen;
++
++    BdAddr bdAddr;
++    for (int i = 0; i < MAXIMUM_NUMBER_CONNECTED_DEVICE; i++) {
++        if (param->connectId == g_connDevices[i].connId) {
++            bdAddr = g_connDevices[i].bdAddr;
++            break;
++        }
++    }
++
++    int sock = socket(PF_BLUETOOTH, SOCK_SEQPACKET, BTPROTO_L2CAP);
++    if (sock < 0) {
++        perror("socket error");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    struct sockaddr_l2 addr = {0};
++    addr.l2_family = AF_BLUETOOTH;
++    addr.l2_cid = htobs(4);
++    addr.l2_bdaddr_type = BDADDR_LE_PUBLIC;
++    str2ba(bdAddr.addr, &addr.l2_bdaddr);
++    int ret = bind(sock, (struct sockaddr *)&addr, sizeof(addr));
++
++    ret = connect(sock, (struct sockaddr *)&addr, sizeof(addr));
++    if (ret < 0) {
++        perror("connect error");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    ret = send(sock, param->value, param->valueLen, 0);
++    if (ret < 0) {
++        perror("send error");
++        return OHOS_BT_STATUS_FAIL;
++    }
++
++    close(sock);
++    if (GATTSERVER(serverId).serverCallbacks->indicationSentCb != NULL) {
++        GATTSERVER(serverId).serverCallbacks->indicationSentCb(param->connectId, OHOS_BT_STATUS_SUCCESS);
++    }
++    return OHOS_BT_STATUS_SUCCESS;
++}
++
++int BleGattsRegisterCallbacks(BtGattServerCallbacks *func)
++{
++    if (func == NULL) {
++        perror("func error");
++        return OHOS_BT_STATUS_PARM_INVALID;
++    }
++
++    g_GattsCallback = func;
++    return OHOS_BT_STATUS_SUCCESS;
++}
+-- 
+2.34.1
+
