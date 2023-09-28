@@ -1335,3 +1335,6 @@ manifest_list:
   haveged:
     remote_url: https://gitee.com/src-openeuler/haveged.git
     version: e3dceae4a22c85e64849e35cdd7c68484b60c41d
+  pulseaudio:
+    remote_url: https://gitlab.freedesktop.org/pulseaudio/pulseaudio.git
+    version: e5ad31e873eed62bc580a86a61177047f9e8c491
