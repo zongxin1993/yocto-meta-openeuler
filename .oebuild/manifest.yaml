@@ -801,9 +801,9 @@ manifest_list:
   nlohmann-json:
     remote_url: https://gitee.com/src-openeuler/nlohmann_json.git
     version: e17a35c1a6b85e774b266585c990650504bc8dee
-  gtest:      
+  gtest:
     remote_url: https://gitee.com/src-openeuler/gtest.git
-    version: 1a7c0e868677a26dc133a4b4969a8590429684be    
+    version: 1a7c0e868677a26dc133a4b4969a8590429684be
   spdlog:
     remote_url: https://gitee.com/src-openeuler/spdlog.git
     version: 97dbdf32095525762a3024a336d62902d0c1b716
@@ -1319,7 +1319,7 @@ manifest_list:
     version: e8f11304d13859972ca586f66e1fc8e132c15a7b
   syslinux:
     remote_url: https://gitee.com/src-openeuler/syslinux.git
-    version: 7f2318a9d7e85935b6c3146c67d31140734b724e 
+    version: 7f2318a9d7e85935b6c3146c67d31140734b724e
   python-argcomplete:
     remote_url: https://gitee.com/src-openeuler/python-argcomplete.git
     version: 8b0336803efe3bc4a2c0765701d3bcffdb3f0217
@@ -1335,3 +1335,12 @@ manifest_list:
   haveged:
     remote_url: https://gitee.com/src-openeuler/haveged.git
     version: e3dceae4a22c85e64849e35cdd7c68484b60c41d
+  libassuan:
+    remote_url: https://gitee.com/src-openeuler/libassuan.git
+    version: c7ad99edfd52ab454b2c4177c2eb03534c045029
+  gpgme:
+    remote_url: https://gitee.com/src-openeuler/gpgme.git
+    version: 894e296acf4dbbfa7323331f5d48842045429ecc
+  libsolv:
+    remote_url: https://gitee.com/src-openeuler/libsolv.git
+    version: 1f43668bc40163548998777a6d700daa75539227
