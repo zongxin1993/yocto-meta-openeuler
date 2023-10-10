@@ -223,11 +223,15 @@ def download_repo(repo_dir, repo_url ,version = None):
         remote_name = "upstream"
         remote = git.Remote.add(repo = repo, name = remote_name, url = repo_url)
     
-    remote.fetch(version, depth=1)
     # if repo is modified, restore it
     if repo.is_dirty():
         repo.git.checkout(".")
-    repo.git.checkout(version)
+    
+    try:
+        repo.git.checkout(version)
+    except GitCommandError:
+        remote.fetch(version, depth=1)
+        repo.git.checkout(version)
 
     bb.utils.unlockfile(lf)
 
