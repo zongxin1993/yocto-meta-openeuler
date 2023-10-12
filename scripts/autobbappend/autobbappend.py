@@ -37,8 +37,8 @@ def search_files(rootDir,filepathmsg,filetype):
                         if j in apathname:
                             filepathresult.append(apath)
     for i in sorted(filepathresult):
-                if not i.endswith(tuple(filetype)):
-                    filepathresult.remove(i)
+        if not i.endswith(tuple(filetype)):
+            filepathresult.remove(i)
     if len(filepathresult) == 0:
         dir = None   
     if len(filepathresult) == 1:
@@ -142,6 +142,7 @@ def read_name(spec_dir):
     for count, line in enumerate(f.readlines()):
         count += 1
         if line.find('Name:') != -1: name = line.split(":")[1].strip()
+    f.close()
     return name
 
 
@@ -162,6 +163,7 @@ def read_packageversion(spec_dir,package_dir):
     package = os.path.splitext(os.path.basename(package_dir))
     package = package[0].split('.tar')[0]
     parts = package.split('-')
+    f.close()
     if len(parts) == 2:
         package_version = parts[1]
         if version != package_version:
@@ -172,12 +174,13 @@ def read_packageversion(spec_dir,package_dir):
 
 def read_oldPV(pv,bb_dir):
     if pv == "git":
-        bb_dir = secure_filename(bb_dir)
-        f = open(bb_dir)
+        #bb_dir = secure_filename(bb_dir)
+        f = open(secure_filename(bb_dir))
         count = -1
         for count, line in enumerate(f.readlines()):
             count += 1
             if line.find('PV = ') != -1: pv = line.split('"')[1].strip()
+        f.close()
     return pv
 
 
@@ -193,6 +196,7 @@ def read_patch(spec_dir):
     for i in lines:
         if re.search('^Patch[0-9]', i):
             result.append(i)
+    file.close()
     m = '                   file://'
     a = r"\one"
     result2 = []
@@ -220,6 +224,7 @@ def read_original_source(bb_dir):
             remote_url = line.strip('SRC_URI = "')
             remote_url = remote_url.split('"')[0].strip()#Delete the '"' at the end
             remote_url = remote_url.split("\\")[0].strip()#Delete the ' \' at the end
+    f.close()
     return remote_url
 
 
@@ -381,7 +386,7 @@ class BuildData:
             BP = '${BP}',
             BPN = '${BPN}',
             ))
- 
+        
         # Write code to file
         if not os.path.exists(bbappend:path):os.makedirs(bbappend:path)
         filePath = bbappend:path+'/'+bpn+'_%.bbappend'
@@ -391,11 +396,10 @@ class BuildData:
         class_file.close()
         delete_None_rows(filePath)
         clearBlankLine(filePath)
- 
+        template_file.close()
         print('\033[32mGenerated successfully!\033[0m')
  
 if __name__ == '__main__':
-    
     args = parse_args()	
     build = BuildData()
     build.Init()
