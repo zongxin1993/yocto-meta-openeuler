@@ -12,6 +12,15 @@ build_list:
       - target: openeuler-image
       - target: openeuler-image -c do_populate_sdk
 ##########################################
+    - name: qemu-mcs
+      platform: qemu-aarch64
+      directory: qemu-aarch64-mcs
+      feature: 
+      - name: openeuler-mcs
+      bitbake:
+      - target: openeuler-image
+      - target: openeuler-image -c do_populate_sdk
+##########################################
     - name: qemu-ros 
       platform: qemu-aarch64
       directory: qemu-aarch64-ros
@@ -88,6 +97,16 @@ build_list:
       directory: x86-64-rt
       feature: 
       - name: openeuler-rt
+      bitbake:
+      - target: openeuler-image
+      - target: openeuler-image -c do_populate_sdk
+##########################################
+    - name: qemu-mcs
+      platform: x86-64
+      directory: x86-64-mcs
+      feature: 
+      - name: openeuler-mcs
+      - name: systemd
       bitbake:
       - target: openeuler-image
       - target: openeuler-image -c do_populate_sdk
