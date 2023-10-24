@@ -37,8 +37,8 @@ def search_files(rootDir,filepathmsg,filetype):
                         if j in apathname:
                             filepathresult.append(apath)
     for i in sorted(filepathresult):
-                if not i.endswith(tuple(filetype)):
-                    filepathresult.remove(i)
+        if not i.endswith(tuple(filetype)):
+            filepathresult.remove(i)
     if len(filepathresult) == 0:
         dir = None   
     if len(filepathresult) == 1:
@@ -220,6 +220,7 @@ def read_original_source(bb_dir):
             remote_url = line.strip('SRC_URI = "')
             remote_url = remote_url.split('"')[0].strip()#Delete the '"' at the end
             remote_url = remote_url.split("\\")[0].strip()#Delete the ' \' at the end
+    f.close()
     return remote_url
 
 
@@ -381,7 +382,7 @@ class BuildData:
             BP = '${BP}',
             BPN = '${BPN}',
             ))
- 
+        template_file.close()
         # Write code to file
         if not os.path.exists(bbappend:path):os.makedirs(bbappend:path)
         filePath = bbappend:path+'/'+bpn+'_%.bbappend'
