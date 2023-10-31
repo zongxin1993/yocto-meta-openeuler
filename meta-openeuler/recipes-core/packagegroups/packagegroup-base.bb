@@ -58,6 +58,13 @@ xz \
 expect \
 sysfsutils \
 elfutils \
+pulseaudio-server \
+pulseaudio-misc \
+pulseaudio-module-dbus-protocol \
+pulseaudio-module-bluetooth-discover \
+pulseaudio-module-bluetooth-policy \
+pulseaudio-module-bluez5-device \
+pulseaudio-module-bluez5-discover \
 "
 
 RDEPENDS:packagegroup-base-libs = " \
@@ -82,6 +89,10 @@ ncurses-terminfo-base \
 libusb1 \
 glib-2.0 \
 libbfd \
+libpulse \
+libpulsecommon \
+libpulsecore \
+pulseaudio-dev \
 "
 
 RDEPENDS:packagegroup-base = " \

@@ -59,6 +59,7 @@ DEPENDS:append:raspberrypi4-64 = " bluez5"
 SRC_URI:append:raspberrypi4-64 = " \
         file://add-bluez-adapter-for-dsoftbus.patch;patchdir=${dsoftbus-depend} \
         file://apply-ble-discovery-support.patch;patchdir=${dsoftbus-src}/dsoftbus \
+        file://0001-bluez-adapter-for-connection-and-transmission.patch;patchdir=${dsoftbus-depend} \
 "
 
 FILES:${PN}-dev = "${includedir}"
