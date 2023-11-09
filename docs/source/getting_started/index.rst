@@ -157,6 +157,24 @@ openEuler Embedded采用yocto构建，但通过 `oebuild <https://gitee.com/open
 
       - 如果想了解有关运行 QEMU 的更多帮助信息，包括如何使能网络、如何共享主机文件等，请参阅开发手册中的 :ref:`QEMU使用 <qemu_start>` 章节。
 
+5. 设置编码和本地化
+-----------
+
+   可以通过设置环境变量来修改当前的编码和本地化支持。
+
+   .. code-block:: shell
+      
+      # 先检查是否包含已经构建好的二进制localedata文件
+      ls /usr/lib64/locale
+      # 如果没有此目录或者此目录为空，则表明无法修改为其他的编码和本地化
+      # 在新版镜像中默认包含 glibc-binary-localedata-en-us-*.rpm 包
+      # 所以上述命令会显示文件夹 en_US
+
+      # 将en_US.UTF-8设置为默认环境变量，写入到profile中使其在登陆后生效
+      echo "export LANG=en_US.UTF-8" >> /etc/profile
+      # 写入完成后重新登陆 或者键入命令使其生效
+      source /etc/profile
+
 ____
 
 基于SDK的应用开发
