@@ -6,8 +6,8 @@ OPENEULER_LOCAL_NAME = "glibc"
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 SRC_URI:prepend = " \
-    file://glibc-2.38.tar.xz \
-    file://localedef-master-e0eca29.zip \
+    file://glibc-${PV}.tar.xz \
+    git://github.com/kraj/localedef;branch=master;name=localedef;destsuffix=glibc-${PV}/localedef;protocol=https \
 "
 
 SRC_URI:remove = " \
@@ -15,13 +15,4 @@ SRC_URI:remove = " \
     git://github.com/kraj/localedef;branch=master;name=localedef;destsuffix=git/localedef;protocol=https \
 "
 
-S = "${WORKDIR}/glibc-2.38"
-
-do_unpack:append() {
-    bb.build.exec_func('do_copy_localedef_source', d)
-}
-
-do_copy_localedef_source() {
-    mv ${WORKDIR}/localedef-master ${S}/localedef
-}
-
+S = "${WORKDIR}/glibc-${PV}"
