@@ -1,0 +1,11 @@
+type: feature
+
+support: ok3568|ryd-3568|ok3399|ok3588
+
+local_conf: |
+  # Define multilib target
+  require conf/multilib.conf
+  MULTILIBS = "multilib:lib32"
+  DEFAULTTUNE:virtclass-multilib-lib32 = "armv7a"
+  # Add the multilib packages to the image
+  IMAGE_INSTALL:append = " lib32-glibc lib32-libgcc lib32-libstdc++"

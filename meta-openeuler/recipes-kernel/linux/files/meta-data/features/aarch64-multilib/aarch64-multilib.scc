@@ -1,0 +1,4 @@
+define KFEATURE_DESCRIPTION "Enable aarch64 multilib related configs"
+define KFEATURE_COMPATBILIY all
+
+kconf non-hardware aarch64-multilib.cfg

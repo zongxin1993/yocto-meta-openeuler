@@ -92,3 +92,9 @@ openamp-dev \
 libmetal-dev \
 sysfsutils-dev \
 "
+
+TOOLCHAIN_TARGET_TASK:remove:aarch64 = " \
+lib32-glibc \
+lib32-libgcc \
+lib32-libstdc++ \
+"
