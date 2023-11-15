@@ -806,7 +806,7 @@ manifest_list:
     version: 1bd03ae8e15c88c9bad864c65fa6b3998f3fa07f
   abseil-cpp:
     remote_url: https://gitee.com/src-openeuler/abseil-cpp.git
-    version: ce75f0e4db4fae3e01f3ee3e90e60bd5e887995f
+    version: 7ad8379ee13e1100f7f3fd43a4db6cba59daa30c
   nlohmann-json:
     remote_url: https://gitee.com/src-openeuler/nlohmann_json.git
     version: e17a35c1a6b85e774b266585c990650504bc8dee
