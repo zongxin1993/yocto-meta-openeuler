@@ -1,0 +1,31 @@
+/dts-v1/;
+/plugin/;
+/ {
+	fragment@0 {
+		target-path = "/";
+		__overlay__ {
+			reserved-memory {
+				#address-cells = <2>;
+				#size-cells = <1>;
+				ranges;
+
+				client_os_reserved: client_os_reserved@7a000000 {
+					reg = <0x00 0x7a000000 0x4000000>;
+					no-map;
+				};
+
+				client_os_dma_memory_region: client_os-dma-memory@70000000 {
+					compatible = "shared-dma-pool";
+					reg = <0x00 0x70000000 0x100000>;
+					no-map;
+				};
+			};
+
+			mcs-remoteproc {
+				compatible = "oe,mcs_remoteproc";
+				memory-region = <&client_os_dma_memory_region>,
+						<&client_os_reserved>;
+			};
+		};
+	};
+};

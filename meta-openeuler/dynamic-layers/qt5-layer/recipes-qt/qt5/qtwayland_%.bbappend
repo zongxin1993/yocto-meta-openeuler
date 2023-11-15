@@ -1,0 +1,55 @@
+require qt5-src.inc
+
+SRC_URI:prepend = "file://0001-Client-Announce-an-output-after-receiving-more-compl.patch \
+           file://0002-Fix-issue-with-repeated-window-size-changes.patch \
+           file://0003-Client-Connect-drags-being-accepted-to-updating-the-.patch \
+           file://0004-Client-Disconnect-registry-listener-on-destruction.patch \
+           file://0005-Client-Set-XdgShell-size-hints-before-the-first-comm.patch \
+           file://0006-Fix-build.patch \
+           file://0007-Fix-remove-listener.patch \
+           file://0008-Hook-up-queryKeyboardModifers.patch \
+           file://0009-Correctly-detect-if-image-format-is-supported-by-QIm.patch \
+           file://0010-Client-Don-t-always-recreate-frame-callbacks.patch \
+           file://0011-Client-Always-destroy-frame-callback-in-the-actual-c.patch \
+           file://0012-Wayland-client-use-wl_keyboard-to-determine-active-s.patch \
+           file://0013-Client-do-not-empty-clipboard-when-a-new-popup-windo.patch \
+           file://0014-Client-Implement-DataDeviceV3.patch \
+           file://0015-Client-Delay-deletion-of-QDrag-object-until-after-we.patch \
+           file://0016-Client-Avoid-processing-of-events-when-showing-windo.patch \
+           file://0017-Handle-registry_global-out-of-constructor.patch \
+           file://0018-Connect-flushRequest-after-forceRoundTrip.patch \
+           file://0019-Move-the-wayland-socket-polling-to-a-separate-event-.patch \
+           file://0020-Client-Remove-mWaitingForUpdateDelivery.patch \
+           file://0021-client-Simplify-round-trip-behavior.patch \
+           file://0022-Client-Fix-opaque-region-setter.patch \
+           file://0023-Use-proper-dependencies-in-compile-tests.patch \
+           file://0024-Revert-Client-Remove-mWaitingForUpdateDelivery.patch \
+           file://0025-Fix-race-condition-on-mWaitingForUpdateDelivery.patch \
+           file://0026-use-poll-2-when-reading-from-clipboard.patch \
+           file://0027-Reduce-memory-leakage.patch \
+           file://0028-Fix-build-with-libcxx-missing-array-include.patch \
+           file://0029-Only-close-popup-in-the-the-hierchary.patch \
+           file://0030-Check-pointer-for-null-before-use-in-ASSERT.patch \
+           file://0031-Use-wl_surface.damage_buffer-on-the-client-side.patch \
+           file://0032-Client-clear-focus-on-touch-cancel.patch \
+           file://0033-Guard-mResizeDirty-by-the-correctMutex.patch \
+           file://0034-Fix-compile-tests.patch \
+           file://0035-Use-CRLF-line-delimiter-for-text-uri-list-data.patch \
+           file://0036-Avoid-calling-requestUpdate-from-wrong-thread.patch \
+           file://0037-Call-finishDrag-in-QWaylandDataDevice-dragSourceCanc.patch \
+           file://0038-Hold-surface-read-lock-throughout-QWaylandEglWindow-.patch \
+           file://0039-Keep-toplevel-windows-in-the-top-left-corner-of-the-.patch \
+           file://0040-Client-Add-F_SEAL_SHRINK-seal-to-shm-backing-file.patch \
+           file://0041-Client-Call-wl_output_release-upon-QWaylandScreen-de.patch \
+           file://0042-Client-Bump-wl_output-version.patch \
+           file://0043-Fix-frame-sync-related-to-unprotected-multithread-ac.patch \
+           file://0044-Client-Handle-zwp_primary_selection_device_manager_v.patch \
+           file://0045-Fixes-the-build-on-CentOS.patch \
+           file://0046-client-Avoid-protocol-error-with-invalid-min-max-siz.patch \
+           file://0047-Client-Fix-handling-of-Qt-BlankCursor.patch \
+           file://0048-client-Force-a-roundtrip-when-an-XdgOutput-is-not-re.patch \
+           file://0049-Client-Manage-QMimeData-lifecycle.patch \
+           file://0050-client-Do-not-cast-placeholder-screens-to-QWaylandSc.patch \
+           file://0051-Client-Remove-flip-popup-constraints.patch \
+           file://qtwayland-decoration-support-backports-from-qt6.patch \
+           "

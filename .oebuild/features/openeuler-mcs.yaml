@@ -1,0 +1,16 @@
+type: feature
+
+support: qemu-aarch64|raspberrypi4-64|hi3093|ok3568|x86-64
+
+layers:
+- yocto-meta-openeuler/rtos/meta-openeuler-rtos
+
+local_conf: |
+  MCS_FEATURES ?= "openamp lopper-devicetree"
+  DISTRO_FEATURES:append = " mcs "
+
+repos:
+  Jailhouse:
+    url: https://gitee.com/src-openeuler/Jailhouse
+    path: Jailhouse
+    refspec: master

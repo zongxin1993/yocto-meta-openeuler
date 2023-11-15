@@ -1,0 +1,13 @@
+type: feature
+
+support: qemu-aarch64|raspberrypi4-64
+
+local_conf: |
+  EXTERNAL_TARGET_SYS:aarch64 = "aarch64-openeuler-linux-musl"
+  TCLIBC = "musl"
+  TCMODE-LIBC = "musl"
+  TCMODE-CRYPT = "musl"
+  MACHINE_ESSENTIAL_EXTRA_RDEPENDS = "musl"
+
+layers:
+- yocto-meta-openeuler/meta-musl

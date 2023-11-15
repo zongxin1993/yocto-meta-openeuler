@@ -1,0 +1,16 @@
+# Functions used by init scripts
+
+title()
+{
+    echo -en "\033[1m"
+    echo -en $@
+    echo -e "\033[0m"
+}
+
+broadcastmessage()
+{
+        for ttys in `who | awk '{print $2}'`;
+        do
+                echo $1 > /dev/$ttys
+        done
+}

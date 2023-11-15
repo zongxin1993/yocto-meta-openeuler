@@ -1,0 +1,12 @@
+diff --git a/src/lxc/isulad_utils.c b/src/lxc/isulad_utils.c
+index ee39302..d81bc39 100644
+--- a/src/lxc/isulad_utils.c
++++ b/src/lxc/isulad_utils.c
+@@ -21,6 +21,7 @@
+ #include <unistd.h>
+ #include <errno.h>
+ #include <stdio_ext.h>
++#include <pwd_utils.h>
+ 
+ #include "isulad_utils.h"
+ #include "log.h"

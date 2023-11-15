@@ -1,0 +1,10 @@
+repos:
+  yocto-poky:
+    url: https://gitee.com/openeuler/yocto-poky.git
+    path: yocto-poky
+    refspec: v4.0.10
+  
+  yocto-meta-openembedded:
+    url: https://gitee.com/openeuler/yocto-meta-openembedded.git
+    path: yocto-meta-openembedded
+    refspec: dev_kirkstone

@@ -1,0 +1,14 @@
+diff --git a/tools/vgimportdevices.c b/tools/vgimportdevices.c
+index ab359d3..cc85068 100644
+--- a/tools/vgimportdevices.c
++++ b/tools/vgimportdevices.c
+@@ -16,6 +16,9 @@
+ #include "lib/cache/lvmcache.h"
+ #include "lib/device/device_id.h"
+ 
++/* coverity[unnecessary_header] needed for MuslC */
++#include <sys/file.h>
++
+ struct vgimportdevices_params {
+ 	uint32_t added_devices;
+ };

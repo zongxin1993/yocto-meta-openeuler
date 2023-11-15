@@ -1,0 +1,5 @@
+type: platform
+
+machine: generic-x86-64
+
+toolchain_type: EXTERNAL_TOOLCHAIN:x86-64
