@@ -14,16 +14,19 @@ LICENSE = "MulanPSL-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=c7ea843127ff6afcb5f768497eb60f0a"
 
 ### Build metadata: SRC_URI, SRCDATA, S, B, FILESEXTRAPATHS....
-SRC_URI = "git://gitee.com/openeuler/UniProton.git;branch=master;protocol=https \
-           git://gitee.com/openeuler/libboundscheck.git;branch=master;protocol=https;name=libboundscheck;destsuffix=git/libboundscheck \
-           git://gitee.com/src-openeuler/libmetal.git;branch=master;protocol=https;name=libmetal;destsuffix=git/libmetal \
-           git://gitee.com/src-openeuler/OpenAMP.git;branch=master;protocol=https;name=openamp;destsuffix=git/openamp \
-           git://gitlab.com/Tim-Tianyu/ethercat.git;branch=master;protocol=https;name=ethercat;destsuffix=git/ethercat "
-
+SRC_URI:append:x86-64 = "git://gitee.com/openeuler/UniProton.git;branch=master;protocol=https \
+    git://gitlab.com/Tim-Tianyu/ethercat.git;branch=master;protocol=https;name=ethercat;destsuffix=git/ethercat \
+    git://gitee.com/zuyiwen/libcxx.git;branch=master;protocol=https;name=libcxx;destsuffix=git/libcxx \
+    file://libboundscheck \
+    file://libmetal \
+    file://OpenAMP \
+    "
 SRCREV="${AUTOREV}"
 SRCREV_FORMAT="default_heads"
 S = "${WORKDIR}/git"
+OPENEULER_SRC_DIR = "/usr1/openeuler/src"
 
+do_fetch[depends] += "libboundscheck:do_fetch libmetal:do_fetch openamp:do_fetch"
 
 def get_uniproton_cpu_type(d):
 
@@ -75,16 +78,25 @@ prepare_compile() {
     then
         mv ${download_dir}/ethercat ${download_dir}/src/net/ethercat
     fi
-    if [ -d "${download_dir}/libboundscheck" ]
+    if [ -d "${download_dir}/libcxx" ]
+    then
+        mv ${download_dir}/libcxx ${download_dir}/${UNIPROTON_BSPDIR}/../component/
+    fi
+    if [ -d "${OPENEULER_SRC_DIR}/libboundscheck" ]
     then
         rm -rf ${download_dir}/platform/libboundscheck
-        mv ${download_dir}/libboundscheck ${download_dir}/platform
+        pushd ${OPENEULER_SRC_DIR}/libboundscheck
+        tar -zxf libboundscheck*.tar.gz
+        find . -maxdepth 1 -name "libboundscheck*" -type d | xargs -I {} mv {} ${download_dir}/platform/libboundscheck
+        popd
     fi
-    if [ -d "${download_dir}/libmetal" ]
+    if [ -d "${OPENEULER_SRC_DIR}/libmetal" ]
     then
+        cp -r ${OPENEULER_SRC_DIR}/libmetal ${download_dir}/libmetal
         pushd ${download_dir}/libmetal
-        tar -zxvf libmetal-2022.10.0.tar.gz
-        mv ./libmetal-2022.10.0 ./libmetal
+        find . -maxdepth 1 -name "libmetal*" -type d | xargs -I {} rm -rf {}
+        tar -zxvf libmetal-*.tar.gz
+        find . -maxdepth 1 -name "libmetal*" -type d | xargs -I {} mv {} libmetal
         cp ${download_dir}/${UNIPROTON_BSPDIR}/../component/UniProton-patch-for-libmetal.patch ./libmetal/
         cd libmetal
         patch -p1 -d . < UniProton-patch-for-libmetal.patch
@@ -94,11 +106,12 @@ prepare_compile() {
         rm -rf libmetal
         popd
     fi
-    if [ -d "${download_dir}/openamp" ]
+    if [ -d "${OPENEULER_SRC_DIR}/OpenAMP" ]
     then
+        cp -r ${OPENEULER_SRC_DIR}/OpenAMP ${download_dir}/openamp
         pushd ${download_dir}/openamp
         tar -zxvf openamp-2022.10.1.tar.gz
-        mv ./openamp-2022.10.1 ./open-amp
+        find . -maxdepth 1 -name "openamp*" -type d | xargs -I {} mv {} open-amp
         cp ${download_dir}/${UNIPROTON_BSPDIR}/../component/UniProton-patch-for-openamp.patch ./open-amp/
         cd open-amp
         patch -p1 -d . < UniProton-patch-for-openamp.patch
