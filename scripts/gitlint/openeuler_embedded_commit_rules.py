@@ -261,7 +261,7 @@ class TagsCheck(CommitRule):
             for openeuler_footer in openeuler_footers:
                 #2.match the capitalization of tags
                 if line.lower().startswith(openeuler_footer.lower()) and not line.startswith(openeuler_footer):
-                    message = "Incorrect capitalization of tag '" + openeuler_footer + "' ,Please pay attention to capitalization."
+                    message = "Incorrect capitalization of tag '" + openeuler_footer + "' ,please pay attention to capitalization."
                     result.append(RuleViolation(self.id, message, line, line_count))
 
             #3.tag-context can't be empty, and there is a space after the colon
