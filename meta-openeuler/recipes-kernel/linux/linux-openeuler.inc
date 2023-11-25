@@ -58,6 +58,11 @@ SRC_URI:append:aarch64 = " \
     file://patches/${ARCH}/0001-arm64-add-zImage-support-for-arm64.patch \
 "
 
+# add multilib patches only for aarch64
+KERNEL_FEATURES:aarch64:append =  " \
+    ${@bb.utils.contains('MULTILIBS', 'multilib:lib32', 'features/aarch64-multilib/aarch64-multilib.scc', '', d)} \
+"
+
 ## DEBUG FEATURES
 KERNEL_FEATURES:append = " \
     ${@bb.utils.contains('IMAGE_FEATURES', 'debug-tweaks', 'features/debug/devmem.scc', '', d)} \
