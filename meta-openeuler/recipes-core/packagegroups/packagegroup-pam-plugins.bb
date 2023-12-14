@@ -43,4 +43,5 @@ pam-plugin-usertype \
 pam-plugin-warn \
 pam-plugin-wheel \
 pam-plugin-xauth \
+pam-plugin-selinux \
 "
