@@ -12,7 +12,7 @@ HOSTTOOLS_NONFATAL += "cc"
 ASSUME_PROVIDED += "util-linux-native pkgconfig-native chrpath-replacement-native"
 
 # package management tools
-HOSTTOOLS_NONFATAL += "rpm rpmbuild createrepo_c dnf unzip"
+HOSTTOOLS_NONFATAL += "rpm rpmbuild createrepo_c dnf unzip rpm2cpio"
 ASSUME_PROVIDED += "rpm-native createrepo-c-native unzip-native"
 
 # commands used by kernel build
@@ -44,8 +44,10 @@ ASSUME_PROVIDED += " pigz-native gzip-native"
 HOSTTOOLS_NONFATAL += "msgfmt msgmerge makeinfo xgettext"
 ASSUME_PROVIDED += "texinfo-dummy-native gettext-native"
 
-# openssl tools
-HOSTTOOLS_NONFATAL += "openssl"
+# openssl tools 
+# temporarily remove openssl nativesdk and use openssl-native for bugs (cmake not found)
+# HOSTTOOLS_NONFATAL += "openssl"
+
 # command from glib2 used by gobject-introspection and libdnf
 HOSTTOOLS_NONFATAL += "gtkdocize gtkdoc-scan gtkdoc-scangobj gtkdoc-mkdb gtkdoc-mkhtml gtkdoc-fixxref"
 
@@ -97,8 +99,7 @@ ASSUME_PROVIDED += "gnu-config-native"
 
 ASSUME_PROVIDED += "gperf-native perl-native \
                     init-system-helpers \
-                    cross-localedef-native nativesdk-glibc-locale \
-                      \
+                    nativesdk-glibc-locale \
                     gtk-doc-native \
                     "
 
@@ -112,7 +113,8 @@ ASSUME_PROVIDED += "xorgproto-native python3-mako-native expat-native"
 ASSUME_PROVIDED += "tcl-native"
 
 # used by python3
-ASSUME_PROVIDED += "bzip2-replacement-native libffi-native openssl-native sqlite3-native zlib-native \
+# remove ASSUME_PROVIDED of openssl-native zlib-native for cmake not found bugs
+ASSUME_PROVIDED += "bzip2-replacement-native libffi-native sqlite3-native \
         xz-native libtirpc-native libnsl2-native autoconf-archive-native \
         gdbm-native readline-native"
 

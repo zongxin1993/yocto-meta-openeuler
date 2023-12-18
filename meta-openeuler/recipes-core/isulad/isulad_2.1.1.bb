@@ -62,12 +62,42 @@ S = "${WORKDIR}/iSulad-v${PV}"
 inherit cmake
 OECMAKE_GENERATOR = "Unix Makefiles"
 
-DEPENDS = "yajl zlib libarchive http-parser curl lcr libevent libevhtp openssl libwebsockets libdevmapper"
+USE_PREBUILD_SHIM_V2 = "1"
 
-EXTRA_OECMAKE = "-DENABLE_GRPC=OFF -DENABLE_SYSTEMD_NOTIFY=OFF -DENABLE_SELINUX=OFF \
-		-DENABLE_SHIM_V2=OFF -DENABLE_OPENSSL_VERIFY=OFF \
-		-DGRPC_CONNECTOR=OFF -DDISABLE_OCI=ON \
+
+DEPENDS += " \
+        yajl zlib libarchive http-parser curl lcr libevent libevhtp openssl libwebsockets libdevmapper \
+        protobuf libseccomp libcap libselinux \
+        ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd', '', d)} \
+        grpc grpc-native protobuf-native \
+        ${@bb.utils.contains('USE_PREBUILD_SHIM_V2', '1', 'lib-shim-v2-bin', 'lib-shim-v2', d)} \
+"
+
+RDEPENDS_${PN} += " \
+        yajl zlib libarchive http-parser curl lcr libevent libevhtp openssl libwebsockets libdevmapper \
+        protobuf libseccomp libcap libselinux \
+        ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd', '', d)} \
+        grpc \
+        glibc-binary-localedata-en-us \
+        ${@bb.utils.contains('USE_PREBUILD_SHIM_V2', '1', 'lib-shim-v2-bin', 'lib-shim-v2', d)} \
+"
+
+EXTRA_OECMAKE = "-DENABLE_GRPC=ON \
+        ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '-DENABLE_SYSTEMD_NOTIFY=ON', '-DENABLE_SYSTEMD_NOTIFY=OFF', d)} \
+		-DENABLE_SHIM_V2=ON -DENABLE_OPENSSL_VERIFY=ON \
+		-DGRPC_CONNECTOR=ON \
 		"
+
+# there are issues with building grpc on arm32 and riscv platforms.
+DEPENDS_remove_arm = " lib-shim-v2 lib-shim-v2-bin grpc grpc-native "
+RDEPENDS_${PN}_remove_arm = " lib-shim-v2 lib-shim-v2-bin grpc "
+EXTRA_OECMAKE_remove_arm = " -DENABLE_SHIM_V2=ON -DENABLE_GRPC=ON -DGRPC_CONNECTOR=ON "
+EXTRA_OECMAKE_append_arm = " -DENABLE_SHIM_V2=OFF -DENABLE_GRPC=OFF -DGRPC_CONNECTOR=OFF "
+
+DEPENDS_remove_riscv64 = " lib-shim-v2 lib-shim-v2-bin grpc grpc-native "
+RDEPENDS_${PN}_remove_riscv64 = " lib-shim-v2 lib-shim-v2-bin grpc "
+EXTRA_OECMAKE_remove_riscv64 = " -DENABLE_SHIM_V2=ON -DENABLE_GRPC=ON -DGRPC_CONNECTOR=ON "
+EXTRA_OECMAKE_append_riscv64 = " -DENABLE_SHIM_V2=OFF -DENABLE_GRPC=OFF -DGRPC_CONNECTOR=OFF "
 
 INHIBIT_PACKAGE_DEBUG_SPLIT = "1"
 
