@@ -1118,7 +1118,7 @@ manifest_list:
     version: d76179822e845ae6bc24bc434757bc032f94bb43
   rpm:
     remote_url: https://gitee.com/src-openeuler/rpm.git
-    version: d17304cb5fbc2a69b2f6d9c59d21623dcaddc7cf
+    version: ff222a7aa9940eb8f87ef0cbe4065a17f26ede79
   debugedit:
     remote_url: https://gitee.com/src-openeuler/debugedit.git
     version: c110f5e42ffe588b3bd1c0699a5326c8fe3c3966
