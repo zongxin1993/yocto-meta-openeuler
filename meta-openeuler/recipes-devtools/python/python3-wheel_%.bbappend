@@ -9,5 +9,3 @@ SRC_URI:prepend = " \
             "
 
 SRC_URI[sha256sum] = "cd1196f3faee2b31968d626e1731c94f99cbdb67cf5a46e4f5656cbee7738873"
-
-
