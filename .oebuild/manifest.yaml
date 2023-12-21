@@ -681,6 +681,9 @@ manifest_list:
   tcl:
     remote_url: https://gitee.com/src-openeuler/tcl.git
     version: 75502c05095dc275d008cb3f117653c15497d9f8
+  tinyxml:
+    remote_url: https://gitee.com/src-openeuler/tinyxml.git
+    version: 42e636ad3f56664d40a678b277c1e9e4f84dcc99
   tinyxml2:
     remote_url: https://gitee.com/src-openeuler/tinyxml2.git
     version: e0e993959c2d780e6a7e2b01a5bd0866971324e5
@@ -1143,3 +1146,24 @@ manifest_list:
   libmodulemd:
     remote_url: https://gitee.com/src-openeuler/libmodulemd.git
     version: 2a009a416c050b6936ba8615fe62ddaf2c8e8236
+  mcs:
+    remote_url: https://gitee.com/openeuler/mcs.git
+    version: c7c0f19335ccec830dafeee32afa137cb74e45c2
+  python-docopt:
+    remote_url: https://gitee.com/src-openeuler/python-docopt.git
+    version: 6e92bd59af7fed310094c11af17b89413c3c67c0
+  screen:
+    remote_url: https://gitee.com/src-openeuler/screen.git
+    version: e716093bf4afcdd2e027566e5ec5ca266c91243a
+  python-ruamel-yaml:
+    remote_url: https://gitee.com/src-openeuler/python-ruamel-yaml.git
+    version: 15d177eec6a308e3470cb55e477b962266f1e8dc
+  python-click:
+    remote_url: https://gitee.com/src-openeuler/python-click.git
+    version: fd49a68a4c761eb42e3cc071479b9be5fa2f65c5
+  python-psutil:
+    remote_url: https://gitee.com/src-openeuler/python-psutil.git
+    version: b0a00d1e3f46f7ec9d8696f2907f13aeeb8b81aa
+  image_pipeline:
+    remote_url: https://gitee.com/src-openeuler/image_pipeline.git
+    version: f1e6c38c502242bcff0cde0d62d869b6d84e37e2
