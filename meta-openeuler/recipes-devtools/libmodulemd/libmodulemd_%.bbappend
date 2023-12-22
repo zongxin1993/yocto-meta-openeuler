@@ -1,7 +1,7 @@
 PV = "2.15.0"
 
 SRC_URI = " \
-    https://github.com/fedora-modularity/libmodulemd/releases/download/libmodulemd-${PV}/modulemd-${PV}.tar.xz \
+    https://github.com/fedora-modularity/libmodulemd/releases/download/${PV}/modulemd-${PV}.tar.xz \
 "
 
 S = "${WORKDIR}/modulemd-${PV}"
