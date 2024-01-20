@@ -14,12 +14,13 @@ SRC_URI = " \
         file://HiEuler-driver/drivers/S90AutoRun \
         file://HiEuler-driver/drivers/pinmux.sh \
         file://HiEuler-driver/drivers/env.tar.gz \
+        file://HiEuler-driver/drivers/can-tools.tar.gz \
 "
 
 S = "${WORKDIR}/HiEuler-driver/drivers"
 
 INSANE_SKIP:${PN} += "already-stripped"
-FILES:${PN} = "${sysconfdir} /usr/bin /ko /vendor"
+FILES:${PN} = "${sysconfdir} /usr/bin /ko /vendor /usr/sbin /usr/lib64"
 
 do_install () {
         install -d ${D}/usr/bin
@@ -53,6 +54,9 @@ do_install () {
 	install -m 0755 ${WORKDIR}/env/fw_env.config ${D}/etc/
 	install -m 0755 ${WORKDIR}/env/fw_printenv ${D}/usr/bin/
 	install -m 0755 ${WORKDIR}/env/fw_setenv ${D}/usr/bin/
+
+	cp -r ${WORKDIR}/can-tools/canutils/* ${D}/usr/
+	cp -r ${WORKDIR}/can-tools/libsocketcan/* ${D}/usr/
 }
 
 INHIBIT_PACKAGE_STRIP = "1"
