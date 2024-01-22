@@ -1,4 +1,4 @@
- yocto-meta-openeuler
+#  yocto-meta-openeuler
 
 ## introduce
 
@@ -34,12 +34,12 @@ OEbuild will automatically git clone the repository in the src directory, and sw
 After OEbuild is built, the following directory structure will be automatically generated:
 
  ```
-<openEuler Embedded构建顶层目录（自己创建的目录）>
-├── build  实际构建目录
-    ├── output  镜像输出目录
-    ├── tmp  构建工作临时文件目录
-├── src    openEuler Embedded所有代码包目录
-```
+<openEuler Embedded>
+├── build  
+    ├── output  
+    ├── tmp  
+├── src    openEuler Embedded
+ ```
 
 ## Get involved
 
@@ -57,7 +57,7 @@ A good git commit is as follows, please describe the relevant information in the
     [git commit msg body (detailed explaination of what to change, why to change, and even how to verify)]
 
     Signed-off-by: [name] <[email]>
-    ```
+  ```
 
 This repository uses gitlint to check every git commit, it is recommended to use gitlint to check your commits before committing to avoid CI gate check failures.
 
