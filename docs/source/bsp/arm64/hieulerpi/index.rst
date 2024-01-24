@@ -9,3 +9,4 @@
    :maxdepth: 1
 
    hieulerpi.rst
+   update.rst
