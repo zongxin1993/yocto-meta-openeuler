@@ -9,5 +9,6 @@
    :maxdepth: 1
 
    hieulerpi.rst
+   hieulerpi_common_commands.rst
    hardware_features.rst
    externed_device_sample.rst
