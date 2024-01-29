@@ -33,6 +33,9 @@ do_compile () {
     pushd externed_device_sample/mpp/sample/hdmi
     oe_runmake
     popd
+    pushd externed_device_sample/mpp/sample/usb_camera
+    oe_runmake
+    popd
 }
 
 do_install () {
@@ -44,6 +47,7 @@ do_install () {
     cp -rf externed_device_sample/mpp/sample/audio/source_file/* ${D}/root/device_sample/source_file/
     install -m 0755 externed_device_sample/mpp/sample/hdmi/sample_hdmi ${D}/root/device_sample/sample_hdmi
     cp -rf externed_device_sample/mpp/sample/hdmi/source_file/* ${D}/root/device_sample/source_file/
+    install -m 0755 externed_device_sample/mpp/sample/usb_camera/sample_uvc ${D}/root/device_sample/sample_uvc
 
 }
 
