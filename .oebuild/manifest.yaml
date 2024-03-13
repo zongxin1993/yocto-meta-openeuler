@@ -1692,3 +1692,111 @@ manifest_list:
   zstd:
     remote_url: https://gitee.com/src-openeuler/zstd.git
     version: 1bd03ae8e15c88c9bad864c65fa6b3998f3fa07f
+  python-idna:
+    remote_url: https://gitee.com/src-openeuler/python-idna.git
+    version: 73e6319886b3df6140df1d04fd23fa56b43079db
+  sdbusplus:
+    remote_url: https://github.com/openbmc/sdbusplus.git
+    version: b7329a90eef04a24c03a2afef43c2145a0033ae6
+  phosphor-bmc-code-mgmt:
+    remote_url: https://github.com/openbmc/phosphor-bmc-code-mgmt.git
+    version: 119e5a2c07b2e87ec2e75c98c06522c76bd59832
+  phosphor-led-manager:
+    remote_url: https://github.com/openbmc/phosphor-led-manager.git
+    version: 6d08ccecd9d98bbe207f9307ad45578cd7d5b995
+  phosphor-led-sysfs:
+    remote_url: https://github.com/openbmc/phosphor-led-sysfs.git
+    version: 97db22fd8fc5abad784aa662407e05d1f11893ae
+  phosphor-dbus-interfaces:
+    remote_url: https://github.com/openbmc/phosphor-dbus-interfaces.git
+    version: 56936f52f25667f233f981e5aacc52981b003b39
+  phosphor-logging:
+    remote_url: https://github.com/openbmc/phosphor-logging.git
+    version: c0cc7ec707ac95dcd784a103f4e3face6395e3ea
+  sdeventplus:
+    remote_url: https://github.com/openbmc/sdeventplus.git
+    version: 02316409089ce12fa7c188f316469be8681b850b
+  stdplus:
+    remote_url: https://github.com/openbmc/stdplus.git
+    version: 68975b90a5e98f90fbcd779b59870c1cbf81bf49
+  phosphor-dbus-monitor:
+    remote_url: https://github.com/openbmc/phosphor-dbus-monitor.git
+    version: 2beffa634d4e899745510af4e8fa2c387ec5d3ad
+  phosphor-snmp:
+    remote_url: https://github.com/openbmc/phosphor-snmp.git
+    version: 0357dffb8da86240c7fb1a45a391dbf39dcc3938
+  phosphor-objmgr:
+    remote_url: https://github.com/openbmc/phosphor-objmgr.git
+    version: af3d797b011f3f0dfc6ad7eae44e5b312f5a3d6e
+  phosphor-debug-collector:
+    remote_url: https://github.com/openbmc/phosphor-debug-collector.git
+    version: 124d31f09cbb0eebd0f14aceade5c2fd290520fe
+  phosphor-networkd:
+    remote_url: http://github.com/openbmc/phosphor-networkd.git
+    version: dd1e592f692ed4dbd073ddc23566f837546bdce6
+  gpioplus:
+    remote_url: http://github.com/openbmc/gpioplus.git
+    version: 8944f2e24ad8152793af010906faf06607f0e04b
+  jsnbd:
+    remote_url: https://github.com/openbmc/jsnbd.git
+    version: 7b7c29369cfeb267efa7f45b271aca6910687461
+  obmc-ikvm:
+    remote_url: https://github.com/openbmc/obmc-ikvm.git
+    version: a4f63b38f1e72a3c34c54e275803d945b949483b
+  slpd-lite:
+    remote_url: https://github.com/openbmc/slpd-lite.git
+    version: ef078cd0d560b8c49061f0b855f0cb4450e69b3a
+  phosphor-health-monitor:
+    remote_url: https://github.com/openbmc/phosphor-health-monitor.git
+    version: a1ed140b5351e1b264471b0462cc4eab753fbda6
+  obmc-console:
+    remote_url: http://github.com/openbmc/obmc-console.git
+    version: 397fd035e3adda2f3d36bfc5f2268372847778e7
+  telemetry:
+    remote_url: https://github.com/openbmc/telemetry.git
+    version: b7b7e1b603fd9df56a72547c8048d182a001d647
+  obmc-phosphor-power:
+    remote_url: https://github.com/openbmc/phosphor-power-control.git
+    version: ca9aa00180423b548369a7485bbca641581cc1ab
+  phosphor-hwmon:
+    remote_url: https://github.com/openbmc/phosphor-hwmon.git
+    version: 0bbd07c008404ed701b336d8a2b398407b908fe6
+  phosphor-inventory-manager:
+    remote_url: https://github.com/openbmc/phosphor-inventory-manager.git
+    version: 69ddaad8dfd1102e9bdd6437149e2a8397a1b558
+  phosphor-settingsd:
+    remote_url: https://github.com/openbmc/phosphor-settingsd.git
+    version: 75a710ca87f6033419d856d965f6100aa4348196
+  phosphor-fan-presence:
+    remote_url: https://github.com/openbmc/phosphor-fan-presence.git
+    version: 0461bd2fdc3d57fa33d933ac9d9fd9452ed39bbb
+  phosphor-certificate-manager:
+    remote_url: https://github.com/openbmc/phosphor-certificate-manager.git
+    version: ebd21ba4fc36577a70cad207e42d66594b73ed13
+  phosphor-state-manager:
+    remote_url: https://github.com/openbmc/phosphor-state-manager.git
+    version: aaa8d3466b931b9cf5a64e3a972cd23c2b5b90c6
+  entity-manager:
+    remote_url: https://github.com/openbmc/entity-manager.git
+    version: b0c7bd18c20983a565c21e1921d647132329f789
+  phosphor-user-manager:
+    remote_url: http://github.com/openbmc/phosphor-user-manager.git
+    version: 6dc7ed95c5bf07e8273d6fad79018f5f19a9b77e
+  krb5:
+    remote_url: https://gitee.com/src-openeuler/krb5.git
+    version: 07a34d888890b384d29c3613b2d5e14bf61ae861
+  bmcweb:
+    remote_url: https://github.com/openbmc/bmcweb.git
+    version: 3d768a165183dd8cf7e485ac67ab7270845d5f87
+  nghttp2:
+    remote_url: https://gitee.com/src-openeuler/nghttp2.git
+    version: 834b92ae9e64f4a5632fb61d73a10a4e9611c391
+  boost-obmc:
+    remote_url: https://gitee.com/src-openeuler/boost.git
+    version: 8ab4fe722e8136317f6f9b370ff20af44f61c78d
+  webui-vue:
+    remote_url: https://github.com/openbmc/webui-vue.git
+    version: 78372d6345cf5f1e04d6a8d56c416a7aec70b998
+  yocto-meta-phosphor:
+    remote_url: https://gitee.com/openeuler/yocto-meta-phosphor.git
+    version: ab20103918e68151d01de65eadd8cfb00b70ed68

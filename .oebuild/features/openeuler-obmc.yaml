@@ -1,0 +1,18 @@
+type: feature
+
+support: qemu-aarch64
+
+layers:
+- yocto-meta-phosphor
+
+local_conf: |
+  DISTRO_FEATURES:append = " obmc "
+  INIT_MANAGER = "systemd"
+  VIRTUAL-RUNTIME_dev_manager = "systemd"
+  ROOT_HOME = "/home/root"
+
+repos:
+  yocto-meta-phosphor:
+    url: https://gitee.com/openeuler/yocto-meta-phosphor.git
+    path: yocto-meta-phosphor
+    refspec: master
