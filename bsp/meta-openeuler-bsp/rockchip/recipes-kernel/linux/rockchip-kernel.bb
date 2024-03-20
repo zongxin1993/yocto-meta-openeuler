@@ -2,7 +2,7 @@ require recipes-kernel/linux/linux-openeuler.inc
 
 FILESEXTRAPATHS:append := "${THISDIR}/files/:"
 
-OPENEULER_KERNEL_CONFIG = ""
+# OPENEULER_KERNEL_CONFIG = ""
 SRC_URI:remove = "file://patches/${ARCH}/0001-arm64-add-zImage-support-for-arm64.patch"
 
 # For orangepi5, use rockchip-kernel
