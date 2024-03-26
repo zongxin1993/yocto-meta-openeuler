@@ -1,0 +1,14 @@
+type: platform
+
+machine: myir-remi
+
+toolchain_type: EXTERNAL_TOOLCHAIN:aarch64
+
+repos:
+  meta-renesas:
+    url: https://gitee.com/alichinese/meta-renesas.git
+    path: meta-renesas
+    refspec: p4.0
+
+layers:
+  - meta-renesas

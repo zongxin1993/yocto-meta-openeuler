@@ -37,7 +37,7 @@ def openeuler_get_checksum_file_list(d):
 
     return " ".join(filelist)
 
-do_fetch[file-checksums] += "${@openeuler_get_checksum_file_list(d)}"
+# do_fetch[file-checksums] += "${@openeuler_get_checksum_file_list(d)}"
 
 # set_rpmdpes is used to set RPMDEPS which comes from nativesdk/host
 python set_rpmdeps() {
