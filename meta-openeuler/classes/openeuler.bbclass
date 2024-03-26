@@ -37,7 +37,7 @@ def openeuler_get_checksum_file_list(d):
 
     return " ".join(filelist)
 
-do_fetch[file-checksums] += "${@openeuler_get_checksum_file_list(d)}"
+# do_fetch[file-checksums] += "${@openeuler_get_checksum_file_list(d)}"
 
 # set_rpmdpes is used to set RPMDEPS which comes from nativesdk/host
 python set_rpmdeps() {
@@ -118,9 +118,10 @@ python () {
     # adapted in openEuler, use original fetch
     if d.getVar("MANIFEST_DIR") is not None and os.path.exists(d.getVar("MANIFEST_DIR")):
         manifest_list = get_manifest(d.getVar("MANIFEST_DIR"))
-        if local_name not in manifest_list:
-            d.setVar('OPENEULER_FETCH', 'disable')
-            return
+        if d.getVar("OPENEULER_MULTI_REPOS") is None:
+            if local_name not in manifest_list:
+                d.setVar('OPENEULER_FETCH', 'disable')
+                return
 
     # handle the SRC_URI
     if src_uri and remove_list:
@@ -139,8 +140,9 @@ python () {
         d.setVar('BB_DONT_CACHE', '1')
     # set SRCREV, if SRCREV changed because of the corresponding changes in manifest.yaml,
     # do_fetch will re-run
-    repo_item = manifest_list[local_name]
-    d.setVar('SRCREV', repo_item['version'])
+    if d.getVar("OPENEULER_MULTI_REPOS") is None:
+        repo_item = manifest_list[local_name]
+        d.setVar('SRCREV', repo_item['version'])
 }
 
 # fetch multi repos in one recipe bb file, an example is
@@ -155,7 +157,7 @@ python do_openeuler_fetch_multi() {
 
     repo_list = d.getVar("OPENEULER_MULTI_REPOS").split()
     for item_name in repo_list:
-        d.setVar("OPENEULER_REPO_NAME", item_name)
+        d.setVar("OPENEULER_LOCAL_NAME", item_name)
         bb.build.exec_func("do_openeuler_fetch", d)
 
     # Restore the variables related to the original package
@@ -182,7 +184,6 @@ python do_openeuler_fetch() {
     local_name = d.getVar('OPENEULER_LOCAL_NAME') if d.getVar('OPENEULER_LOCAL_NAME')  else d.getVar('OPENEULER_REPO_NAME')
 
     urls = d.getVar("SRC_URI").split()
-
     # for fake recipes without SRC_URI pass
     src_uri = (d.getVar('SRC_URI') or "").split()
     if len(src_uri) == 0:

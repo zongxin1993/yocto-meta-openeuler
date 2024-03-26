@@ -1851,3 +1851,30 @@ manifest_list:
   open62541:
     remote_url: https://gitee.com/src-openeuler/open62541.git
     version: 6564947947abe265d86aaf10fe6fdc1a03fb89b9
+  vim:
+    remote_url: https://gitee.com/src-openeuler/vim.git
+    version: 67e5cc494de128be87367b929f75a60f803dbbb2
+  python-pycryptodome:
+    remote_url: https://gitee.com/src-openeuler/python-pycryptodome.git
+    version: 2a53e85983df87058fb8879c2855a9393dce19c2
+  python-pycryptodomex:
+    remote_url: https://gitee.com/src-openeuler/python-pycryptodomex.git
+    version: f86e282cbb869da1e86773beea1aaaed95873685
+  fiptool:
+    remote_url: https://gitee.com/alichinese/rzg_trusted-firmware-a.git
+    version: aed3786384b99dc13a46a8d3af139df28b5642a3
+  flash-writer:
+    remote_url: https://gitee.com/alichinese/myir-renesas-flash-writer.git
+    version: 8cd973992da7cdc8646a498b81d1a1e4e9f74f20
+  optee-example:
+    remote_url: https://gitee.com/alichinese/optee_examples.git
+    version: e9c870525af8f7e7fccf575a0ca5394ce55adcec
+  rzg_optee-os:
+    remote_url: https://gitee.com/alichinese/rzg_optee-os.git
+    version: c6c0c5d713b6083cc71c1d48633e97d79ecb9f21
+  myir-renesas-tf-a:
+    remote_url: https://gitee.com/alichinese/myir-renesas-tf-a.git
+    version: 1308cc5eb85aa67f5e29241e99c21d7e1b27c913
+  mbedtls:
+    remote_url: https://gitee.com/alichinese/mbedtls.git
+    version: dd79db10014d85b26d11fe57218431f2e5ede6f2
