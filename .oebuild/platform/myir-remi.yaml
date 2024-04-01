@@ -1,0 +1,9 @@
+type: platform
+
+machine: myir-remi
+
+toolchain_type: EXTERNAL_TOOLCHAIN:aarch64
+
+local_conf: |
+  TRUSTED_BOARD_BOOT = "1"
+  ENABLE_SPD_OPTEE = "1"
