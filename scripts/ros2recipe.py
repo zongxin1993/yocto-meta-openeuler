@@ -45,17 +45,19 @@ def get_bottom_inherit_line():
     return ret
 
 def get_license_line():  
+    import codecs
     license_line = ''  
     license_md5 = ''  
     try:  
-        with open(xml_path, 'r', encoding='utf-8') as file:  
-            for i, line in enumerate(file, 1):  
-                if 'license' in line:  
-                    license_line = str(i)  
-                    md5 = hashlib.md5()  
-                    md5.update(line.encode())  # No need to add a newline here, as file lines include it  
-                    license_md5 = md5.hexdigest()  
-                    break  
+        xml_cont = codecs.open(xml_path, 'r', 'utf-8').readlines()  
+        for i, line in enumerate(xml_cont, 1):  
+            if 'license' in line:  
+                license_line = str(i)  
+                md5 = hashlib.md5()
+                #md5.update((line + '\n').encode())  
+                md5.update(line.encode())
+                license_md5 = md5.hexdigest()  
+                break  
     except FileNotFoundError:  
         print(f"File not found: {xml_path}")  
     except IOError as e:  
