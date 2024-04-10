@@ -62,7 +62,7 @@ def get_license_line():
         print(f"I/O error while reading the file: {e}")  
     except OSError as e:  
         print(f"OS error while opening the file: {e}")  
-    return license_line, license_md5
+    return (license_line, license_md5)
 
 def get_spacing_prefix():
     return '\n' + ' ' * 4
