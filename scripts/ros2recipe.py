@@ -44,21 +44,26 @@ def get_bottom_inherit_line():
     ret = 'inherit ros_${ROS_BUILD_TYPE}\n'
     return ret
 
-def get_license_line():
+def get_license_line():  
     import codecs
-    license_line = ''                             
-    license_md5 = ''
-    i = 0
-    xml_cont = codecs.open(xml_path, 'r', 'utf-8').readlines()
-    for line in xml_cont:
-        i += 1
-        if 'license' in line:
-            license_line = str(i)
-            md5 = hashlib.md5()
-            #md5.update((line + '\n').encode())
-            md5.update((line).encode())
-            license_md5 = md5.hexdigest()
-            break
+    license_line = ''  
+    license_md5 = ''  
+    try:  
+        xml_cont = codecs.open(xml_path, 'r', 'utf-8').readlines()  
+        for i, line in enumerate(xml_cont, 1):  
+            if 'license' in line:  
+                license_line = str(i)  
+                md5 = hashlib.md5()
+                #md5.update((line + '\n').encode())  
+                md5.update(line.encode())
+                license_md5 = md5.hexdigest()  
+                break  
+    except FileNotFoundError:  
+        print(f"File not found: {xml_path}")  
+    except IOError as e:  
+        print(f"I/O error while reading the file: {e}")  
+    except OSError as e:  
+        print(f"OS error while opening the file: {e}")  
     return (license_line, license_md5)
 
 def get_spacing_prefix():
