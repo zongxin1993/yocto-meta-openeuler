@@ -118,9 +118,15 @@ python () {
     # adapted in openEuler, use original fetch
     if d.getVar("MANIFEST_DIR") is not None and os.path.exists(d.getVar("MANIFEST_DIR")):
         manifest_list = get_manifest(d.getVar("MANIFEST_DIR"))
-        if local_name not in manifest_list:
-            d.setVar('OPENEULER_FETCH', 'disable')
-            return
+        # The judgment here is made to avoid running openeuler_fetch when the
+        # package name is not in the manifest. However, it does not consider
+        # the situation where a bb file contains multiple source repositories.
+        # For recipes with multiple source repositories, we should not make
+        # judgments on local_name.
+        if d.getVar("OPENEULER_MULTI_REPOS") is None:
+            if local_name not in manifest_list:
+                d.setVar('OPENEULER_FETCH', 'disable')
+                return
 
     # handle the SRC_URI
     if src_uri and remove_list:
@@ -137,10 +143,12 @@ python () {
     # so there will alway be a chance to update SRCREV
     if d.getVar('BB_SRCREV_POLICY') != "cache":
         d.setVar('BB_DONT_CACHE', '1')
-    # set SRCREV, if SRCREV changed because of the corresponding changes in manifest.yaml,
-    # do_fetch will re-run
-    repo_item = manifest_list[local_name]
-    d.setVar('SRCREV', repo_item['version'])
+
+    if d.getVar("OPENEULER_MULTI_REPOS") is None:
+        # set SRCREV, if SRCREV changed because of the corresponding changes in manifest.yaml,
+        # do_fetch will re-run
+        repo_item = manifest_list[local_name]
+        d.setVar('SRCREV', repo_item['version'])
 }
 
 # fetch multi repos in one recipe bb file, an example is
