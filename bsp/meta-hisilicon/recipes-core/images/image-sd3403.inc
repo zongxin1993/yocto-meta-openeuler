@@ -57,7 +57,8 @@ person-position-ack \
 robot-charge-control \
 robot-init-pose \
 robot-bringup \
-ros2-wheeltec-robot \
+ros2-hieuler-robot \
+hieuler_teleop \
 serial \
 device-sample \
 depth-image-proc \
