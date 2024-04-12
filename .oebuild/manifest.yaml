@@ -1325,7 +1325,7 @@ manifest_list:
     version: d5249a62739a60017da7db4d5c489675b92b7ea5
   rclpy:
     remote_url: https://gitee.com/src-openeuler/rclpy.git
-    version: 776e0ab9850935006078d8d31b8d006e484c01bf
+    version: 860977c811a6fc1d09674993578793d857e8b83f
   rcpputils:
     remote_url: https://gitee.com/src-openeuler/rcpputils.git
     version: 568e3af236d589658a106a143b592f1193afce35
