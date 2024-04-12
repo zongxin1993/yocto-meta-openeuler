@@ -21,6 +21,8 @@ SRC_URI[sha256sum] = "7ac4b50feee004a9fa88f1dfd2d2fa738a82896763050cd773b3c54b0a
 
 DEPENDS:remove = "flex"
 
+DEPENDS += "libselinux"
+
 # no coreutils in openeuler
 RDEPENDS:${PN}-xtests:remove = " \
     coreutils \
