@@ -10,14 +10,17 @@ SECTION = "base/shell"
 
 inherit useradd pkgconfig meson perlnative update-rc.d update-alternatives qemu systemd gettext bash-completion manpages features_check
 
+# unmerged-usr support is deprecated upstream, taints the system and will be
+# removed in the near future. Fail the build if it is not enabled.
+REQUIRED_DISTRO_FEATURES += "usrmerge"
+
 # As this recipe builds udev, respect systemd being in DISTRO_FEATURES so
 # that we don't build both udev and systemd in world builds.
-REQUIRED_DISTRO_FEATURES = "systemd"
+REQUIRED_DISTRO_FEATURES += "systemd"
 
 SRC_URI += " \
            file://touchscreen.rules \
            file://00-create-volatile.conf \
-           file://basic.conf.in \
            ${@bb.utils.contains('PACKAGECONFIG', 'polkit_hostnamed_fallback', 'file://org.freedesktop.hostname1_no_polkit.conf', '', d)} \
            ${@bb.utils.contains('PACKAGECONFIG', 'polkit_hostnamed_fallback', 'file://00-hostnamed-network-user.conf', '', d)} \
            file://init \
@@ -25,34 +28,33 @@ SRC_URI += " \
            file://systemd-pager.sh \
            file://0002-binfmt-Don-t-install-dependency-links-at-install-tim.patch \
            file://0008-implment-systemd-sysv-install-for-OE.patch \
-           file://0004-Move-sysusers.d-sysctl.d-binfmt.d-modules-load.d-to-.patch \
-           file://27254.patch \
-           file://27253.patch \
            "
 
 # patches needed by musl
 SRC_URI:append:libc-musl = " ${SRC_URI_MUSL}"
 SRC_URI_MUSL = "\
-               file://0009-missing_type.h-add-comparison_fn_t.patch \
-               file://0010-add-fallback-parse_printf_format-implementation.patch \
-               file://0011-src-basic-missing.h-check-for-missing-strndupa.patch \
-               file://0012-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch \
-               file://0013-add-missing-FTW_-macros-for-musl.patch \
-               file://0014-Use-uintmax_t-for-handling-rlim_t.patch \
-               file://0015-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch \
-               file://0016-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch \
-               file://0017-Define-glibc-compatible-basename-for-non-glibc-syste.patch \
-               file://0018-Do-not-disable-buffering-when-writing-to-oom_score_a.patch \
-               file://0019-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch \
-               file://0020-avoid-redefinition-of-prctl_mm_map-structure.patch \
-               file://0021-do-not-disable-buffer-in-writing-files.patch \
-               file://0022-Handle-__cpu_mask-usage.patch \
-               file://0023-Handle-missing-gshadow.patch \
-               file://0024-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch \
-               file://0005-pass-correct-parameters-to-getdents64.patch \
-               file://0001-Adjust-for-musl-headers.patch \
-               file://0006-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch \
-               file://0003-errno-util-Make-STRERROR-portable-for-musl.patch \
+               file://0001-missing_type.h-add-comparison_fn_t.patch \
+               file://0002-add-fallback-parse_printf_format-implementation.patch \
+               file://0003-src-basic-missing.h-check-for-missing-strndupa.patch \
+               file://0004-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch \
+               file://0005-add-missing-FTW_-macros-for-musl.patch \
+               file://0006-Use-uintmax_t-for-handling-rlim_t.patch \
+               file://0007-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch \
+               file://0008-Define-glibc-compatible-basename-for-non-glibc-syste.patch \
+               file://0009-Do-not-disable-buffering-when-writing-to-oom_score_a.patch \
+               file://0010-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch \
+               file://0011-avoid-redefinition-of-prctl_mm_map-structure.patch \
+               file://0012-do-not-disable-buffer-in-writing-files.patch \
+               file://0013-Handle-__cpu_mask-usage.patch \
+               file://0014-Handle-missing-gshadow.patch \
+               file://0015-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch \
+               file://0016-pass-correct-parameters-to-getdents64.patch \
+               file://0017-Adjust-for-musl-headers.patch \
+               file://0018-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch \
+               file://0019-errno-util-Make-STRERROR-portable-for-musl.patch \
+               file://0020-sd-event-Make-malloc_trim-conditional-on-glibc.patch \
+               file://0021-shared-Do-not-use-malloc_info-on-musl.patch \
+               file://0022-avoid-missing-LOCK_EX-declaration.patch \
                "
 
 PAM_PLUGINS = " \
@@ -63,12 +65,14 @@ PAM_PLUGINS = " \
 "
 
 PACKAGECONFIG ??= " \
-    ${@bb.utils.filter('DISTRO_FEATURES', 'acl audit efi ldconfig pam selinux smack usrmerge polkit seccomp', d)} \
+    ${@bb.utils.filter('DISTRO_FEATURES', 'acl audit efi ldconfig pam pni-names selinux smack usrmerge polkit seccomp', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'minidebuginfo', 'coredump elfutils', '', d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'wifi', 'rfkill', '', d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xkbcommon', '', d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'sysvinit', '', 'link-udev-shared', d)} \
     backlight \
     binfmt \
+    cgroupv2 \
     gshadow \
     hibernate \
     hostnamed \
@@ -132,6 +136,7 @@ PACKAGECONFIG[bzip2] = "-Dbzip2=true,-Dbzip2=false,bzip2"
 PACKAGECONFIG[cgroupv2] = "-Ddefault-hierarchy=unified,-Ddefault-hierarchy=hybrid"
 PACKAGECONFIG[coredump] = "-Dcoredump=true,-Dcoredump=false"
 PACKAGECONFIG[cryptsetup] = "-Dlibcryptsetup=true,-Dlibcryptsetup=false,cryptsetup,,cryptsetup"
+PACKAGECONFIG[cryptsetup-plugins] = "-Dlibcryptsetup-plugins=true,-Dlibcryptsetup-plugins=false,cryptsetup,,cryptsetup"
 PACKAGECONFIG[tpm2] = "-Dtpm2=true,-Dtpm2=false,tpm2-tss,tpm2-tss libtss2 libtss2-tcti-device"
 # If multiple compression libraries are enabled, the format to use for compression is chosen implicitly,
 # so if you want to compress with e.g. lz4 you cannot enable zstd, so you cannot read zstd-compressed journal files.
@@ -140,9 +145,8 @@ PACKAGECONFIG[default-compression-lz4] = "-Dlz4=true -Ddefault-compression=lz4,,
 PACKAGECONFIG[default-compression-xz] = "-Dxz=true -Ddefault-compression=xz,,xz"
 PACKAGECONFIG[default-compression-zstd] = "-Dzstd=true -Ddefault-compression=zstd,,zstd"
 PACKAGECONFIG[dbus] = "-Ddbus=true,-Ddbus=false,dbus"
-PACKAGECONFIG[efi] = "-Defi=true,-Defi=false"
-PACKAGECONFIG[gnu-efi] = "-Dgnu-efi=true -Defi-libdir=${STAGING_LIBDIR} -Defi-includedir=${STAGING_INCDIR}/efi,-Dgnu-efi=false,gnu-efi"
-PACKAGECONFIG[elfutils] = "-Delfutils=true,-Delfutils=false,elfutils"
+PACKAGECONFIG[efi] = "-Defi=true -Dbootloader=true,-Defi=false -Dbootloader=false,python3-pyelftools-native"
+PACKAGECONFIG[elfutils] = "-Delfutils=true,-Delfutils=false,elfutils,,libelf libdw"
 PACKAGECONFIG[firstboot] = "-Dfirstboot=true,-Dfirstboot=false"
 PACKAGECONFIG[repart] = "-Drepart=true,-Drepart=false"
 PACKAGECONFIG[homed] = "-Dhomed=true,-Dhomed=false"
@@ -158,6 +162,7 @@ PACKAGECONFIG[ima] = "-Dima=true,-Dima=false"
 PACKAGECONFIG[importd] = "-Dimportd=true,-Dimportd=false,glib-2.0"
 # Update NAT firewall rules
 PACKAGECONFIG[iptc] = "-Dlibiptc=true,-Dlibiptc=false,iptables"
+PACKAGECONFIG[journal-color] = ",,,less"
 PACKAGECONFIG[journal-upload] = "-Dlibcurl=true,-Dlibcurl=false,curl"
 PACKAGECONFIG[kmod] = "-Dkmod=true,-Dkmod=false,kmod"
 PACKAGECONFIG[ldconfig] = "-Dldconfig=true,-Dldconfig=false,,ldconfig"
@@ -175,11 +180,13 @@ PACKAGECONFIG[microhttpd] = "-Dmicrohttpd=true,-Dmicrohttpd=false,libmicrohttpd"
 PACKAGECONFIG[myhostname] = "-Dnss-myhostname=true,-Dnss-myhostname=false,,libnss-myhostname"
 PACKAGECONFIG[networkd] = "-Dnetworkd=true,-Dnetworkd=false"
 PACKAGECONFIG[no-dns-fallback] = "-Ddns-servers="
-PACKAGECONFIG[nss] = "-Dnss-systemd=true,-Dnss-systemd=false"
+PACKAGECONFIG[no-ntp-fallback] = "-Dntp-servers="
+PACKAGECONFIG[nss] = "-Dnss-systemd=true,-Dnss-systemd=false,,libnss-systemd"
 PACKAGECONFIG[nss-mymachines] = "-Dnss-mymachines=true,-Dnss-mymachines=false"
 PACKAGECONFIG[nss-resolve] = "-Dnss-resolve=true,-Dnss-resolve=false"
 PACKAGECONFIG[oomd] = "-Doomd=true,-Doomd=false"
 PACKAGECONFIG[openssl] = "-Dopenssl=true,-Dopenssl=false,openssl"
+PACKAGECONFIG[p11kit] = "-Dp11kit=true,-Dp11kit=false,p11-kit"
 PACKAGECONFIG[pam] = "-Dpam=true,-Dpam=false,libpam,${PAM_PLUGINS}"
 PACKAGECONFIG[pcre2] = "-Dpcre2=true,-Dpcre2=false,libpcre2"
 PACKAGECONFIG[polkit] = "-Dpolkit=true,-Dpolkit=false"
@@ -189,6 +196,7 @@ PACKAGECONFIG[polkit] = "-Dpolkit=true,-Dpolkit=false"
 PACKAGECONFIG[polkit_hostnamed_fallback] = ",,,,dbus-broker,polkit"
 PACKAGECONFIG[portabled] = "-Dportabled=true,-Dportabled=false"
 PACKAGECONFIG[pstore] = "-Dpstore=true,-Dpstore=false"
+PACKAGECONFIG[pni-names] = ",,,"
 PACKAGECONFIG[qrencode] = "-Dqrencode=true,-Dqrencode=false,qrencode,,qrencode"
 PACKAGECONFIG[quotacheck] = "-Dquotacheck=true,-Dquotacheck=false"
 PACKAGECONFIG[randomseed] = "-Drandomseed=true,-Drandomseed=false"
@@ -200,7 +208,7 @@ PACKAGECONFIG[smack] = "-Dsmack=true,-Dsmack=false"
 PACKAGECONFIG[sysext] = "-Dsysext=true, -Dsysext=false"
 PACKAGECONFIG[sysusers] = "-Dsysusers=true,-Dsysusers=false"
 PACKAGECONFIG[sysvinit] = "-Dsysvinit-path=${sysconfdir}/init.d -Dsysvrcnd-path=${sysconfdir},-Dsysvinit-path= -Dsysvrcnd-path=,,systemd-compat-units update-rc.d"
-# When enabled use reproducble build timestamp if set as time epoch,
+# When enabled use reproducible build timestamp if set as time epoch,
 # or build time if not. When disabled, time epoch is unset.
 def build_epoch(d):
     epoch = d.getVar('SOURCE_DATE_EPOCH') or "-1"
@@ -222,6 +230,8 @@ PACKAGECONFIG[xz] = "-Dxz=true,-Dxz=false,xz"
 PACKAGECONFIG[zlib] = "-Dzlib=true,-Dzlib=false,zlib"
 PACKAGECONFIG[zstd] = "-Dzstd=true,-Dzstd=false,zstd"
 
+RESOLV_CONF ??= ""
+
 # Helper variables to clarify locations.  This mirrors the logic in systemd's
 # build system.
 rootprefix ?= "${root_prefix}"
@@ -238,9 +248,13 @@ EXTRA_OEMESON += "-Dnobody-user=nobody \
                   -Dsystem-uid-max=999 \
                   -Dsystem-alloc-gid-min=101 \
                   -Dsystem-gid-max=999 \
+                  -Dcreate-log-dirs=false \
+                  ${@bb.utils.contains('DISTRO_FEATURES', 'zeroconf', '-Ddefault-mdns=no -Ddefault-llmnr=no', '', d)} \
                   "
 
-# Hardcode target binary paths to avoid using paths from sysroot
+# Hardcode target binary paths to avoid using paths from sysroot or worse
+# it pokes for these binaries on build host and encodes that distro assumption
+# into target
 EXTRA_OEMESON += "-Dkexec-path=${sbindir}/kexec \
                   -Dkmod-path=${base_bindir}/kmod \
                   -Dmount-path=${base_bindir}/mount \
@@ -248,17 +262,23 @@ EXTRA_OEMESON += "-Dkexec-path=${sbindir}/kexec \
                   -Dquotaon-path=${sbindir}/quotaon \
                   -Dsulogin-path=${base_sbindir}/sulogin \
                   -Dnologin-path=${base_sbindir}/nologin \
-                  -Dumount-path=${base_bindir}/umount"
+                  -Dumount-path=${base_bindir}/umount \
+                  -Dloadkeys-path=${bindir}/loadkeys \
+                  -Dsetfont-path=${bindir}/setfont"
 
 # The 60 seconds is watchdog's default vaule.
 WATCHDOG_TIMEOUT ??= "60"
 
-do_configure:prepend() {
-  sed s@:ROOT_HOME:@${ROOT_HOME}@g ${WORKDIR}/basic.conf.in > ${S}/sysusers.d/basic.conf.in
-}
-
 do_install() {
 	meson_do_install
+	# Change the root user's home directory in /lib/sysusers.d/basic.conf.
+	# This is done merely for backward compatibility with previous systemd recipes.
+	# systemd hardcodes root user's HOME to be "/root". Changing to use other values
+	# may have unexpected runtime behaviors.
+	if [ "${ROOT_HOME}" != "/root" ]; then
+		bbwarn "Using ${ROOT_HOME} as root user's home directory is not fully supported by systemd"
+		sed -i -e 's#/root#${ROOT_HOME}#g' ${D}${exec_prefix}/lib/sysusers.d/basic.conf
+	fi
 	install -d ${D}/${base_sbindir}
 	if ${@bb.utils.contains('PACKAGECONFIG', 'serial-getty-generator', 'false', 'true', d)}; then
 		# Provided by a separate recipe
@@ -270,12 +290,12 @@ do_install() {
 	[ ! -e ${D}/${base_sbindir}/udevd ] && ln -s ${rootlibexecdir}/systemd/systemd-udevd ${D}/${base_sbindir}/udevd
 
 	install -d ${D}${sysconfdir}/udev/rules.d/
-	install -d ${D}${sysconfdir}/tmpfiles.d
+	install -d ${D}${nonarch_libdir}/tmpfiles.d
 	for rule in $(find ${WORKDIR} -maxdepth 1 -type f -name "*.rules"); do
 		install -m 0644 $rule ${D}${sysconfdir}/udev/rules.d/
 	done
 
-	install -m 0644 ${WORKDIR}/00-create-volatile.conf ${D}${sysconfdir}/tmpfiles.d/
+	install -m 0644 ${WORKDIR}/00-create-volatile.conf ${D}${nonarch_libdir}/tmpfiles.d/
 
 	if ${@bb.utils.contains('DISTRO_FEATURES','sysvinit','true','false',d)}; then
 		install -d ${D}${sysconfdir}/init.d
@@ -288,7 +308,7 @@ do_install() {
 		# /var/log is typically a symbolic link to inside /var/volatile,
 		# which is expected to be empty.
 		rm -rf ${D}${localstatedir}/log
-	else
+	elif [ -e ${D}${localstatedir}/log/journal ]; then
 		chown root:systemd-journal ${D}${localstatedir}/log/journal
 
 		# journal-remote creates this at start
@@ -329,8 +349,9 @@ do_install() {
 		echo 'f /run/systemd/resolve/resolv.conf 0644 root root' >>${D}${exec_prefix}/lib/tmpfiles.d/systemd.conf
 		ln -s ../run/systemd/resolve/resolv.conf ${D}${sysconfdir}/resolv-conf.systemd
 	else
-		sed -i -e "s%^L! /etc/resolv.conf.*$%L! /etc/resolv.conf - - - - ../run/systemd/resolve/resolv.conf%g" ${D}${exec_prefix}/lib/tmpfiles.d/etc.conf
-		ln -s ../run/systemd/resolve/resolv.conf ${D}${sysconfdir}/resolv-conf.systemd
+		resolv_conf="${@bb.utils.contains('RESOLV_CONF', 'stub-resolv', 'run/systemd/resolve/stub-resolv.conf', 'run/systemd/resolve/resolv.conf', d)}"
+		sed -i -e "s%^L! /etc/resolv.conf.*$%L! /etc/resolv.conf - - - - ../${resolv_conf}%g" ${D}${exec_prefix}/lib/tmpfiles.d/etc.conf
+		ln -s ../${resolv_conf} ${D}${sysconfdir}/resolv-conf.systemd
 	fi
 	if ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'false', 'true', d)}; then
 		rm ${D}${exec_prefix}/lib/tmpfiles.d/x11.conf
@@ -368,6 +389,15 @@ do_install() {
         sed -i -e 's/#RebootWatchdogSec=10min/RebootWatchdogSec=${WATCHDOG_TIMEOUT}/' \
             ${D}/${sysconfdir}/systemd/system.conf
     fi
+
+	if ${@bb.utils.contains('PACKAGECONFIG', 'pni-names', 'true', 'false', d)}; then
+		if ! grep -q '^NamePolicy=.*mac' ${D}${rootlibexecdir}/systemd/network/99-default.link; then
+			sed -i '/^NamePolicy=/s/$/ mac/' ${D}${rootlibexecdir}/systemd/network/99-default.link
+		fi
+		if ! grep -q 'AlternativeNamesPolicy=.*mac' ${D}${rootlibexecdir}/systemd/network/99-default.link; then
+			sed -i '/AlternativeNamesPolicy=/s/$/ mac/' ${D}${rootlibexecdir}/systemd/network/99-default.link
+		fi
+	fi
 }
 
 python populate_packages:prepend (){
@@ -377,22 +407,24 @@ python populate_packages:prepend (){
 PACKAGES_DYNAMIC += "^lib(udev|systemd|nss).*"
 
 PACKAGE_BEFORE_PN = "\
-    ${PN}-gui \
-    ${PN}-vconsole-setup \
-    ${PN}-initramfs \
     ${PN}-analyze \
-    ${PN}-kernel-install \
-    ${PN}-rpm-macros \
     ${PN}-binfmt \
-    ${PN}-zsh-completion \
     ${PN}-container \
+    ${PN}-crypt \
+    ${PN}-extra-utils \
+    ${PN}-gui \
+    ${PN}-initramfs \
     ${PN}-journal-gatewayd \
     ${PN}-journal-upload \
     ${PN}-journal-remote \
-    ${PN}-extra-utils \
+    ${PN}-kernel-install \
+    ${PN}-rpm-macros \
     ${PN}-udev-rules \
+    ${PN}-vconsole-setup \
+    ${PN}-zsh-completion \
     libsystemd-shared \
     udev \
+    udev-bash-completion \
     udev-hwdb \
 "
 
@@ -417,7 +449,7 @@ SYSTEMD_PACKAGES = "${@bb.utils.contains('PACKAGECONFIG', 'binfmt', '${PN}-binfm
 "
 SYSTEMD_SERVICE:${PN}-binfmt = "systemd-binfmt.service"
 
-USERADD_PACKAGES = "${PN} ${PN}-extra-utils \
+USERADD_PACKAGES = "${PN} \
                     udev \
                     ${@bb.utils.contains('PACKAGECONFIG', 'microhttpd', '${PN}-journal-gatewayd', '', d)} \
                     ${@bb.utils.contains('PACKAGECONFIG', 'microhttpd', '${PN}-journal-remote', '', d)} \
@@ -432,12 +464,16 @@ USERADD_PARAM:${PN} += "${@bb.utils.contains('PACKAGECONFIG', 'polkit', '--syste
 USERADD_PARAM:${PN} += "${@bb.utils.contains('PACKAGECONFIG', 'resolved', '--system -d / -M --shell /sbin/nologin systemd-resolve;', '', d)}"
 USERADD_PARAM:${PN} += "${@bb.utils.contains('PACKAGECONFIG', 'timesyncd', '--system -d / -M --shell /sbin/nologin systemd-timesync;', '', d)}"
 USERADD_PARAM:${PN} += "${@bb.utils.contains('PACKAGECONFIG', 'oomd', '--system -d / -M --shell /sbin/nologin systemd-oom;', '', d)}"
-USERADD_PARAM:${PN}-extra-utils = "--system -d / -M --shell /sbin/nologin systemd-bus-proxy"
 USERADD_PARAM:${PN}-journal-gatewayd = "--system -d / -M --shell /sbin/nologin systemd-journal-gateway"
 USERADD_PARAM:${PN}-journal-remote = "--system -d / -M --shell /sbin/nologin systemd-journal-remote"
 USERADD_PARAM:${PN}-journal-upload = "--system -d / -M --shell /sbin/nologin systemd-journal-upload"
 
 FILES:${PN}-analyze = "${bindir}/systemd-analyze"
+
+FILES:${PN}-crypt = "${bindir}/systemd-cryptenroll \
+                     ${libdir}/cryptsetup \
+                    "
+RRECOMMENDS:${PN} += "${PN}-crypt"
 
 FILES:${PN}-initramfs = "/init"
 RDEPENDS:${PN}-initramfs = "${PN}"
@@ -465,7 +501,7 @@ FILES:${PN}-binfmt = "${sysconfdir}/binfmt.d/ \
                       ${systemd_system_unitdir}/systemd-binfmt.service"
 RRECOMMENDS:${PN}-binfmt = "${@bb.utils.contains('PACKAGECONFIG', 'binfmt', 'kernel-module-binfmt-misc', '', d)}"
 
-RRECOMMENDS:${PN}-vconsole-setup = "${@bb.utils.contains('PACKAGECONFIG', 'vconsole', 'kbd kbd-consolefonts kbd-keymaps', '', d)}"
+RDEPENDS:${PN}-vconsole-setup = "${@bb.utils.contains('PACKAGECONFIG', 'vconsole', 'kbd kbd-consolefonts kbd-keymaps', '', d)}"
 
 
 FILES:${PN}-journal-gatewayd = "${rootlibexecdir}/systemd/systemd-journal-gatewayd \
@@ -516,7 +552,6 @@ FILES:${PN}-container = "${sysconfdir}/dbus-1/system.d/org.freedesktop.import1.c
                          ${exec_prefix}/lib/tmpfiles.d/systemd-nspawn.conf \
                          ${exec_prefix}/lib/tmpfiles.d/README \
                          ${systemd_system_unitdir}/systemd-nspawn@.service \
-                         ${libdir}/libnss_mymachines.so.2 \
                          ${datadir}/dbus-1/system-services/org.freedesktop.import1.service \
                          ${datadir}/dbus-1/system-services/org.freedesktop.machine1.service \
                          ${datadir}/dbus-1/system.d/org.freedesktop.import1.conf \
@@ -524,6 +559,8 @@ FILES:${PN}-container = "${sysconfdir}/dbus-1/system.d/org.freedesktop.import1.c
                          ${datadir}/polkit-1/actions/org.freedesktop.import1.policy \
                          ${datadir}/polkit-1/actions/org.freedesktop.machine1.policy \
                         "
+
+RDEPENDS:${PN}-container = "${@bb.utils.contains('PACKAGECONFIG', 'nss-mymachines', 'libnss-mymachines', '', d)}"
 
 # "machinectl import-tar" uses "tar --numeric-owner", not supported by busybox.
 RRECOMMENDS:${PN}-container += "\
@@ -545,13 +582,13 @@ FILES:${PN}-extra-utils = "\
                         ${bindir}/systemd-run \
                         ${bindir}/systemd-cat \
                         ${bindir}/systemd-creds \
-                        ${bindir}/systemd-cryptenroll \
                         ${bindir}/systemd-delta \
                         ${bindir}/systemd-cgls \
                         ${bindir}/systemd-cgtop \
                         ${bindir}/systemd-stdio-bridge \
                         ${base_bindir}/systemd-ask-password \
                         ${base_bindir}/systemd-tty-ask-password-agent \
+                        ${base_sbindir}/mount.ddi \
                         ${systemd_system_unitdir}/initrd.target.wants/systemd-pcrphase-initrd.path \
                         ${systemd_system_unitdir}/systemd-ask-password-console.path \
                         ${systemd_system_unitdir}/systemd-ask-password-console.service \
@@ -565,9 +602,6 @@ FILES:${PN}-extra-utils = "\
                         ${rootlibexecdir}/systemd/systemd-resolve-host \
                         ${rootlibexecdir}/systemd/systemd-ac-power \
                         ${rootlibexecdir}/systemd/systemd-activate \
-                        ${rootlibexecdir}/systemd/systemd-bus-proxyd \
-                        ${systemd_system_unitdir}/systemd-bus-proxyd.service \
-                        ${systemd_system_unitdir}/systemd-bus-proxyd.socket \
                         ${rootlibexecdir}/systemd/systemd-measure \
                         ${rootlibexecdir}/systemd/systemd-pcrphase \
                         ${rootlibexecdir}/systemd/systemd-socket-proxyd \
@@ -622,6 +656,8 @@ FILES:${PN} = " ${base_bindir}/* \
                 ${datadir}/polkit-1 \
                 ${datadir}/${BPN} \
                 ${datadir}/factory \
+                ${sysconfdir}/credstore/ \
+                ${sysconfdir}/credstore.encrypted/ \
                 ${sysconfdir}/dbus-1/ \
                 ${sysconfdir}/modules-load.d/ \
                 ${sysconfdir}/pam.d/ \
@@ -650,12 +686,14 @@ FILES:${PN} = " ${base_bindir}/* \
                 ${bindir}/bootctl \
                 ${bindir}/oomctl \
                 ${bindir}/userdbctl \
+                ${exec_prefix}/lib/credstore \
                 ${exec_prefix}/lib/tmpfiles.d/*.conf \
                 ${exec_prefix}/lib/systemd \
                 ${exec_prefix}/lib/modules-load.d \
                 ${exec_prefix}/lib/sysctl.d \
                 ${exec_prefix}/lib/sysusers.d \
                 ${exec_prefix}/lib/environment.d \
+                ${exec_prefix}/lib/pcrlock.d \
                 ${localstatedir} \
                 ${rootlibexecdir}/modprobe.d/systemd.conf \
                 ${rootlibexecdir}/modprobe.d/README \
@@ -675,7 +713,7 @@ FILES:${PN} = " ${base_bindir}/* \
 
 FILES:${PN}-dev += "${base_libdir}/security/*.la ${datadir}/dbus-1/interfaces/ ${sysconfdir}/rpm/macros.systemd"
 
-RDEPENDS:${PN} += "kmod dbus util-linux-mount util-linux-umount udev (= ${EXTENDPKGV}) systemd-udev-rules util-linux-agetty util-linux-fsck"
+RDEPENDS:${PN} += "kmod dbus util-linux-mount util-linux-umount udev (= ${EXTENDPKGV}) systemd-udev-rules util-linux-agetty util-linux-fsck util-linux-swaponoff"
 RDEPENDS:${PN} += "${@bb.utils.contains('PACKAGECONFIG', 'serial-getty-generator', '', 'systemd-serialgetty', d)}"
 RDEPENDS:${PN} += "volatile-binds"
 
@@ -685,6 +723,7 @@ RRECOMMENDS:${PN} += "systemd-extra-utils \
                       kernel-module-autofs4 kernel-module-unix kernel-module-ipv6 kernel-module-sch-fq-codel \
                       os-release \
                       systemd-conf \
+                      ${@bb.utils.contains('PACKAGECONFIG', 'logind', 'pam-plugin-umask', '', d)} \
 "
 
 INSANE_SKIP:${PN} += "dev-so libdir"
@@ -696,6 +735,7 @@ FILES:libsystemd-shared = "${rootlibdir}/systemd/libsystemd-shared*.so"
 
 RPROVIDES:udev = "hotplug"
 
+RDEPENDS:udev-bash-completion += "bash-completion"
 RDEPENDS:udev-hwdb += "udev"
 
 FILES:udev += "${base_sbindir}/udevd \
@@ -708,6 +748,7 @@ FILES:udev += "${base_sbindir}/udevd \
                ${rootlibexecdir}/udev/dmi_memory_id \
                ${rootlibexecdir}/udev/fido_id \
                ${rootlibexecdir}/udev/findkeyboards \
+               ${rootlibexecdir}/udev/iocost \
                ${rootlibexecdir}/udev/keyboard-force-release.sh \
                ${rootlibexecdir}/udev/keymap \
                ${rootlibexecdir}/udev/mtd_probe \
@@ -719,6 +760,7 @@ FILES:udev += "${base_sbindir}/udevd \
                ${rootlibexecdir}/udev/rules.d/60-autosuspend-chromiumos.rules \
                ${rootlibexecdir}/udev/rules.d/60-block.rules \
                ${rootlibexecdir}/udev/rules.d/60-cdrom_id.rules \
+               ${rootlibexecdir}/udev/rules.d/60-dmi-id.rules \
                ${rootlibexecdir}/udev/rules.d/60-drm.rules \
                ${rootlibexecdir}/udev/rules.d/60-evdev.rules \
                ${rootlibexecdir}/udev/rules.d/60-fido-id.rules \
@@ -727,6 +769,7 @@ FILES:udev += "${base_sbindir}/udevd \
                ${rootlibexecdir}/udev/rules.d/60-persistent-alsa.rules \
                ${rootlibexecdir}/udev/rules.d/60-persistent-input.rules \
                ${rootlibexecdir}/udev/rules.d/60-persistent-storage.rules \
+               ${rootlibexecdir}/udev/rules.d/60-persistent-storage-mtd.rules \
                ${rootlibexecdir}/udev/rules.d/60-persistent-storage-tape.rules \
                ${rootlibexecdir}/udev/rules.d/60-persistent-v4l.rules \
                ${rootlibexecdir}/udev/rules.d/60-sensor.rules \
@@ -746,6 +789,7 @@ FILES:udev += "${base_sbindir}/udevd \
                ${rootlibexecdir}/udev/rules.d/80-net-setup-link.rules \
                ${rootlibexecdir}/udev/rules.d/81-net-dhcp.rules \
                ${rootlibexecdir}/udev/rules.d/90-vconsole.rules \
+               ${rootlibexecdir}/udev/rules.d/90-iocost.rules \
                ${rootlibexecdir}/udev/rules.d/README \
                ${sysconfdir}/udev \
                ${sysconfdir}/init.d/systemd-udevd \
@@ -754,10 +798,10 @@ FILES:udev += "${base_sbindir}/udevd \
                ${base_bindir}/systemd-hwdb \
                ${base_bindir}/udevadm \
                ${base_sbindir}/udevadm \
-               ${datadir}/bash-completion/completions/udevadm \
                ${systemd_system_unitdir}/systemd-hwdb-update.service \
               "
 
+FILES:udev-bash-completion = "${datadir}/bash-completion/completions/udevadm"
 FILES:udev-hwdb = "${rootlibexecdir}/udev/hwdb.d \
                    "
 
@@ -770,6 +814,9 @@ INITSCRIPT_PARAMS:udev = "start 03 S ."
 python __anonymous() {
     if not bb.utils.contains('DISTRO_FEATURES', 'sysvinit', True, False, d):
         d.setVar("INHIBIT_UPDATERCD_BBCLASS", "1")
+
+    if bb.utils.contains('DISTRO_FEATURES', 'systemd-resolved', True, False, d) and not bb.utils.contains('PACKAGECONFIG', 'nss-resolve resolved', True, False, d):
+        bb.error("DISTRO_FEATURES[systemd-resolved] requires PACKAGECONFIG[nss-resolve, resolved]")
 
     if bb.utils.contains('PACKAGECONFIG', 'repart', True, False, d) and not bb.utils.contains('PACKAGECONFIG', 'openssl', True, False, d):
         bb.error("PACKAGECONFIG[repart] requires PACKAGECONFIG[openssl]")
@@ -811,15 +858,31 @@ ALTERNATIVE_LINK_NAME[runlevel] = "${base_sbindir}/runlevel"
 ALTERNATIVE_PRIORITY[runlevel] ?= "300"
 
 pkg_postinst:${PN}:libc-glibc () {
-	sed -e '/^hosts:/s/\s*\<myhostname\>//' \
-		-e 's/\(^hosts:.*\)\(\<files\>\)\(.*\)\(\<dns\>\)\(.*\)/\1\2 myhostname \3\4\5/' \
-		-i $D${sysconfdir}/nsswitch.conf
+	if ${@bb.utils.contains('PACKAGECONFIG', 'myhostname', 'true', 'false', d)}; then
+		sed -e '/^hosts:/s/\s*\<myhostname\>//' \
+			-e 's/\(^hosts:.*\)\(\<files\>\)\(.*\)\(\<dns\>\)\(.*\)/\1\2 myhostname \3\4\5/' \
+			-i $D${sysconfdir}/nsswitch.conf
+	fi
+	if ${@bb.utils.contains('PACKAGECONFIG', 'nss', 'true', 'false', d)}; then
+		sed -e 's#\(^passwd:.*\)#\1 systemd#' \
+			-e 's#\(^group:.*\)#\1 systemd#' \
+			-e 's#\(^shadow:.*\)#\1 systemd#' \
+			-i $D${sysconfdir}/nsswitch.conf
+	fi
 }
 
 pkg_prerm:${PN}:libc-glibc () {
-	sed -e '/^hosts:/s/\s*\<myhostname\>//' \
-		-e '/^hosts:/s/\s*myhostname//' \
-		-i $D${sysconfdir}/nsswitch.conf
+	if ${@bb.utils.contains('PACKAGECONFIG', 'myhostname', 'true', 'false', d)}; then
+		sed -e '/^hosts:/s/\s*\<myhostname\>//' \
+			-e '/^hosts:/s/\s*myhostname//' \
+			-i $D${sysconfdir}/nsswitch.conf
+	fi
+	if ${@bb.utils.contains('PACKAGECONFIG', 'nss', 'true', 'false', d)}; then
+		sed -e '/^passwd:/s#\s*systemd##' \
+			-e '/^group:/s#\s*systemd##' \
+			-e '/^shadow:/s#\s*systemd##' \
+			-i $D${sysconfdir}/nsswitch.conf
+	fi
 }
 
 PACKAGE_WRITE_DEPS += "qemu-native"
