@@ -1530,9 +1530,9 @@ manifest_list:
   syslinux:
     remote_url: https://gitee.com/src-openeuler/syslinux.git
     version: 7f2318a9d7e85935b6c3146c67d31140734b724e
-  systemd:
-    remote_url: https://gitee.com/src-openeuler/systemd.git
-    version: 5b7479879d98638372c8f537c18c13f0079d7b20
+  # systemd:
+  #   remote_url: https://gitee.com/src-openeuler/systemd.git
+  #   version: 2b20884ae6d7df65398e5fb1fccc4b4e9bc7d27f
   systemtap:
     remote_url: https://gitee.com/src-openeuler/systemtap.git
     version: 60ee7da866d0c3a3fb1fa9e2255681a5ba7107ca

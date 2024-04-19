@@ -1,16 +1,14 @@
-
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:${THISDIR}/systemd:"
 
 # files, patches that come from openeuler
-SRC_URI =+ " \
+SRC_URI = " \
         file://systemd-${PV}.tar.gz \
         file://backport-Revert-sysctl.d-switch-net.ipv4.conf.all.rp_filter-f.patch \
         file://backport-Avoid-tmp-being-mounted-as-tmpfs-without-the-user-s-.patch \
         file://backport-temporarily-disable-test-seccomp.patch \
-        file://backport-sd-event-always-initialize-sd_event.perturb.patch \
-        file://backport-sd-event-fix-error-handling.patch \
-        file://backport-core-refuse-dbus-activation-if-dbus-is-not-running.patch \
-        file://backport-core-only-refuse-Type-dbus-service-enqueuing-if-dbus.patch \
+        file://backport-core-exec-do-not-crash-with-UtmpMode-user-without-Us.patch \
+        file://backport-resolved-limit-the-number-of-signature-validations-i.patch \
+        file://backport-resolved-reduce-the-maximum-nsec3-iterations-to-100.patch \
         file://update-rtc-with-system-clock-when-shutdown.patch \
         file://udev-add-actions-while-rename-netif-failed.patch \
         file://fix-two-VF-virtual-machines-have-same-mac-address.patch \
@@ -49,7 +47,6 @@ SRC_URI =+ " \
         file://bugfix-also-stop-machine-when-a-machine-un.patch \
         file://print-the-process-status-to-console-when-shutdown.patch \
         file://Retry-to-handle-the-uevent-when-worker-is-terminated.patch \
-        file://treat-hyphen-as-valid-hostname-char.patch \
         file://process-util-log-more-information-when-runnin.patch \
         file://fuser-print-umount-message-to-reboot-umount-msg.patch \
         file://shutdown-reboot-when-recieve-crash-signal.patch \
@@ -61,4 +58,6 @@ SRC_URI =+ " \
         file://bugfix-for-cgroup-Swap-cgroup-v1-deletion-and-migration.patch \
         file://delete-journal-files-except-system.journal-when-jour.patch \
         file://set-the-cpuset.cpus-mems-of-machine.slice-to-all-by-.patch \
+        file://add-a-new-switch-to-control-whether-udev-complies-wi.patch \
+        file://journal-don-t-enable-systemd-journald-audit.socket.patch \
 "

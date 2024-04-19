@@ -14,9 +14,9 @@ ConditionKernelCommandLine=|rd.modules-load
 ConditionFileIsExecutable=/sbin/depmod
 ConditionFileNotEmpty=!/lib/modules/%v/modules.dep
 
+
 [Service]
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=/sbin/depmod -a
 TimeoutSec=90s
-

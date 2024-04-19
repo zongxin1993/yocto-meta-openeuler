@@ -1,7 +1,7 @@
 # main bb: openembedded-core/meta/recipes-core/systemd/systemd-boot_253.7.bb
 
 # version in openEuler
-PV = "253"
+PV = "255"
 S = "${WORKDIR}/systemd-${PV}"
 
 OPENEULER_REPO_NAME = "systemd"
