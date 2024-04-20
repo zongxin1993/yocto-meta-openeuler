@@ -15,7 +15,7 @@ wrap_bin () {
     case $bin in
         clang*)
             # --gcc-toolchain, --sysroot will be removed later
-            execcmd="exec ${EXTERNAL_TOOLCHAIN_BIN}/$bin --target=${EXTERNAL_TARGET_SYS} --gcc-toolchain=${EXTERNAL_TOOLCHAIN_GCC} --sysroot=${EXTERNAL_TOOLCHAIN_GCC}/aarch64-openeuler-linux-gnu/sysroot -Wno-int-conversion \"\$@\""
+            execcmd="exec ${EXTERNAL_TOOLCHAIN_BIN}/$bin -Wno-int-conversion \"\$@\""
             ;;
         llvm-*)
             execcmd="exec ${EXTERNAL_TOOLCHAIN_BIN}/$bin \"\$@\""

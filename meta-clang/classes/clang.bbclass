@@ -1,8 +1,6 @@
 # Add the necessary override
 CCACHE_COMPILERCHECK:toolchain-clang ?= "%compiler% -v"
-# HOST_CC_ARCH:prepend:toolchain-clang = "-target ${HOST_SYS} "
-# --no-sysroot-suffix not support.
-HOST_CC_ARCH:remove:toolchain-clang = " --no-sysroot-suffix "
+HOST_CC_ARCH:prepend:toolchain-clang = "-target ${HOST_SYS} "
 CC:toolchain-clang  = "${CCACHE}${HOST_PREFIX}clang ${HOST_CC_ARCH}${TOOLCHAIN_OPTIONS}"
 CXX:toolchain-clang = "${CCACHE}${HOST_PREFIX}clang++ ${HOST_CC_ARCH}${TOOLCHAIN_OPTIONS}"
 CPP:toolchain-clang = "${CCACHE}${HOST_PREFIX}clang ${HOST_CC_ARCH}${TOOLCHAIN_OPTIONS} -E"
