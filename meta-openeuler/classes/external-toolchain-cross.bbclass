@@ -11,12 +11,16 @@ wrap_bin () {
     shift
     script="${D}${bindir}/${TARGET_PREFIX}$bin"
     execcmd="exec ${EXTERNAL_TOOLCHAIN_BIN}/${EXTERNAL_TARGET_SYS}-$bin \"\$@\""
+    # for llvm compiler
     case $bin in
         clang*)
-            execcmd="exec ${EXTERNAL_TOOLCHAIN_BIN}/$bin --target=${EXTERNAL_TARGET_SYS} --gcc-toolchain=${EXTERNAL_TOOLCHAIN} --sysroot=${EXTERNAL_TOOLCHAIN_SYSROOT} -Wno-int-conversion \"\$@\""
+            # --gcc-toolchain, --sysroot will be removed later
+            execcmd="exec ${EXTERNAL_TOOLCHAIN_BIN}/$bin --target=${EXTERNAL_TARGET_SYS} --gcc-toolchain=${EXTERNAL_TOOLCHAIN_GCC} --sysroot=${EXTERNAL_TOOLCHAIN_GCC}/aarch64-openeuler-linux-gnu/sysroot -Wno-int-conversion \"\$@\""
             ;;
         llvm-*)
-            script="${D}${bindir}/${TARGET_PREFIX}${bin:5}"
+            execcmd="exec ${EXTERNAL_TOOLCHAIN_BIN}/$bin \"\$@\""
+            ;;
+        *lld)
             execcmd="exec ${EXTERNAL_TOOLCHAIN_BIN}/$bin \"\$@\""
             ;;
         *)
