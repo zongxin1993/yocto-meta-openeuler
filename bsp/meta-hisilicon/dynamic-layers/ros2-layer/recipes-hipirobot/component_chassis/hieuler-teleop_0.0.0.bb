@@ -6,15 +6,15 @@
 inherit ros_distro_humble
 inherit ros_superflore_generated
 
-DESCRIPTION = "ROS2 robot_bringup for robot_control"
+DESCRIPTION = "ROS2 hieuler_teleop"
 AUTHOR = "hieuler"
 SECTION = "devel"
-LICENSE = "None"
-LIC_FILES_CHKSUM = "file://package.xml;beginline=8;endline=8;md5=782925c2d55d09052e1842a0b4886802"
+LICENSE = "Apache-2.0"
+LIC_FILES_CHKSUM = "file://package.xml;beginline=10;endline=10;md5=3dce4ba60d7e51ec64f3c3dc18672dd3"
 
 ROS_CN = ""
 PV = "0.0.0"
-ROS_BPN = "robot-bringup"
+ROS_BPN = "hieuler_teleop"
 
 ROS_BUILD_DEPENDS = " \
     ros2-hieuler-robot \
@@ -50,13 +50,13 @@ RDEPENDS:${PN} += "${ROS_EXEC_DEPENDS}"
 
 OPENEULER_LOCAL_NAME = "hieuler_component_chassis"
 SRC_URI = " \
-    file://${OPENEULER_LOCAL_NAME}/uart/robot_bringup \
+    file://${OPENEULER_LOCAL_NAME}/uart/keyboard \
 "
 
-S = "${WORKDIR}/hieuler_component_chassis/uart/robot_bringup"
+S = "${WORKDIR}/hieuler_component_chassis/uart/keyboard"
 FILES:${PN} += "${datadir}"
 DISABLE_OPENEULER_SOURCE_MAP = "1"
-ROS_BUILD_TYPE = "ament_cmake"
+ROS_BUILD_TYPE = "ament_python"
 
 inherit ros_${ROS_BUILD_TYPE}
 
