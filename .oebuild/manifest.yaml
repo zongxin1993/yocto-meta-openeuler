@@ -470,7 +470,7 @@ manifest_list:
     version: 0fd71598436075e6c20392b30c4977fff1cf9a6c
   hirobot_component_dtof:
     remote_url: https://gitee.com/hipirobot/hirobot_component_dtof.git
-    version: aa04480006ee91d955688594c90a84cc28c10e61
+     version: 54fadb7854aa45f8a392c769ab11e91218fd7e4c
   hirobot_component_navigation:
     remote_url: https://gitee.com/hipirobot/hirobot_component_navigation.git
     version: ef551969466f96572d057588d4be0a85605f045e
