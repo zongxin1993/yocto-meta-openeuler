@@ -62,7 +62,7 @@ person-position-ack \
 robot-charge-control \
 robot-init-pose \
 robot-bringup \
-ros2-wheeltec-robot \
+hieuler_teleop \
 serial \
 depth-image-proc \
 depthimage-to-laserscan \
