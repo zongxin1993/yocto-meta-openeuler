@@ -5,5 +5,5 @@ body: 1.此发行版为对应toolchains V0.1.0版本。
       3.请给merge_data.sh文件可执行权限，并执行即可得到对应的工具链文件夹。
       4.更新内容：发布首个LLVM工具链版本。
 target_commitish: master
-owner: openeuler
+owner: eastb233
 repo: yocto-meta-openeuler

@@ -9,7 +9,7 @@ function do_prepare() {
 	[ ! -d "$LIB_PATH" ] && mkdir $LIB_PATH
 	pushd $LIB_PATH
 	delete_dir $LLVM
-	git clone -b $LLVM_BRANCH https://gitee.com/openeuler/$LLVM.git --depth 1
+	git clone -b $LLVM_BRANCH https://gitee.com/eastb233/$LLVM.git --depth 1
 	popd
 }
 
