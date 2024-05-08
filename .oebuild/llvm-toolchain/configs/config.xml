@@ -1,0 +1,2 @@
+LLVM="llvm-project"
+LLVM_BRANCH="cross-build"
