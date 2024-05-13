@@ -49,7 +49,8 @@ RUN sudo chown -R jenkins:jenkins /opt /usr1 && sudo chmod -R 755 /opt /usr1
 
 RUN set -eux; \
 pip install PyYaml python-git requests python-jenkins paramiko json2table \
-gitlint sphinx_tabs sphinx_multiversion sphinx-rtd-theme Sphinx==5.1.1 oebuild pyyaml pygit gitpython
+gitlint sphinx_tabs sphinx_multiversion sphinx-rtd-theme Sphinx==5.1.1 oebuild pyyaml pygit gitpython \
+-i https://pypi.tuna.tsinghua.edu.cn/simple
 
 VOLUME /home/${user}/.jenkins
 VOLUME ${AGENT_WORKDIR}
@@ -93,53 +94,10 @@ RUN ./x86_64-buildtools-extended-nativesdk-standalone-24.03-LTS.sh -d /opt/build
 RUN . /opt/buildtools/nativesdk/environment-setup-x86_64-openeulersdk-linux
 
 RUN mkdir -p /usr1/openeuler/gcc
-# download toolchain release
-WORKDIR /usr1/openeuler/gcc
 
-RUN wget https://gitee.com/openeuler/yocto-meta-openeuler/releases/download/toolchians-v0.1.4/1_aarch64-openeuler-linux-gnu.tar.gz
+COPY gcc /usr1/openeuler/gcc
 
-RUN wget https://gitee.com/openeuler/yocto-meta-openeuler/releases/download/toolchians-v0.1.4/2_aarch64-openeuler-linux-gnu.tar.gz
-
-RUN wget https://gitee.com/openeuler/yocto-meta-openeuler/releases/download/toolchians-v0.1.4/3_aarch64-openeuler-linux-gnu.tar.gz
-
-RUN wget https://gitee.com/openeuler/yocto-meta-openeuler/releases/download/toolchians-v0.1.4/4_aarch64-openeuler-linux-gnu.tar.gz
-
-RUN wget https://gitee.com/openeuler/yocto-meta-openeuler/releases/download/toolchians-v0.1.4/1_x86_64-openeuler-linux-gnu.tar.gz
-
-RUN wget https://gitee.com/openeuler/yocto-meta-openeuler/releases/download/toolchians-v0.1.4/2_x86_64-openeuler-linux-gnu.tar.gz
-
-RUN wget https://gitee.com/openeuler/yocto-meta-openeuler/releases/download/toolchians-v0.1.4/3_x86_64-openeuler-linux-gnu.tar.gz
-
-RUN wget https://gitee.com/openeuler/yocto-meta-openeuler/releases/download/toolchians-v0.1.4/4_x86_64-openeuler-linux-gnu.tar.gz
-
-RUN wget https://gitee.com/openeuler/yocto-meta-openeuler/releases/download/toolchians-v0.1.4/1_arm-openeuler-linux-gnueabi.tar.gz
-
-RUN wget https://gitee.com/openeuler/yocto-meta-openeuler/releases/download/toolchians-v0.1.4/2_arm-openeuler-linux-gnueabi.tar.gz
-
-RUN wget https://gitee.com/openeuler/yocto-meta-openeuler/releases/download/toolchians-v0.1.4/3_arm-openeuler-linux-gnueabi.tar.gz
-
-RUN wget https://gitee.com/openeuler/yocto-meta-openeuler/releases/download/toolchians-v0.1.4/1_riscv64-openeuler-linux-gnu.tar.gz
-
-RUN wget https://gitee.com/openeuler/yocto-meta-openeuler/releases/download/toolchians-v0.1.4/2_riscv64-openeuler-linux-gnu.tar.gz
-
-RUN wget https://gitee.com/openeuler/yocto-meta-openeuler/releases/download/toolchians-v0.1.4/merge_data.sh
-
-RUN bash ./merge_data.sh
-
-RUN tar xzvf aarch64-openeuler-linux-gnu.tar.gz &&  \
-    mv aarch64-openeuler-linux-gnu openeuler_gcc_arm64le &&  \
-    rm -rf aarch64-openeuler-linux-gnu.tar.gz && \
-    tar xzvf x86_64-openeuler-linux-gnu.tar.gz &&  \
-    mv x86_64-openeuler-linux-gnu openeuler_gcc_x86_64 &&  \
-    rm -rf x86_64-openeuler-linux-gnu.tar.gz && \
-    tar xzvf arm-openeuler-linux-gnueabi.tar.gz &&  \
-    mv arm-openeuler-linux-gnueabi openeuler_gcc_arm32le &&  \
-    rm -rf arm-openeuler-linux-gnueabi.tar.gz && \
-    tar xzvf riscv64-openeuler-linux-gnu.tar.gz &&  \
-    mv riscv64-openeuler-linux-gnu openeuler_gcc_riscv64 && \
-    rm -rf riscv64-openeuler-linux-gnu.tar.gz && \
-    rm -rf merge_data.sh && \
-    chmod -R 777 /usr1/openeuler/gcc
+RUN sudo chmod -R 777 /usr1/openeuler/gcc && sudo chown -R ${user}:${group} /usr1
 
 RUN rm -rf merge_data.sh
 

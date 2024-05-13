@@ -1,52 +1,87 @@
-FROM openeuler/openeuler:23.09
+# base image
+FROM openeuler/openeuler:21.09
 
-# RUN sed -i "s#http://repo.openeuler.org#https://repo.huaweicloud.com/openeuler#g" /etc/yum.repos.d/openEuler.repo
+# MAINTAINER
+LABEL maintainer="tangwei"
+LABEL version="1.0"
+LABEL description="This is the image used by openEuler Embedded for CI/CD"
 
+RUN sed -i 's/repo.openeuler.org/archives.openeuler\.openatom\.cn/g' /etc/yum.repos.d/openEuler.repo
+
+# yum install
 RUN set -eux; \
 yum -y install git java tar cmake gperf sqlite-devel libffi-devel xz-devel \
 zlib zlib-devel openssl-devel bzip2-devel ncurses-devel readline-devel \
 libpcap-devel parted autoconf-archive chrpath gcc-c++ patch rpm-build flex \
 autoconf automake m4 bison bc libtool gettext-devel createrepo_c net-tools \
-wget sudo hostname rpcgen texinfo python meson dosfstools mtools libmpc-devel \
-gmp-devel ninja-build numactl-devel make python3 python3-pip screen glibc-locale-archive iproute \
-xz unzip help2man libstdc++-static gcc g++ rsync python3-devel gdisk \
+wget sudo hostname rpcgen texinfo meson dosfstools mtools libmpc-devel \
+gmp-devel ninja-build numactl-devel make python python3 python3-pip screen \
+iproute help2man gdisk libstdc++-static diffstat lzip python3-devel rsync xz-lzma-compat xz unzip gcc g++ \
 vim hwdata libxslt perl-XML-Parser umoci skopeo
 
-ARG user=openeuler
-ARG group=openeuler
-ARG uid=1000
-ARG gid=1000
+ARG VERSION=4.3
+ARG user=jenkins
+ARG group=jenkins
+#must to be 1001 for adapt disk mount in jenkins'job
+ARG uid=1001
+ARG gid=1001
+ARG AGENT_WORKDIR=/home/${user}/agent
 
-# add build user
-RUN groupadd -g ${gid} ${group} && useradd -c "${user}" -d /home/${user} -u ${uid} -g ${gid} -m ${user}
+RUN curl --create-dirs -fsSLo /usr/share/jenkins/agent.jar https://repo.jenkins-ci.org/public/org/jenkins-ci/main/remoting/${VERSION}/remoting-${VERSION}.jar \
+    && chmod 755 /usr/share/jenkins \
+    && chmod 644 /usr/share/jenkins/agent.jar \
+    && ln -sf /usr/share/jenkins/agent.jar /usr/share/jenkins/slave.jar
+
+RUN curl --create-dirs -fsSLo /usr/local/bin/jenkins-agent http://121.36.53.23/AdoptOpenJDK/jenkins-agent
+#COPY jenkins-agent /usr/local/bin/jenkins-agent
+
+RUN chmod a+rx /usr/local/bin/jenkins-agent \
+     && ln -s /usr/local/bin/jenkins-agent /usr/local/bin/jenkins-slave
+
+RUN groupadd -g ${gid} ${group} && useradd -c "Jenkins user" -d /home/${user} -u ${uid} -g ${gid} -m ${user}
 RUN echo "${user} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-# modify /usr1 owner
-RUN mkdir -p /usr1 && chown -R ${user}:${group} /usr1 /opt && chmod -R 755 /usr1 /opt
+#add umask conf to 022 in file /etc/bashrc
+RUN echo "umask 002" >> /etc/bashrc
 
-# install nativesdk toolchains and environment of build toolchains
-# notice: nativesdk and toolchains is for building OS
+ARG user_openeuler=openeuler
+ARG group_openeuler=openeuler
+ARG uid_openeuler=1000
+ARG gid_openeuler=1000
+
+# add build user
+RUN groupadd -g ${gid_openeuler} ${group_openeuler} && useradd -c "${user_openeuler}" -d /home/${user_openeuler} -u ${uid_openeuler} -g ${gid_openeuler} -m ${user_openeuler}
+RUN echo "${user_openeuler} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# modify /usr1 owner
+RUN mkdir -p /usr1 && chown -R ${user_openeuler}:${group_openeuler} /usr1 /opt && chmod -R 755 /usr1 /opt
 
 # modify default configs
 RUN sed -i 's/TMOUT=300/TMOUT=/g' /etc/bashrc
 
-# add umask conf to 022 in file /etc/bashrc
-RUN echo "umask 022" >> /etc/bashrc
+USER ${user}
+ENV AGENT_WORKDIR=${AGENT_WORKDIR}
+RUN mkdir /home/${user}/.jenkins && mkdir -p ${AGENT_WORKDIR} && sudo mkdir -p /opt/buildtools/nativesdk && sudo mkdir -p /usr1/openeuler/gcc
+RUN sudo chown -R jenkins:jenkins /opt /usr1 && sudo chmod -R 755 /opt /usr1
 
-USER openeuler
+RUN set -eux; \
+pip install PyYaml python-git requests python-jenkins paramiko json2table \
+gitlint sphinx_tabs sphinx_multiversion sphinx-rtd-theme Sphinx==5.1.1 oebuild pygit gitpython \
+-i https://pypi.tuna.tsinghua.edu.cn/simple
 
+VOLUME /home/${user}/.jenkins
+VOLUME ${AGENT_WORKDIR}
+
+WORKDIR ${AGENT_WORKDIR}
+
+ENTRYPOINT ["jenkins-agent"]
+# download ct-ng
 RUN mkdir -p /opt/buildtools/nativesdk/crosstool-ng
-
 WORKDIR /opt/buildtools/nativesdk/crosstool-ng
-
 RUN wget http://crosstool-ng.org/download/crosstool-ng/crosstool-ng-1.26.0.tar.bz2
-
 RUN tar jxvf crosstool-ng-1.26.0.tar.bz2
-
 RUN ./crosstool-ng-1.26.0/configure
-
 RUN make
-
 RUN sudo make install
 
 RUN mkdir -p /opt/buildtools/nativesdk/sdk_info
@@ -103,8 +138,6 @@ RUN wget https://gitee.com/openeuler/yocto-meta-openeuler/releases/download/tool
 
 RUN wget https://gitee.com/openeuler/yocto-meta-openeuler/releases/download/toolchians-v0.1.4/2_riscv64-openeuler-linux-gnu.tar.gz
 
-RUN wget https://gitee.com/openeuler/yocto-meta-openeuler/releases/download/toolchians-v0.1.4/3_riscv64-openeuler-linux-gnu.tar.gz
-
 RUN wget https://gitee.com/openeuler/yocto-meta-openeuler/releases/download/toolchians-v0.1.4/merge_data.sh
 
 RUN bash ./merge_data.sh
@@ -124,10 +157,14 @@ RUN tar xzvf aarch64-openeuler-linux-gnu.tar.gz &&  \
     rm -rf merge_data.sh && \
     chmod -R 777 /usr1/openeuler/gcc
 
-RUN pip install pyyaml pygit gitpython
+RUN rm -rf merge_data.sh
+
+RUN rm -rf /crosstool-ng-1.26.0
+
+USER ${user}
+
+WORKDIR ${AGENT_WORKDIR}
 
 RUN rm -rf /opt/buildtools/nativesdk/crosstool-ng
 
 RUN rm -rf /opt/buildtools/nativesdk/sdk_info
-
-RUN rm -rf /crosstool-ng-1.26.0
