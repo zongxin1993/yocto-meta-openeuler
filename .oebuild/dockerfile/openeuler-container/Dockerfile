@@ -8,8 +8,9 @@ zlib zlib-devel openssl-devel bzip2-devel ncurses-devel readline-devel \
 libpcap-devel parted autoconf-archive chrpath gcc-c++ patch rpm-build flex \
 autoconf automake m4 bison bc libtool gettext-devel createrepo_c net-tools \
 wget sudo hostname rpcgen texinfo python meson dosfstools mtools libmpc-devel \
-gmp-devel ninja-build numactl-devel make python3 python3-pip screen glibc-locale-archive iproute \
-xz unzip help2man libstdc++-static gcc g++ rsync python3-devel gdisk umoci skopeo
+gmp-devel ninja-build numactl-devel make python3 python3-pip screen glibc-locale-archive \
+iproute xz unzip help2man libstdc++-static gcc g++ rsync python3-devel gdisk umoci skopeo \
+libxslt vim hwdata perl-XML-Parser
 
 ARG user=openeuler
 ARG group=openeuler
@@ -47,48 +48,48 @@ RUN wget ${openeuler_repo}/releases/download/nativesdk-${nativesdk_version}/${na
     && wget ${openeuler_repo}/releases/download/nativesdk-${nativesdk_version}/2_${nativesdk_name}-${openeuler_base_version}.sh \
     && wget ${openeuler_repo}/releases/download/nativesdk-${nativesdk_version}/3_${nativesdk_name}-${openeuler_base_version}.sh \
     && wget ${openeuler_repo}/releases/download/nativesdk-${nativesdk_version}/${nativesdk_name}-${openeuler_base_version}.target.manifest \
-    && wget ${openeuler_repo}/releases/download/nativesdk-${nativesdk_version}/${nativesdk_name}e-${openeuler_base_version}.host.manifest \
+    && wget ${openeuler_repo}/releases/download/nativesdk-${nativesdk_version}/${nativesdk_name}-${openeuler_base_version}.host.manifest \
     && wget ${openeuler_repo}/releases/download/nativesdk-${nativesdk_version}/merge_data.sh \
     && bash ./merge_data.sh
 RUN ./${nativesdk_name}-${openeuler_base_version}.sh -d /opt/buildtools/nativesdk -y
 RUN . /opt/buildtools/nativesdk/environment-setup-x86_64-openeulersdk-linux
-RUN rm -rf /opt/buildtools/nativesdk/sdk_info
 
 # download toolchain release and install it
-ARG toolchain_version=v0.1.3
+ARG toolchain_version=v0.1.4
 RUN mkdir -p /usr1/openeuler/gcc
 WORKDIR /usr1/openeuler/gcc
-RUN wget ${openeuler_repo}/releases/download/toolchians-${toolchain_version}/1_aarch64-openeuler-linux-gnu.tar.gz \
-    && wget ${openeuler_repo}/releases/download/toolchians-${toolchain_version}/2_aarch64-openeuler-linux-gnu.tar.gz \
-    && wget ${openeuler_repo}/releases/download/toolchians-${toolchain_version}/3_aarch64-openeuler-linux-gnu.tar.gz \
-    && wget ${openeuler_repo}/releases/download/toolchians-${toolchain_version}/4_aarch64-openeuler-linux-gnu.tar.gz \
-    && wget ${openeuler_repo}/releases/download/toolchians-${toolchain_version}/1_x86_64-openeuler-linux-gnu.tar.gz \
-    && wget ${openeuler_repo}/releases/download/toolchians-${toolchain_version}/2_x86_64-openeuler-linux-gnu.tar.gz \
-    && wget ${openeuler_repo}/releases/download/toolchians-${toolchain_version}/3_x86_64-openeuler-linux-gnu.tar.gz \
-    && wget ${openeuler_repo}/releases/download/toolchians-${toolchain_version}/4_x86_64-openeuler-linux-gnu.tar.gz \
-    && wget ${openeuler_repo}/releases/download/toolchians-${toolchain_version}/1_arm-openeuler-linux-gnueabi.tar.gz \
-    && wget ${openeuler_repo}releases/download/toolchians-${toolchain_version}/2_arm-openeuler-linux-gnueabi.tar.gz \
-    && wget ${openeuler_repo}/releases/download/toolchians-${toolchain_version}/3_arm-openeuler-linux-gnueabi.tar.gz \
-    && wget ${openeuler_repo}releases/download/toolchians-${toolchain_version}/1_riscv64-openeuler-linux-gnu.tar.gz \
-    && wget ${openeuler_repo}/releases/download/toolchians-${toolchain_version}/2_riscv64-openeuler-linux-gnu.tar.gz \
-    && wget ${openeuler_repo}/releases/download/toolchians-${toolchain_version}/3_riscv64-openeuler-linux-gnu.tar.gz \
-    && wget ${openeuler_repo}/releases/download/toolchians-${toolchain_version}/merge_data.sh \
+RUN wget ${openeuler_repo}/releases/download/toolchains-${toolchain_version}/1_openeuler_gcc_arm64le.tar.gz \
+    && wget ${openeuler_repo}/releases/download/toolchains-${toolchain_version}/2_openeuler_gcc_arm64le.tar.gz \
+    && wget ${openeuler_repo}/releases/download/toolchains-${toolchain_version}/3_openeuler_gcc_arm64le.tar.gz \
+    && wget ${openeuler_repo}/releases/download/toolchains-${toolchain_version}/4_openeuler_gcc_arm64le.tar.gz \
+    && wget ${openeuler_repo}/releases/download/toolchains-${toolchain_version}/1_openeuler_gcc_x86_64.tar.gz \
+    && wget ${openeuler_repo}/releases/download/toolchains-${toolchain_version}/2_openeuler_gcc_x86_64.tar.gz \
+    && wget ${openeuler_repo}/releases/download/toolchains-${toolchain_version}/3_openeuler_gcc_x86_64.tar.gz \
+    && wget ${openeuler_repo}/releases/download/toolchains-${toolchain_version}/4_openeuler_gcc_x86_64.tar.gz \
+    && wget ${openeuler_repo}/releases/download/toolchains-${toolchain_version}/1_openeuler_gcc_arm32le.tar.gz \
+    && wget ${openeuler_repo}/releases/download/toolchains-${toolchain_version}/2_openeuler_gcc_arm32le.tar.gz \
+    && wget ${openeuler_repo}/releases/download/toolchains-${toolchain_version}/3_openeuler_gcc_arm32le.tar.gz \
+    && wget ${openeuler_repo}/releases/download/toolchains-${toolchain_version}/1_openeuler_gcc_riscv64.tar.gz \
+    && wget ${openeuler_repo}/releases/download/toolchains-${toolchain_version}/2_openeuler_gcc_riscv64.tar.gz \
+    && wget ${openeuler_repo}/releases/download/toolchains-${toolchain_version}/3_openeuler_gcc_riscv64.tar.gz \
+    && wget ${openeuler_repo}/releases/download/toolchains-${toolchain_version}/merge_data.sh \
     && bash ./merge_data.sh
 # deal aarch64 toolchain
-RUN tar xzvf aarch64-openeuler-linux-gnu.tar.gz &&  \
-    mv aarch64-openeuler-linux-gnu openeuler_gcc_arm64le &&  \
-    rm -rf aarch64-openeuler-linux-gnu.tar.gz
+RUN tar xzvf openeuler_gcc_arm64le.tar.gz &&  \
+    rm -rf openeuler_gcc_arm64le.tar.gz
 # deal x86_64 toolchain
-RUN tar xzvf x86_64-openeuler-linux-gnu.tar.gz &&  \
-    mv x86_64-openeuler-linux-gnu openeuler_gcc_x86_64 &&  \
-    rm -rf x86_64-openeuler-linux-gnu.tar.gz
+RUN tar xzvf openeuler_gcc_x86_64.tar.gz &&  \
+    rm -rf openeuler_gcc_x86_64.tar.gz
 # deal arm toolchain
-RUN tar xzvf arm-openeuler-linux-gnueabi.tar.gz &&  \
-    mv arm-openeuler-linux-gnueabi openeuler_gcc_arm32le &&  \
-    rm -rf arm-openeuler-linux-gnueabi.tar.gz
+RUN tar xzvf openeuler_gcc_arm32le.tar.gz &&  \
+    rm -rf openeuler_gcc_arm32le.tar.gz
 # deal riscv64 toolchain
-RUN tar xzvf riscv64-openeuler-linux-gnu.tar.gz &&  \
-    mv riscv64-openeuler-linux-gnu openeuler_gcc_riscv64 && \
-    rm -rf riscv64-openeuler-linux-gnu.tar.gz
+RUN tar xzvf openeuler_gcc_riscv64.tar.gz &&  \
+    rm -rf openeuler_gcc_riscv64.tar.gz
 RUN rm -rf merge_data.sh
+
 RUN sudo chmod -R 777 /opt/buildtools/nativesdk/sysroots/x86_64-openeulersdk-linux/var/
+
+WORKDIR /home/${user}
+
+RUN rm -rf /opt/buildtools/nativesdk/sdk_info
