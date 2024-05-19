@@ -12,7 +12,7 @@
 
    以下会基于mcs镜像介绍如何使用树莓派UEFI。
 
-构建树梅派openeuler-image-mcs镜像和烧录
+构建树莓派openeuler-image-mcs镜像和烧录
 =======================================
 
    镜像构建参考 :ref:`mcs镜像构建指导 <mcs_build>` ,
