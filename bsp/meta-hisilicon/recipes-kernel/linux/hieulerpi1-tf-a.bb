@@ -35,3 +35,10 @@ do_install:append() {
 }
 
 FILES:${PN} += " /boot/kernel-pi "
+
+addtask do_deploy after do_install
+
+do_deploy() {
+    test -d "${OUTPUT_DIR}" || mkdir -p "${OUTPUT_DIR}"
+    echo ${OUTPUT_DIR} ${DEPLOY_DIR_IMAGE} | xargs -n 1 cp -fp ${D}/boot/kernel-pi
+}
