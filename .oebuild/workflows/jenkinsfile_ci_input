@@ -630,8 +630,8 @@ pipeline {
                 }
             }
         }
-        //##############x86-64-rt-hmi-ros-mcs-kernel6.6###################
-        stage("x86-64-rt-hmi-ros-mcs-kernel6.6"){
+        //##############x86-64-rt-hmi-ros-kernel6.6###################
+        stage("x86-64-rt-hmi-ros-kernel6.6"){
             when {
                 equals expected: "x86-64-rt-hmi-ros-mcs-kernel6.6", actual: IMAGE_NAME
             }
@@ -645,7 +645,7 @@ pipeline {
                             def logDir = mkdirOpeneulerLog()
                             
                             // 执行x86-64-rt-hmi-ros-mcs镜像编译检查
-                            def stageName = "x86-64-rt-hmi-ros-mcs-kernel6.6"
+                            def stageName = "x86-64-rt-hmi-ros-kernel6.6"
                             def arch = "x86-64"
                             def task_res_code = sh (script: """
                                 python3 main.py build \
@@ -654,7 +654,7 @@ pipeline {
                                 -a $arch \
                                 -t /usr1/openeuler/gcc/openeuler_gcc_x86_64 \
                                 -p x86-64 \
-                                -f "kernel6;openeuler-rt;hmi;openeuler-ros;openeuler-mcs" \
+                                -f "kernel6;openeuler-rt;hmi;openeuler-ros" \
                                 -i "openeuler-image;openeuler-image -c do_populate_sdk" \
                                 -s_out "/home/jenkins/ccache/openeuler_embedded/$ciBranch/sstate-cache/$stageName" \
                                 -dt $IMAGE_DATE \
