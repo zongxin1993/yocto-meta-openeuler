@@ -10,7 +10,12 @@ ${@bb.utils.contains('MCS_FEATURES', 'jailhouse', 'jailhouse-overlay', '', d)} \
 # Notice: we need our sdcard_image-rpi.bbclass in meta-openeuler-bsp to work.
 uefi_configuration() {
     # we use Image.gz for grub.cfg here
-    gzip -c "${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGETYPE}" > "${DEPLOY_DIR_IMAGE}/Image.gz"
+    if [ ! -z "${INITRAMFS_IMAGE}" -a "${INITRAMFS_IMAGE_BUNDLE}" = "1" ]; then
+        gzip -c "${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGETYPE}-${INITRAMFS_LINK_NAME}.bin" > "${DEPLOY_DIR_IMAGE}/Image.gz"
+    else
+        gzip -c "${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGETYPE}" > "${DEPLOY_DIR_IMAGE}/Image.gz"
+    fi
+
     mcopy -v -i ${WORKDIR}/boot.img -s ${DEPLOY_DIR_IMAGE}/Image.gz ::Image.gz || bbfatal "mcopy cannot copy ${DEPLOY_DIR_IMAGE}/Image.gz into boot.img"
     # here we want uefi to boot
     mcopy -v -i ${WORKDIR}/boot.img -s ${DEPLOY_DIR_IMAGE}/RPI_EFI.fd ::RPI_EFI.fd || bbfatal "mcopy cannot copy ${DEPLOY_DIR_IMAGE}/RPI_EFI.fd into boot.img"
@@ -31,5 +36,7 @@ install_mcs_overlays() {
     # add jailhouse-overlay
     if ${@bb.utils.contains('MCS_FEATURES', 'jailhouse', 'true', 'false', d)}; then
         mcopy -v -i ${WORKDIR}/boot.img -s ${DEPLOY_DIR_IMAGE}/jailhouse-overlay.dtbo ::overlays/jailhouse-overlay.dtbo || bbfatal "mcopy cannot copy ${DEPLOY_DIR_IMAGE}/jailhouse-overlay.dtbo into boot.img"
+        # overwrite dtb to assign more devices to non-root linux
+        mcopy -v -D o -i ${WORKDIR}/boot.img -s ${DEPLOY_DIR_IMAGE}/bcm2711-rpi-4-b-jailhouse.dtb ::bcm2711-rpi-4-b.dtb || bbfatal "mcopy cannot copy ${DEPLOY_DIR_IMAGE}/bcm2711-rpi-4-b-jailhouse.dtb into boot.img"
     fi
 }
