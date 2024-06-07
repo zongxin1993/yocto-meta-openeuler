@@ -363,6 +363,9 @@ manifest_list:
   gdk-pixbuf:
     remote_url: https://gitee.com/src-openeuler/gdk-pixbuf2.git
     version: 937f760c19145e0f9e7e5be67b3b346e7684130e
+  genext2fs: 
+    remote_url: https://gitee.com/src-oepkgs/genext2fs.git
+    version: 4d50c496ec414f88ef7d96cecefdb3d8877f4cc4
   geographic_info:
     remote_url: https://gitee.com/src-openeuler/geographic_info.git
     version: b8e4507f540390f09bb4a4a64dd150d7da265966
@@ -1031,7 +1034,7 @@ manifest_list:
     version: 42e783e24b0a018f81bb6c838ca7532862528a07
   oee_archive:
     remote_url: https://gitee.com/openeuler/oee_archive.git
-    version: 9e2aaf1387967d9aad5449c93616fccaeade253d
+    version: 105d9aa44ec4fa1142ed199df26838c413e076e4
   ompl:
     remote_url: https://gitee.com/src-openeuler/ompl.git
     version: 42759f06c9a8d712a5ba86f1f3b22a569ec81232
