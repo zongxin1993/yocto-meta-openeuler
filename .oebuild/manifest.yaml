@@ -122,7 +122,7 @@ manifest_list:
     version: 3e60b8bf40794d2e3a46ae5959f0cdfb936a8226
   cdrkit:
     remote_url: https://gitee.com/src-openeuler/cdrkit.git
-    version: 40b60eb1107259db5b8785c5a5c9989847ff79c0
+    version: dce1123714301c369bdfbfc0a226eaed339d6cdf
   ceres-solver:
     remote_url: https://gitee.com/src-openeuler/ceres-solver.git
     version: fc7bb918c95655fc2f32275dc346247f83d63a98
@@ -140,7 +140,7 @@ manifest_list:
     version: b1fc3bcb36b3500a92928a1dbe427d864ba40ed9
   cmake:
     remote_url: https://gitee.com/src-openeuler/cmake.git
-    version: ac3f495f2e4f9118636e1be9d0547309587820a4
+    version: b836522309b22b1a089b30a3e05c1782771fcb90
   common-interfaces:
     remote_url: https://gitee.com/src-openeuler/common_interfaces.git
     version: c168e309961db65f3c2fcf24c77cb8a92fdda75b
@@ -161,7 +161,7 @@ manifest_list:
     version: 1e70638ab38b631e1f71dfc82fad375a40504991
   cronie:
     remote_url: https://gitee.com/src-openeuler/cronie.git
-    version: dbfa876ddfae2e44c6dded16afc568a112af5e3b
+    version: fe1fcd8ebaf00348ec1bf0fc2248981dd2c8fb47
   curl:
     remote_url: https://gitee.com/src-openeuler/curl.git
     version: 5166adffbae10c3952682da91cd19fe0e43be0b8
@@ -170,7 +170,7 @@ manifest_list:
     version: f27e645561d9f09569cc06be645b99f5d60a476c
   dbus:
     remote_url: https://gitee.com/src-openeuler/dbus.git
-    version: dddf1b004f4ec06ef159f326421c25b5ca4dd273
+    version: 591a09b3db0cd5dfa09bb4230a2f19b0503230a2
   debugedit:
     remote_url: https://gitee.com/src-openeuler/debugedit.git
     version: c110f5e42ffe588b3bd1c0699a5326c8fe3c3966
@@ -188,7 +188,7 @@ manifest_list:
     version: df60676c56ee2e0cc2a5235213079ebb9df4ad9b
   dnf:
     remote_url: https://gitee.com/src-openeuler/dnf.git
-    version: ad7310ffccf11df5bd11f19896a66221ba40bd54
+    version: bed04e57be8eb9f98e43971f06e0c14418deaaa2
   dosfstools:
     remote_url: https://gitee.com/src-openeuler/dosfstools.git
     version: 36ff718b4bfc067c5be2c12bdfd3d99f17a4c77c
@@ -224,10 +224,10 @@ manifest_list:
     version: 440bb2d5a42cb5287310bb1abeced370bb46cb52
   expat:
     remote_url: https://gitee.com/src-openeuler/expat.git
-    version: 5cee5c7f83e48e9037668bcd615c5d198888a3e9
+    version: 8811ed3489c45a5b93fedda9ca535af0a4e42e48
   expect:
     remote_url: https://gitee.com/src-openeuler/expect.git
-    version: 684ba7e216b11ebc7a4b5b9516f7ac452aefc51f
+    version: 7d7eb1a7cf63771967ef9de902231b15ad795869
   file:
     remote_url: https://gitee.com/src-openeuler/file.git
     version: bad93dd69236c6f1b0915ee926c0a8c86bb4ec6e
@@ -275,7 +275,7 @@ manifest_list:
     version: 0dc3e0e05f69b764c671d9e14c736bcd6e97677a
   glib2:
     remote_url: https://gitee.com/src-openeuler/glib2.git
-    version: 817ffaba92c8d3de5e89823b3e90c0c54ff7504f
+    version: bbef6405f2a627903c86dc53617f30c39aef0f5f
   glibc:
     remote_url: https://gitee.com/src-openeuler/glibc.git
     version: 3b2777c1fcf8366d5cf069e7547e85283b57faa1
@@ -308,7 +308,7 @@ manifest_list:
     version: 53105c970d6494e4651becbc08e2c085d6481315
   grub2:
     remote_url: https://gitee.com/src-openeuler/grub2.git
-    version: fc65dacbbc158f133ab4b81c5da474c6a13cd271
+    version: ae0bcccb0d591337c5132502f820464fe7be2a3a
   gstreamer-rockchip:
     remote_url: https://gitee.com/emancipator/gstreamer-rockchip.git
     version: aab4a4210b1e8cf1f8fa26f335f93110c39b4dbc
@@ -359,7 +359,7 @@ manifest_list:
     version: e088ee22b3ccf532b5092f8b3b1b8c912a6c246d
   iproute:
     remote_url: https://gitee.com/src-openeuler/iproute.git
-    version: b2ec2c93fda99e99131720615307b028682442c7
+    version: 02329b6615207b81af5af1f469b21b20bcdd7551
   iptables:
     remote_url: https://gitee.com/src-openeuler/iptables.git
     version: c88e4762b49bcf0575ada3d2787764157fc72309
@@ -407,7 +407,7 @@ manifest_list:
     version: 26787717d8334808e5819965daf0af89faea143b
   less:
     remote_url: https://gitee.com/src-openeuler/less.git
-    version: c4210c9d3a029e1b8a532227464e169d52401d43
+    version: d467d76b5b8ca49510abda24ef7569d4c430e5e2
   lib-shim-v2:
     remote_url: https://gitee.com/src-openeuler/lib-shim-v2.git
     version: a33154c48feb0c675e83c4c5b093dcf4f5ee7aaf
@@ -506,7 +506,7 @@ manifest_list:
     version: 2a009a416c050b6936ba8615fe62ddaf2c8e8236
   libnl3:
     remote_url: https://gitee.com/src-openeuler/libnl3.git
-    version: ff793c5a84ab7af839c6c244a65c9d502b288a5a
+    version: f408af6f4aa188e6c6defe9d9cc2611b7b4d68fa
   libnsl2:
     remote_url: https://gitee.com/src-openeuler/libnsl2.git
     version: acab56f4a1c4d820b310c27e1c38381d7f4dd103
@@ -533,7 +533,7 @@ manifest_list:
     version: df14e52837d079a5344fb684e6827a3a7f890cf7
   libsepol:
     remote_url: https://gitee.com/src-openeuler/libsepol.git
-    version: ddd1336c1c9eba6058b8806267b946ddc6e75694
+    version: 8aca5b4ab03e1b625a659393d93cbe464d11d9a5
   libsodium:
     remote_url: https://gitee.com/src-openeuler/libsodium.git
     version: d5faf7451602a10ffd1f9f44c04c44836c1fbbc9
@@ -602,7 +602,7 @@ manifest_list:
     version: 581824acaad04b49cd0744718c70fb42766786b1
   logrotate:
     remote_url: https://gitee.com/src-openeuler/logrotate.git
-    version: 3db1ff66fa29e482266a598c03e5cec7c8131808
+    version: 64ccae10d28b9549bb97aa09b68b10188c25d7fd
   lttng-ust:
     remote_url: https://gitee.com/src-openeuler/lttng-ust.git
     version: 296d2b12219ed6924a33acbf01837cf90c17c7e3
@@ -644,7 +644,7 @@ manifest_list:
     version: c7c0f19335ccec830dafeee32afa137cb74e45c2
   mesa:
     remote_url: https://gitee.com/src-openeuler/mesa.git
-    version: 4c50468e054f8e9f9f2460fbd537020137d11140
+    version: 5edf4270536d6f4b6fc4938e9669c25d4316f0f7
   meson:
     remote_url: https://gitee.com/src-openeuler/meson.git
     version: d76179822e845ae6bc24bc434757bc032f94bb43
@@ -683,7 +683,7 @@ manifest_list:
     version: 43e4e8c4265d83e4b94fd1dbcabce08587fbfe49
   numpy:
     remote_url: https://gitee.com/src-openeuler/numpy.git
-    version: f3a3b9116f3519b1440a073aa039eac67aacd39c
+    version: fad7e4a6d7eb4c46fbceef50d8274e027da31af1
   oee_archive:
     remote_url: https://gitee.com/openeuler/oee_archive.git
     version: 1e64a8fc558d4ddee4c9f07dd7be719f15881d44
@@ -884,7 +884,7 @@ manifest_list:
     version: ea508cb98406def3e6043fdaca9027b86b3beb05
   python-zipp:
     remote_url: https://gitee.com/src-openeuler/python-zipp.git
-    version: 588865be5c5c1aa4668076310a620e761160a626
+    version: 9d07850a50ed8afb911d3030dcae2e49f32d856d
   python3:
     remote_url: https://gitee.com/src-openeuler/python3.git
     version: 90d2230471ac38e89918dd7df4ec90b4141fec6f
@@ -1157,7 +1157,7 @@ manifest_list:
     version: 1370aeba6969b893018bd157b49aa2c64e7fe2da
   tzdata:
     remote_url: https://gitee.com/src-openeuler/tzdata.git
-    version: ca2175cd6321b616aaa7dba925d6820e9582d878
+    version: 6df1fdaf57e23f29be57390ea28a65effed5d7b8
   u-boot-rockchip:
     remote_url: https://gitee.com/emancipator/u-boot-rockchip.git
     version: 57076598f1b68ada83302dab3bb6b7b93983f90b
