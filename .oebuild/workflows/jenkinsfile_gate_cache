@@ -1,0 +1,119 @@
+// this jenkinsfile is for src code and gate sstate cache
+def BUILD_COM
+def IMAGE_DATE = ""
+
+pipeline {
+    agent { node "${node}" }
+    environment {
+        PATH = "/home/jenkins/.local/bin:${env.PATH}"
+    }
+    stages {
+        stage("init-task"){
+            steps{
+                script{
+                    BUILD_COM = load '.oebuild/workflows/build_common.groovy'
+                    IMAGE_DATE = BUILD_COM.getNowDatetime()
+                }
+                dir('/home/jenkins/agent'){
+                    script{
+                        BUILD_COM.downloadEmbeddedCI(embeddedRemote, embeddedBranch)
+                    }
+                }
+            }
+        }
+        stage("build task"){
+            parallel {
+                stage("qemu-aarch64"){
+                    agent { node "${node}" }
+                    steps {
+                        dir('/home/jenkins/agent'){
+                            script{
+                                BUILD_COM.downloadEmbeddedCI(embeddedRemote, embeddedBranch)
+                            }
+                        }
+                        dir('/home/jenkins/agent/embedded-ci'){
+                            script{
+                                //下载yocto-meta-openeuler代码
+                                BUILD_COM.downloadYoctoWithBranch("/home/jenkins/agent", repoNamespace, repoName, ciBranch, 1)
+                                BUILD_COM.prepareSrcCode("/home/jenkins")
+                                def random_str = BUILD_COM.getRandomStr()
+                                def log_dir = BUILD_COM.mkdirOpeneulerLog()
+
+                                BUILD_COM.build_qemu_aarch64(IMAGE_DATE, log_dir, random_str)
+                            }
+                        }
+                    }
+                }
+                stage("qemu-arm"){
+                    agent { node "${node}" }
+                    steps {
+                        dir('/home/jenkins/agent'){
+                            script{
+                                BUILD_COM.downloadEmbeddedCI(embeddedRemote, embeddedBranch)
+                            }
+                        }
+                        dir('/home/jenkins/agent/embedded-ci'){
+                            script{
+                                //下载yocto-meta-openeuler代码
+                                BUILD_COM.downloadYoctoWithBranch("/home/jenkins/agent", repoNamespace, repoName, ciBranch, 1)
+                                BUILD_COM.prepareSrcCode("/home/jenkins")
+                                def random_str = BUILD_COM.getRandomStr()
+                                def log_dir = BUILD_COM.mkdirOpeneulerLog()
+                                
+                                // 执行qemu-arm镜像编译检查
+                                BUILD_COM.build_qemu_arm(IMAGE_DATE, log_dir, random_str)
+                            }
+                        }
+                    }
+                }
+                stage("x86-64"){
+                    agent { node "${node}" }
+                    steps {
+                        dir('/home/jenkins/agent'){
+                            script{
+                                BUILD_COM.downloadEmbeddedCI(embeddedRemote, embeddedBranch)
+                            }
+                        }
+                        dir('/home/jenkins/agent/embedded-ci'){
+                            script{
+                                //下载yocto-meta-openeuler代码
+                                BUILD_COM.downloadYoctoWithBranch("/home/jenkins/agent", repoNamespace, repoName, ciBranch, 1)
+                                BUILD_COM.prepareSrcCode("/home/jenkins")
+                                def random_str = BUILD_COM.getRandomStr()
+                                def log_dir = BUILD_COM.mkdirOpeneulerLog()
+                                
+                                // 执行x86-64镜像编译检查
+                                BUILD_COM.build_x86_64(IMAGE_DATE, log_dir, random_str)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    post {
+        always {
+            dir('/home/jenkins/agent/embedded-ci'){
+                script{
+                    withCredentials([
+                        string(credentialsId: "${giteeId}", variable: 'GITEETOKEN')
+                    ]){
+                        def chks = ""
+                        for (int i = 0; i < BUILD_COM.STAGES_RES.size(); ++i) {
+                            chks = "${chks} -chk ${BUILD_COM.STAGES_RES[i]}"
+                        }
+                        sh """
+                        python3 main.py comment \
+                             -m ci \
+                             -o ${repoNamespace} \
+                             -p ${commentRepoName} \
+                             -b ${ciBranch} \
+                             -gt ${GITEETOKEN} \
+                             ${chks}
+                        """
+                    }
+                }
+            }
+        }
+    }
+}
