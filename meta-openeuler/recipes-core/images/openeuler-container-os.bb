@@ -2,6 +2,9 @@ SUMMARY = "container os image"
 
 require openeuler-image-common.inc
 
+inherit features_check
+REQUIRED_DISTRO_FEATURES = "isulad"
+
 # IMAGE_INSTALL was defined in file openeuler-image-common.inc
 # overwrite this variable to remove unnecessary packages
 # this image is only used to start containers
@@ -10,6 +13,7 @@ IMAGE_INSTALL = " \
 packagegroup-core-boot \
 packagegroup-kernel-modules \
 packagegroup-openssh \
+${@bb.utils.contains("DISTRO_FEATURES", "kubeedge isulad", "packagegroup-kubeedge", "", d)} \
 packagegroup-isulad \
 packagegroup-container-images \
 "
