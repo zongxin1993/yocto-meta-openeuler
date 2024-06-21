@@ -137,6 +137,8 @@ SRC_URI:append = " \
 
 S = "${WORKDIR}/iSulad-v${PV}"
 
+COMPATIBLE_MACHINE = "qemu-aarch64|raspberrypi4-64|hieulerpi1"
+
 inherit cmake pkgconfig
 OECMAKE_GENERATOR = "Unix Makefiles"
 
