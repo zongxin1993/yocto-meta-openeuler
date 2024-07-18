@@ -1,4 +1,4 @@
-SUMMARY = "lib depneds from mipi app"
+SUMMARY = "user lib for mipi"
 DESCRIPTION = "user lib for mipi"
 HOMEPAGE = "hipirobot/hieuler_component_ai"
 LICENSE = "CLOSED"
@@ -18,11 +18,11 @@ do_install:append() {
     cp -rf -P ${WORKDIR}/hieuler_component_ai/sample/camera/src/ffmpeglib/lib/* ${D}${libdir}
 }
 
+
 FILES:${PN} += " \
     ${libdir}/*so* \
 "
 
 FILES:${PN}-dev = ""
 
-EXCLUDE_FROM_SHLIBS = "1"
 INSANE_SKIP:${PN} += "already-stripped dev-so"

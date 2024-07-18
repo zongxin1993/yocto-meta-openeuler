@@ -38,7 +38,6 @@ do_install:append() {
     cp -rf -P ${WORKDIR}/lib/* ${D}${libdir}
     cp -rf -P ${WORKDIR}/include/* ${D}/usr/include/
     cd ${D}${libdir}
-    ln -s libsecurec.so libboundscheck.so
     cd -
     sed \
     -e s#@VERSION@#${PV}# \
@@ -52,10 +51,6 @@ do_install:append() {
     install -m 0644 ${WORKDIR}/hieulerpi1-user-driver.pc ${D}${libdir}/pkgconfig/
 
 }
-
-# hieulerpi1-user-driver provides libboundscheck.so
-PROVIDES += "libboundscheck"
-RPROVIDES:${PN} += "libboundscheck"
 
 FILES:${PN} += " \
     ${libdir}/*so* \
@@ -74,6 +69,11 @@ FILES:${PN}-staticdev += " \
     ${libdir}/npu/*a \
     ${libdir}/svp_npu/*a \
 "
- 
-EXCLUDE_FROM_SHLIBS = "1"
+
+# hieulerpi1-user-driver package provides library with the same name but located in different paths,
+# which will lead to the following dependency issues when detecting the shlib:
+# do_package: hieulerpi1-user-driver: Multiple shlib providers for libascendcl.so: hieulerpi1-user-driver, hieulerpi1-user-driver ...
+# set these as private libraries, don't try to search provider for it
+PRIVATE_LIBS = "libgraph.so libascendcl.so "
+
 INSANE_SKIP:${PN} += "already-stripped dev-so"

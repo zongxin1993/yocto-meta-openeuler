@@ -24,6 +24,11 @@ do_install:append() {
 
 }
 
+# runtime dependencies, the following packages are required by the driver library
+RDEPENDS:${PN} += " \
+    hieulerpi1-user-driver \
+"
+
 FILES:${PN} += " \
     ${libdir}/*so* \
     /res/* \
@@ -31,5 +36,4 @@ FILES:${PN} += " \
 
 FILES:${PN}-dev = ""
 
-EXCLUDE_FROM_SHLIBS = "1"
 INSANE_SKIP:${PN} += "already-stripped dev-so"
