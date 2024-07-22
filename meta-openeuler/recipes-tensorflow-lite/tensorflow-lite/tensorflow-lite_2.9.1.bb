@@ -48,8 +48,8 @@ do_install() {
         s:@includedir@:${includedir}:g' ${D}${libdir}/pkgconfig/tensorflow2-lite.pc
 
     # flatbuffers
-    install -d  ${D}${includedir}/flatbuffers
-    install -m 0644 ${B}/flatbuffers/include/flatbuffers/*.h ${D}${includedir}/flatbuffers/
+#    install -d  ${D}${includedir}/flatbuffers
+#    install -m 0644 ${B}/flatbuffers/include/flatbuffers/*.h ${D}${includedir}/flatbuffers/
 }
 
 ALLOW_EMPTY:${PN} = "1"
