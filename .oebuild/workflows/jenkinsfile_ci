@@ -11,12 +11,26 @@ pipeline {
             steps{
                 script{
                     BUILD_COM = load '.oebuild/workflows/build_common.groovy'
+                    IMAGE_DATE = BUILD_COM.getNowDatetime()
                 }
                 dir('/home/jenkins/agent'){
                     script{
                         BUILD_COM.downloadEmbeddedCI(embeddedRemote, embeddedBranch)
-                        IMAGE_DATE = BUILD_COM.getNowDatetime()
                     }
+                }
+                dir('/home/jenkins/agent/embedded-ci'){
+                    script{
+                        BUILD_COM.downloadYoctoWithBranch("/home/jenkins/agent", repoNamespace, repoName, ciBranch, 1)
+                    }
+                }
+                dir('/home/jenkins/agent/embedded-ci'){
+                    stash(name: "embedded-ci")
+                }
+                // the stash will not include .git, so mv .git to .git_bak
+                dir('/home/jenkins/agent/yocto-meta-openeuler'){
+                    sh "mv .git .git_bak"
+                    stash(name: "yocto-meta-openeuler")
+                    sh "mv .git_bak .git"
                 }
             }
         }
@@ -24,25 +38,35 @@ pipeline {
             parallel {
                 stage("group1"){
                     agent { node "${node}" }
+                    when {
+                        expression { env.group1 != null }
+                    }
                     steps {
                         dir('/home/jenkins/agent'){
                             script{
-                                BUILD_COM.downloadEmbeddedCI(embeddedRemote, embeddedBranch)
+                                sh "mkdir embedded-ci"
+                                sh "mkdir yocto-meta-openeuler"
                             }
+                        }
+                        dir('/home/jenkins/agent/embedded-ci'){
+                            unstash(name: "embedded-ci")
+                        }
+                        dir('/home/jenkins/agent/yocto-meta-openeuler'){
+                            unstash(name: "yocto-meta-openeuler")
+                            sh "mv .git_bak .git"
                         }
                         dir('/home/jenkins/agent/embedded-ci'){
                             script{
                                 withCredentials([
                                     file(credentialsId: remoteID, variable: 'remoteKey')
                                 ]){
-                                    //下载yocto-meta-openeuler代码
-                                    BUILD_COM.downloadYoctoWithBranch("/home/jenkins/agent", repoNamespace, repoName, ciBranch, 1)
                                     BUILD_COM.prepareSrcCode("/home/jenkins")
                                     def random_str = BUILD_COM.getRandomStr()
                                     def log_dir = BUILD_COM.mkdirOpeneulerLog()
 
                                     for (image_name in group1.split()){
                                         println "build ${image_name} ..."
+                                        yocto_dir = "/home/jenkins/agent/yocto-meta-openeuler"
                                         BUILD_COM.dynamicBuild(image_name, IMAGE_DATE, log_dir, random_str)
                                     }
                                 }
@@ -52,25 +76,35 @@ pipeline {
                 }
                 stage("group2"){
                     agent { node "${node}" }
+                    when {
+                        expression { env.group2 != null }
+                    }
                     steps {
                         dir('/home/jenkins/agent'){
                             script{
-                                BUILD_COM.downloadEmbeddedCI(embeddedRemote, embeddedBranch)
+                                sh "mkdir embedded-ci"
+                                sh "mkdir yocto-meta-openeuler"
                             }
+                        }
+                        dir('/home/jenkins/agent/embedded-ci'){
+                            unstash(name: "embedded-ci")
+                        }
+                        dir('/home/jenkins/agent/yocto-meta-openeuler'){
+                            unstash(name: "yocto-meta-openeuler")
+                            sh "mv .git_bak .git"
                         }
                         dir('/home/jenkins/agent/embedded-ci'){
                             script{
                                 withCredentials([
                                     file(credentialsId: remoteID, variable: 'remoteKey')
                                 ]){
-                                    //下载yocto-meta-openeuler代码
-                                    BUILD_COM.downloadYoctoWithBranch("/home/jenkins/agent", repoNamespace, repoName, ciBranch, 1)
                                     BUILD_COM.prepareSrcCode("/home/jenkins")
                                     def random_str = BUILD_COM.getRandomStr()
                                     def log_dir = BUILD_COM.mkdirOpeneulerLog()
 
-                                    for (image_name in group2.split()){
+                                    for (image_name in group1.split()){
                                         println "build ${image_name} ..."
+                                        yocto_dir = "/home/jenkins/agent/yocto-meta-openeuler"
                                         BUILD_COM.dynamicBuild(image_name, IMAGE_DATE, log_dir, random_str)
                                     }
                                 }
@@ -80,25 +114,35 @@ pipeline {
                 }
                 stage("group3"){
                     agent { node "${node}" }
+                    when {
+                        expression { env.group3 != null }
+                    }
                     steps {
                         dir('/home/jenkins/agent'){
                             script{
-                                BUILD_COM.downloadEmbeddedCI(embeddedRemote, embeddedBranch)
+                                sh "mkdir embedded-ci"
+                                sh "mkdir yocto-meta-openeuler"
                             }
+                        }
+                        dir('/home/jenkins/agent/embedded-ci'){
+                            unstash(name: "embedded-ci")
+                        }
+                        dir('/home/jenkins/agent/yocto-meta-openeuler'){
+                            unstash(name: "yocto-meta-openeuler")
+                            sh "mv .git_bak .git"
                         }
                         dir('/home/jenkins/agent/embedded-ci'){
                             script{
                                 withCredentials([
                                     file(credentialsId: remoteID, variable: 'remoteKey')
                                 ]){
-                                    //下载yocto-meta-openeuler代码
-                                    BUILD_COM.downloadYoctoWithBranch("/home/jenkins/agent", repoNamespace, repoName, ciBranch, 1)
                                     BUILD_COM.prepareSrcCode("/home/jenkins")
                                     def random_str = BUILD_COM.getRandomStr()
                                     def log_dir = BUILD_COM.mkdirOpeneulerLog()
 
-                                    for (image_name in group3.split()){
+                                    for (image_name in group1.split()){
                                         println "build ${image_name} ..."
+                                        yocto_dir = "/home/jenkins/agent/yocto-meta-openeuler"
                                         BUILD_COM.dynamicBuild(image_name, IMAGE_DATE, log_dir, random_str)
                                     }
                                 }
@@ -108,25 +152,35 @@ pipeline {
                 }
                 stage("group4"){
                     agent { node "${node}" }
+                    when {
+                        expression { env.group4 != null }
+                    }
                     steps {
                         dir('/home/jenkins/agent'){
                             script{
-                                BUILD_COM.downloadEmbeddedCI(embeddedRemote, embeddedBranch)
+                                sh "mkdir embedded-ci"
+                                sh "mkdir yocto-meta-openeuler"
                             }
+                        }
+                        dir('/home/jenkins/agent/embedded-ci'){
+                            unstash(name: "embedded-ci")
+                        }
+                        dir('/home/jenkins/agent/yocto-meta-openeuler'){
+                            unstash(name: "yocto-meta-openeuler")
+                            sh "mv .git_bak .git"
                         }
                         dir('/home/jenkins/agent/embedded-ci'){
                             script{
                                 withCredentials([
                                     file(credentialsId: remoteID, variable: 'remoteKey')
                                 ]){
-                                    //下载yocto-meta-openeuler代码
-                                    BUILD_COM.downloadYoctoWithBranch("/home/jenkins/agent", repoNamespace, repoName, ciBranch, 1)
                                     BUILD_COM.prepareSrcCode("/home/jenkins")
                                     def random_str = BUILD_COM.getRandomStr()
                                     def log_dir = BUILD_COM.mkdirOpeneulerLog()
 
-                                    for (image_name in group4.split()){
+                                    for (image_name in group1.split()){
                                         println "build ${image_name} ..."
+                                        yocto_dir = "/home/jenkins/agent/yocto-meta-openeuler"
                                         BUILD_COM.dynamicBuild(image_name, IMAGE_DATE, log_dir, random_str)
                                     }
                                 }
@@ -136,25 +190,35 @@ pipeline {
                 }
                 stage("group5"){
                     agent { node "${node}" }
+                    when {
+                        expression { env.group5 != null }
+                    }
                     steps {
                         dir('/home/jenkins/agent'){
                             script{
-                                BUILD_COM.downloadEmbeddedCI(embeddedRemote, embeddedBranch)
+                                sh "mkdir embedded-ci"
+                                sh "mkdir yocto-meta-openeuler"
                             }
+                        }
+                        dir('/home/jenkins/agent/embedded-ci'){
+                            unstash(name: "embedded-ci")
+                        }
+                        dir('/home/jenkins/agent/yocto-meta-openeuler'){
+                            unstash(name: "yocto-meta-openeuler")
+                            sh "mv .git_bak .git"
                         }
                         dir('/home/jenkins/agent/embedded-ci'){
                             script{
                                 withCredentials([
                                     file(credentialsId: remoteID, variable: 'remoteKey')
                                 ]){
-                                    //下载yocto-meta-openeuler代码
-                                    BUILD_COM.downloadYoctoWithBranch("/home/jenkins/agent", repoNamespace, repoName, ciBranch, 1)
                                     BUILD_COM.prepareSrcCode("/home/jenkins")
                                     def random_str = BUILD_COM.getRandomStr()
                                     def log_dir = BUILD_COM.mkdirOpeneulerLog()
 
-                                    for (image_name in group5.split()){
+                                    for (image_name in group1.split()){
                                         println "build ${image_name} ..."
+                                        yocto_dir = "/home/jenkins/agent/yocto-meta-openeuler"
                                         BUILD_COM.dynamicBuild(image_name, IMAGE_DATE, log_dir, random_str)
                                     }
                                 }
@@ -169,6 +233,9 @@ pipeline {
         always {
             dir('/home/jenkins/agent/embedded-ci'){
                 script{
+                    if (env.isComment == null || env.isComment == "false"){
+                        return
+                    }
                     withCredentials([
                         string(credentialsId: "${giteeId}", variable: 'GITEETOKEN')
                     ]){
@@ -178,12 +245,12 @@ pipeline {
                         }
                         sh """
                         python3 main.py comment \
-                             -m ci \
-                             -o ${repoNamespace} \
-                             -p ${commentRepoName} \
-                             -b ${ciBranch} \
-                             -gt ${GITEETOKEN} \
-                             ${chks}
+                            -m ci \
+                            -o ${repoNamespace} \
+                            -p ${commentRepoName} \
+                            -b ${ciBranch} \
+                            -gt ${GITEETOKEN} \
+                            ${chks}
                         """
                     }
                 }
