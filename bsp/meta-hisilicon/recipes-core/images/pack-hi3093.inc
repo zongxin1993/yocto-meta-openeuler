@@ -10,6 +10,7 @@ make_boot_intrd() {
         cp -f ./tools-tmp/link_emmc_devs ./
         rm -rf ./tools-tmp
     fi
+    sed -i '$a\sh /hi3093_init.sh' ./etc/init.d/rc.sysinit
     cp -fp ./boot/zImage ${OUTPUT_DIR}/ || true
     rm -f ./boot/Image* || true
     rm -f ./boot/zImage* || true
