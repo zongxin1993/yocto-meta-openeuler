@@ -12,3 +12,4 @@ docs/source/_build/
 
 # no vscode configuration
 *.vscode
+.vscode-ctags
