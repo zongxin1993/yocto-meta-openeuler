@@ -23,9 +23,15 @@ SRC_URI:append:ok3568 = " \
     ${@bb.utils.contains('MCS_FEATURES', 'openamp', 'file://patches/0003-ok3568-support-mcs.patch', '', d)} \
 "
 
+# patch for tspi-rk3566 devicetree
+SRC_URI:append:tspi-rk3566 = " \
+    file://patches/0001-Add-JLC-tspi-dtb-file.patch \
+"
+
 S = "${WORKDIR}/rockchip-kernel"
 
 OPENEULER_KERNEL_CONFIG = "file://config/${SOC_FAMILY}/defconfig"
+OPENEULER_KERNEL_CONFIG:tspi-rk3566 = "file://config/tspi-rk3566/defconfig"
 
 # mkimg need use dtc command
 DEPENDS += "dtc-native"
